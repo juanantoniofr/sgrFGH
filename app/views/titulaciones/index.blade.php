@@ -30,9 +30,28 @@
                         {{ Session::get('message') }}
                     </div>
                 @endif
-                
-                <p>Titulaciones. FadeIn para ver las asignaturas</p>
-                
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead><th>Código</th><th>Nombre</th><th>Update At</th></thead>
+                        <tbody>
+                        @foreach($titulaciones as $titulacion )
+                            <tr>
+                                <td>{{ $titulacion->codigo}}</td>
+                                <td>
+                                    <!-- editar -->
+                                    <a href="" title="Editar Titulación" class="editaTitulacion" data-idtitulo="{{ $titulacion->id }}" ><i class="fa fa-pencil fa-fw"></i></a>
+                                
+                                    <!-- eliminar -->
+                                    <a class = "eliminaTitulacion" data-idtitulo="{{$titulacion->id}}" title = "Eliminar Titulación"><i class="fa fa-trash-o fa-fw"></i></a>
+                                    {{ $titulacion->nombre }}
+                                </td>
+                                
+                                <td> Update: {{ $titulacion->updated_at}}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
             </div> <!-- /.panel-body  -->           
         </div> <!-- /.panel-info -->   
@@ -42,22 +61,14 @@
 
 @stop
 
-{{$addModal or ''}}
+@section('modal')
+
+    {{ $modalNuevaTitulacion or '' }}
+    {{ $modalEditaTitulacion or '' }}
+@stop
 
 @section('js')
 
-{{HTML::script('assets/js/applet.js')}}
-<script type="text/javascript">
-        function writeToContainer(valor){
-            
-            
-            
-                $('#dni').html(valor).change();
-            
-            
-            
-            
-            }    
-</script>
+    {{HTML::script('assets/js/titulaciones.js')}}
 
 @stop
