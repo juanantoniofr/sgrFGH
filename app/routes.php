@@ -86,9 +86,9 @@ Route::get('admin/home.html',array('as' => 'adminHome.html','uses' => 'UsersCont
 //*********
 // Calendarios (Todas las capacidades)
 //*********
-Route::get('calendarios.html',array('as' => 'calendarios.html','uses' => 'CalendarController@showCalendarViewMonth','before' => array('auth','inicioCurso','capacidad:1-2-3-4-5-6,msg')));
+Route::get('calendariosFCOM.html',array('as' => 'calendariosFCOM.html','uses' => 'CalendarController@showCalendarViewMonth','before' => array('auth','inicioCurso','capacidad:1-2-3-4-5-6,msg')));
 
-Route::get('calendariosFGH.html',array('as' => 'calendariosFGH.html','uses' => 'CalendarControllerFGH@showCalendarViewMonth','before' => array('auth','inicioCurso','capacidad:1-2-3-4-5-6,msg')));
+Route::get('calendarios.html',array('as' => 'calendarios.html','uses' => 'CalendarControllerFGH@showCalendarViewMonth','before' => array('auth','inicioCurso','capacidad:1-2-3-4-5-6,msg')));
 
 //*********
 // Recursos (capacidad = 4)

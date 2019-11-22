@@ -248,7 +248,7 @@ class CalendarControllerFGH extends BaseController {
 		//$tipos de actividad
 		$tipoActividades = ACL::getTipoActividadPorRol();
 		//se devuelve la vista calendario.
-		return View::make('calendariosFGH')->with('tipoActividades',$tipoActividades)->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tCaption',$tCaption)->with('tHead',$tHead)->with('tBody',$tBody)->with('nh',$nh)->with('viewActive',$viewActive)->with('uvusUser',$uvus)->nest('sidebar','sidebar',array('msg' => $msg,'grupos' => $groupWithAccess))->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg');
+		return View::make('calendarios')->with('tipoActividades',$tipoActividades)->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tCaption',$tCaption)->with('tHead',$tHead)->with('tBody',$tBody)->with('nh',$nh)->with('viewActive',$viewActive)->with('uvusUser',$uvus)->nest('sidebar','sidebar',array('msg' => $msg,'grupos' => $groupWithAccess))->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg');
 	}
 
 	//Ajax functions

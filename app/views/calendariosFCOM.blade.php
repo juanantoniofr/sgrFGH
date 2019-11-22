@@ -166,12 +166,11 @@
               <label class="control-label col-sm-2">Actividad:</label>
               <div class="col-sm-8">
                 <select class="form-control"  name="actividad" id="tipoActividad">
-                  
-                  @foreach ($tipoActividades as $actividad)
-                    <option value=" {{ $actividad['codigo'] }} ">{{ $actividad['actividad'] }}
-                    </option>
-                  @endforeach
-                  
+                  @if (Auth::user()->capacidad > 1)<option value="Docencia Reglada PAP">Docencia Reglada PAP</option>@endif
+                  @if (Auth::user()->capacidad > 1)<option value="Títulos propios">Títulos propios</option>@endif
+                  @if (Auth::user()->capacidad > 1)<option value="Otra actividad docente/investigadora">Otra actividad docente/investigadora</option>@endif
+                  <option value="Autoaprendizaje">Autoaprendizaje</option>
+                  @if (Auth::user()->capacidad > 1)<option value="Otra actividad">Otra actividad</option>@endif
                 </select>
               </div>
             </div>
@@ -359,23 +358,12 @@
                     <label><input type="checkbox" id = "checkcolectivo" value = "colectivo" name="info[]" /> Colectivo</label>
                   </div>  
               </div>     
-              
               <div class="col-md-6 col-md-offset-4"> 
                   <div class="checkbox">
                     <label><input type="checkbox" id = "checktotal" value = "total" name="info[]" /> Total (puestos/equipos)</label>
                   </div>  
-              </div>
-              
-              <div class="col-md-6 col-md-offset-4">
-                <label class="control-label">Tipo de Actividad:</label>
-                <select class="form-control"  name="actividad" id="printTipoActividad" multiple="multiple">
-                  @foreach (Config::get('options.tipoActividad') as $actividad)
-                    <option selected="selected" value=" {{ $actividad['codigo'] }} ">{{ $actividad['actividad'] }}
-                    </option>
-                  @endforeach
-                </select>       
-              </div>    
-            
+              </div>       
+
             </div>
               
         </div> <!-- ./body -->

@@ -21,6 +21,39 @@
                 <span id="nombre_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span id='text_error'></span></span>
                 {{Form::text('nombre',Input::old('nombre'),array('class' => 'form-control'))}}
               </div>
+
+              <div class="form-group col-md-6" id="fgaforomax">
+                {{Form::label('aforomax', 'Aforo Máximo')}}
+                <span id="aforomax_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span id='text_error'></span></span>
+                {{Form::text('aforomax',Input::old('aforomax'),array('class' => 'form-control'))}}
+              </div>
+
+
+              <div class="form-group col-md-6" id="fgaforoexam">
+                {{Form::label('aforoexam', 'Aforo Examen')}}
+                <span id="aforoexam_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span id='text_error'></span></span>
+                {{Form::text('aforoexam',Input::old('aforoexam'),array('class' => 'form-control'))}}
+              </div>
+
+              <div class="form-group"> 
+                <label>Medios disponibles:</label><br />
+                <label class="checkbox-inline">
+                  <input type="checkbox" name = "mediosdisponibles[]" value="1" > Proyector
+                </label>
+                 <label class="checkbox-inline">
+                  <input type="checkbox" name = "mediosdisponibles[]" value="2" > PC
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" name = "mediosdisponibles[]"  value="3" > Videoconferencia IP
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" name = "mediosdisponibles[]" value="5" > Videoconferencia WEB 
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" name = "microfono[]" value="6" > Micrófono
+                </label>
+              </div>
+
               
               <div class="form-group" id="fgnuevogrupo">
                 {{Form::label('idgrupo', 'Seleccione Agrupación o..')}}
