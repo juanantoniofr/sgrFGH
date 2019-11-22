@@ -46,7 +46,9 @@ Route::get('hola',array('as'=>'hola',function(){
 	
 
 	echo "<pre>";
-	var_dump($aActividadesConAcceso);
+
+	var_dump(Titulacion::find('2')->toArray());
+
 	echo "</pre>";
 	
 }));
@@ -56,6 +58,15 @@ Route::get('hola',array('as'=>'hola',function(){
 //*********
 
 Route::get('/admin/titulaciones.html',array('as' => 'titulaciones','uses' => 'TitulacionController@listar'));
+
+
+
+Route::post('admin/salvaNuevaTitulacion',array('as' => 'salvaNuevaTitulacion','uses' => 'TitulacionController@nuevaTitulacion','before' => array(/*'auth',*/'ajax_check'/*,'capacidad:4-6,msg'*/)) );//Nueva Titulacion 
+
+Route::get('admin/getTitulacion',array('as' => 'getTitulacion','uses' => 'TitulacionController@getTitulacion','before' => array(/*'auth',*/'ajax_check'/*,'capacidad:4-6,msg'*/)) );//Nueva Titulacion 
+
+
+
 
 
 //*********

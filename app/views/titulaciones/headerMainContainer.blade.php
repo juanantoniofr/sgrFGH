@@ -3,7 +3,9 @@
         
         <form class="navbar-form navbar-left">
             <div class="form-group ">
-                <a href="{{route('addRecurso')}}" class="active btn btn-danger" id="btnNuevoRecurso" title="Añadir nuevo Espacio o Equipo"><i class="fa fa-plus fa-fw"></i> Añadir</a>
+
+                <a href="" class="active btn btn-danger" id="botonMuestraModalNuevaTitulacion" title="Añadir nueva titulacion"><i class="fa fa-plus fa-fw"></i> Añadir titulación</a>
+
             </div>
             <div class="form-group ">
                 <a href="{{route('recursos')}}" class="btn btn-primary" title="Listar Espacios o Medios"><i class="fa fa-list fa-fw"></i> Listar todos</a>

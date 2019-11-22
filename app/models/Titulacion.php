@@ -4,7 +4,9 @@ class Titulacion extends Eloquent {
 
  	protected $table = 'titulaciones';
 
- 	protected $fillable = array('codigo', 'titulacion');
+
+ 	protected $fillable = array('codigo', 'nombre');
+
 
 
 	
