@@ -132,28 +132,38 @@ class recursosController extends BaseController {
     return View::make('admin.recurseAdd')->with(compact('recursos'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos');
   }
 
+  /**
+    * Guarda en BD un nuevo recurso (Espacio//puesto//medio
+    * 
+    * @param Input::get('odGRupo') :int 
+     * @param Input::get('nuevogrupo') :varchar(256)
+     *
+     * @return $respuesta :array, errores de validación de formulario o mensaje de éxito
+    */
+
   public function addRecurso(){
     
     //@params
     $idgrupo = Input::get('idgrupo','');
     $nuevogrupo = Input::get('nuevogrupo','');
-    //out
+    //@return
     $respuesta = array( 'error' => false,
                         'msg'   => 'Mensaje para el usuario....idgrupo = ' . $idgrupo .' y, nuevogrupo = ' . $nuevogrupo,
                         'errors' => array());
     
-    
-
-    
+    //Validación formulario 
     $rules = array(
         'nombre'      => 'required|unique:recursos',
         'nuevogrupo'  => 'required_if:idgrupo,0',
+        'aforomaximo' => 'integer',
+        'aforoexamen' => 'integer',        
         );
 
      $messages = array(
-          'required'      => 'El campo <strong>:attribute</strong> es obligatorio....',
-          'unique'        => 'Existe un recurso con el mismo nombre....',
-          'nuevogrupo.required_if'  => 'Campo requerido....',
+          'required'      => 'El campo <strong>:attribute</strong> es obligatorio.',
+          'unique'        => 'Existe un recurso con el mismo nombre.',
+          'nuevogrupo.required_if'  => 'Campo requerido.',
+          'integer' => 'El campo <strong>:attribute</strong> debe ser un número entero.'
         );
     
     $validator = Validator::make(Input::all(), $rules, $messages);
@@ -163,7 +173,6 @@ class recursosController extends BaseController {
         $respuesta['error'] = true;
         $respuesta['errors'] = $validator->errors()->toArray();
       }
-
     else{  
       $recurso = new Recurso;
       $recurso->nombre = Input::get('nombre');
@@ -173,6 +182,9 @@ class recursosController extends BaseController {
       $recurso->descripcion = Input::get('descripcion');
       $recurso->acl = $this->getACL();
       $recurso->id_lugar = Input::get('id_lugar');
+      $recurso->aforomaximo = Input::get('aforomaximo');
+      $recurso->aforoexamen = Input::get('aforoexamen');
+      $recurso->mediosdisponibles = json_encode(Input::get('mediosdiponibles'));
 
       if ($recurso->save()) Session::flash('message', 'Recurso <strong>'. $recurso->nombre .' </strong>añadido con éxito');
     
