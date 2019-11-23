@@ -121,6 +121,8 @@ $(function(e){
         e.preventDefault();
         updateChkeditorInstances();
         $data = $('form#nuevoRecurso').serialize();
+        console.log($data);
+        //exit;
         $.ajax({
             type: "GET",
             url: "salvarNuevoRecurso",

@@ -35,23 +35,13 @@
                 {{Form::text('aforoexam',Input::old('aforoexam'),array('class' => 'form-control'))}}
               </div>
 
-              <div class="form-group"> 
-                <label>Medios disponibles:</label><br />
-                <label class="checkbox-inline">
-                  <input type="checkbox" name = "mediosdisponibles[]" value="1" > Proyector
-                </label>
-                 <label class="checkbox-inline">
-                  <input type="checkbox" name = "mediosdisponibles[]" value="2" > PC
-                </label>
-                <label class="checkbox-inline">
-                  <input type="checkbox" name = "mediosdisponibles[]"  value="3" > Videoconferencia IP
-                </label>
-                <label class="checkbox-inline">
-                  <input type="checkbox" name = "mediosdisponibles[]" value="5" > Videoconferencia WEB 
-                </label>
-                <label class="checkbox-inline">
-                  <input type="checkbox" name = "microfono[]" value="6" > Micrófono
-                </label>
+              <div class="form-group">
+                <label>Medios disponibles:</label><br />  
+                @foreach($mediosdisponibles as $medio) 
+                  <label class="checkbox-inline">
+                    <input type="checkbox" name = "mediosdisponibles[]" value="{{$medio['codigo']}}" > {{$medio['nombre']}}
+                  </label>
+                @endforeach
               </div>
 
               

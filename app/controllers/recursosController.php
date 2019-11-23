@@ -75,6 +75,7 @@ class recursosController extends BaseController {
     return Redirect::back();
     
   }
+
   public function admins(){
 
     $sortby = Input::get('sortby','username');
@@ -125,21 +126,27 @@ class recursosController extends BaseController {
     
   }
 
+  /**
+    * Devuelve vista para añadir recurso ??? 
+    * 
+    * @return View::make('admin.recurseAdd') :string
+  */
 
 	public function formAdd(){
 
     $recursos = Recurso::groupby('grupo_id')->orderby('grupo','asc')->get();
-    return View::make('admin.recurseAdd')->with(compact('recursos'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos');
+    $mediosdisponibles = Config::get('mediosdisponibles.medios');
+    return View::make('admin.recurseAdd')->with(compact('recursos','mediosdisponibles'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos');
   }
 
   /**
     * Guarda en BD un nuevo recurso (Espacio//puesto//medio
     * 
     * @param Input::get('odGRupo') :int 
-     * @param Input::get('nuevogrupo') :varchar(256)
-     *
-     * @return $respuesta :array, errores de validación de formulario o mensaje de éxito
-    */
+    * @param Input::get('nuevogrupo') :varchar(256)
+    *
+    * @return $respuesta :array, errores de validación de formulario o mensaje de éxito
+  */
 
   public function addRecurso(){
     
@@ -182,9 +189,14 @@ class recursosController extends BaseController {
       $recurso->descripcion = Input::get('descripcion');
       $recurso->acl = $this->getACL();
       $recurso->id_lugar = Input::get('id_lugar');
-      $recurso->aforomaximo = Input::get('aforomaximo');
-      $recurso->aforoexamen = Input::get('aforoexamen');
-      $recurso->mediosdisponibles = json_encode(Input::get('mediosdiponibles'));
+      $recurso->aforomaximo = Input::get('aforomax');
+      $recurso->aforoexamen = Input::get('aforoexam');
+      $aMediosDisponibles = Input::get('mediosdisponibles',array());
+      $medios = implode(',', $aMediosDisponibles);
+      $recurso->mediosdisponibles = json_encode(
+          array(
+                'medios' => $medios )
+        );
 
       if ($recurso->save()) Session::flash('message', 'Recurso <strong>'. $recurso->nombre .' </strong>añadido con éxito');
     
@@ -198,7 +210,14 @@ class recursosController extends BaseController {
     }//fin else
 
     return $respuesta;
-  }//fin function
+  }
+
+
+  /**
+    * Devuelve vista principal gestión de recursos 
+    * 
+    * @return View::make('admin.recurseAdd') :string
+  */
 
   public function listar(){
       
@@ -209,6 +228,7 @@ class recursosController extends BaseController {
 
     $idgruposelected = Input::get('grupoid','');
     
+    $mediosdisponibles = Config::get('mediosdisponibles.medios');
     $recursosListados = 'Todos los recursos';
     if (!empty($idgruposelected)) $recursosListados = Recurso::where('grupo_id','=',$idgruposelected)->first()->grupo;
 
@@ -218,19 +238,18 @@ class recursosController extends BaseController {
       //ONLY_FULL_GROUP_BY delete for sql_mode servidor mysql
       $grupos = Recurso::groupby('grupo_id')->orderby('grupo','asc')->get();
       //$grupos = Recurso::all();
-      if (!empty($idgruposelected)) $recursos = Recurso::where('nombre','like',"%$search%")->where('grupo_id','=',$idgruposelected)/*->orderby($sortby,$order)*/->paginate($offset);
+      if (!empty($idgruposelected)) 
+        $recursos = Recurso::where('nombre','like',"%$search%")->where('grupo_id','=',$idgruposelected)/*->orderby($sortby,$order)*/->paginate($offset);
       else
-        
-      
-      return View::make('admin.recurselist')->with(compact('recursos','sortby','order','grupos','idgruposelected','recursosListados'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos')->nest('modalAdd','admin.recurseModalAdd',array('grupos'=>$grupos))->nest('modalEdit','admin.recurseModalEdit',array('recursos'=>$grupos))->nest('modalEditGrupo','admin.modaleditgrupo');
-    }
+        return View::make('admin.recurselist')->with(compact('recursos','sortby','order','grupos','idgruposelected','recursosListados'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos')->nest('modalAdd','admin.recurseModalAdd',compact('grupos','mediosdisponibles'))->nest('modalEdit','admin.recurseModalEdit',array('recursos'=>$grupos))->nest('modalEditGrupo','admin.modaleditgrupo');
+      }
     
-
     $recursos = User::find(Auth::user()->id)->supervisa()->where('nombre','like',"%$search%")->orderby($sortby,$order)->paginate($offset);
     $grupos = User::find(Auth::user()->id)->supervisa()->groupby('grupo_id')->orderby('grupo','asc')->get();
-    if (!empty($idgruposelected)) $recursos = Recurso::where('nombre','like',"%$search%")->where('grupo_id','=',$idgruposelected)->orderby($sortby,$order)->paginate($offset);
-
-    return View::make('admin.recurselist')->with(compact('recursos','sortby','order','grupos','idgruposelected','recursosListados'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos')->nest('modalAdd','admin.recurseModalAdd',compact('grupos'))->nest('modalEdit','admin.recurseModalEdit',array('recursos'=>$grupos))->nest('modalEditGrupo','admin.modaleditgrupo');
+    if (!empty($idgruposelected))
+      $recursos = Recurso::where('nombre','like',"%$search%")->where('grupo_id','=',$idgruposelected)->orderby($sortby,$order)->paginate($offset);
+      
+    return View::make('admin.recurselist')->with(compact('recursos','sortby','order','grupos','idgruposelected','recursosListados'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos')->nest('modalAdd','admin.recurseModalAdd',compact('grupos','mediosdisponibles'))->nest('modalEdit','admin.recurseModalEdit',array('recursos'=>$grupos))->nest('modalEditGrupo','admin.modaleditgrupo');
   } 
 
 
