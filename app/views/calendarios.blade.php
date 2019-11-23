@@ -9,38 +9,39 @@
 
 <div id="page-wrapper"> 
 
-
   <div class="row">
-  <div id = "espera" style="display:none"></div>
+    <div id = "espera" style="display:none"></div>
 
     <div id="calendario">
+    
       <h2>
         Calendario: <span id ="recurseName"></span> 
       </h2>
      
-     <a id ="pdfseprus" style="display:none" class="btn btn-danger right" alt="Plan de Autoportección F. de Comunicación: Organización de Actos Públicos y Cesión de Espacios" href="{{asset('assets/organizacionActosPublicosyCesionDeEspacios.pdf')}}" target="_blank"><i class="fa fa-file-pdf-o fa-fw" ></i> Instrucciones de seguridad generales y normas de actuación ante emergencias</a>
+      <a id ="pdfseprus" style="display:none" class="btn btn-danger right" alt="Plan de Autoportección F. de Comunicación: Organización de Actos Públicos y Cesión de Espacios" href="{{asset('assets/organizacionActosPublicosyCesionDeEspacios.pdf')}}" target="_blank"><i class="fa fa-file-pdf-o fa-fw" ></i> Instrucciones de seguridad generales y normas de actuación ante emergencias</a>
           
       <hr />
 
       <div class="form-inline pull-left" role="form">
         
         <div class="form-group">
-          <button class="btn btn-danger" data-toggle="modal" data-target=".myModal-sm" id="btnNuevaReserva" data-fristday="{{date('d-m-Y',ACL::fristMonday())}}"><i class="fa fa-calendar fa-fw" ></i>
-           Nueva reserva
+          
+          <button class="btn btn-danger" data-toggle="modal" data-target=".myModal-sm" id="btnNuevaReserva" data-fristday="{{date('d-m-Y',ACL::fristMonday())}}">
+            <i class="fa fa-calendar fa-fw" ></i>
+            Nueva reserva
           </button>
           <a class="btn btn-info" id="infoButton" alt="Muestra descripción del recurso..." style="display:none" > <i class="fa fa-eye fa-fw" ></i>Descripción</a>
-
         </div>
-
       </div>  
 
-      
       <div class="form-inline pull-right btn-group">
+        
         <div class="btn-group" style = "margin-right:10px" id="btnNav">
           <button class="btn btn-primary" data-calendar-nav="prev" id="navprev"> << </button>
           <button class="btn btn-default active" data-calendar-nav="today" id="navhoy">Hoy</button>
           <button class="btn btn-primary" data-calendar-nav="next" id="navnext"> >></button>
         </div>
+        
         <div class="btn-group" id = "btnView" style = "margin-right:10px">
           <!--<button class="btn btn-warning" data-calendar-view="year">Year</button>-->
           <button class="btn btn-warning active" data-calendar-view="month">Mes</button>
@@ -50,30 +51,24 @@
           <i class="glyphicon glyphicon-list-alt"></i> Mi Agenda
           </button>
         </div>
+        
         <div class = "btn-group"  >
           <a type="button" data-view="{{$viewActive}}" data-day="{{$day}}" data-month="{{$numMonth}}" data-year="{{$year}}"  id="btnprint"  class="btn btn-primary disabled">
             <i class="fa fa-print fa-fw" ></i> Imprimir
           </a>
         </div>
-     </div>
+      </div>
 
-
-      
-
-          
       @if(isset($msg) && !empty($msg))
         <div class="alert alert-danger col-md-12 text-center" role="alert" id="alert_msg" data-nh="{{$nh}}"><strong>{{$msg}}</strong></div> 
       @else
         <div class="alert alert-danger col-md-12 text-center" role="alert" id="alert"><strong> Por favor, seleccione espacio o medio a reservar</strong></div> 
-       
       @endif
+      
       <div style = "display:none" class="alert alert-info col-md-12 text-center" role="alert" id="msg"></div> 
       <div style = "display:none" class="alert alert-success col-md-12 text-center" role="alert" id="message"></div>
       <div style = "display:none" class="alert alert-warning col-md-12 text-center" role="alert" id="warning"></div>
     
-
-
-      
       <div id="loadCalendar">  
         <table class="pull-left " style = "table-layout: fixed;width: 100%;" id="tableCalendar" >
           <caption id="tableCaption">{{$tCaption}}</caption>
@@ -81,99 +76,93 @@
           <tbody id="tableBody">{{$tBody}}</tbody>
         </table>
       </div>
-    </div>   
+    </div><!-- /#calendario -->   
+ </div><!-- /.row -->
+</div><!-- /#page-wrapper -->
 
-
- </div>
- <!-- /#row -->
-</div>
-
-  <!-- /#page-wrapper -->
-
- <!-- Modal deleteEvent
-  **********************
-  **********************
-   -->
-
-  <div class="modal fade deleteOptionsModal-lg " id="deleteOptionsModal" tabindex="-2" role="dialog" aria-labelledby="optionsDelete" aria-hidden="true">
+<!-- Modal deleteEvent-->
+<div class="modal fade deleteOptionsModal-lg " id="deleteOptionsModal" tabindex="-2" role="dialog" aria-labelledby="optionsDelete" aria-hidden="true">
     
-    <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg">
       
-      <div class="modal-content">
+    <div class="modal-content">
         
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3 class="modal-title" id="deleteModalTitle">Eliminar evento</h3>
-        </div>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="modal-title" id="deleteModalTitle">Eliminar evento</h3>
+      </div><!-- /.modal-header -->
         
 
-        <div class="modal-body" style = "min-height:100px">
-          <div  class="col-md-12 alert alert-danger text-center" rol="alert" >¿Seguro que desea eliminar el evento?</div>
+      <div class="modal-body" style = "min-height:100px">
+        
+        <div  class="col-md-12 alert alert-danger text-center" rol="alert" >¿Seguro que desea eliminar el evento?
         </div>
+      </div><!-- /.modal-body -->
     
-        <div class="modal-footer">
+      <div class="modal-footer">
          
-          <div class="col-md-12">
-            <button type="button" class="btn btn-primary optiondel" id="option1" data-id-serie="" data-id-evento="">Eliminar evento/s</button><br />
-          </div>  
-          <div class="col-lg-12" style="margin-top:10px">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-          </div>
+        <div class="col-md-12">
+          <button type="button" class="btn btn-primary optiondel" id="option1" data-id-serie="" data-id-evento="">Eliminar evento/s</button><br />
+        </div>  
+    
+        <div class="col-lg-12" style="margin-top:10px">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
         </div>
+      </div><!-- /.modal-footer -->
       
-      </div>
-    </div>
-  </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <!-- Modal addEvent & editEvent  -->
 <div class="modal fade myModal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="formNewEvent" aria-hidden="true">
-    
-    <div class="modal-dialog modal-lg">
+
+  <div class="modal-dialog modal-lg">
      
-      <div class="modal-content">
-        
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h3 class="modal-title" id="myModalLabel"></h3>
-        </div><!-- ./header --> 
+      </div><!-- ./header --> 
         
 
-        <div class="modal-body">
-          <form class="form-horizontal" role="form" id = "addEvent">
-            <h4 style = "border-bottom:1px solid #bbb;color:#999;margin:0px;margin-bottom:10px;">Información básica</h4>
+      <div class="modal-body">
+      
+        <form class="form-horizontal" role="form" id = "addEvent">
+          <h4 style = "border-bottom:1px solid #bbb;color:#999;margin:0px;margin-bottom:10px;">Información básica</h4>
             
-            <!-- Errores --> 
-            <div id = 'errorsModalAdd' class = "col-md-12 alert alert-danger text-center is_slide" style = "display:none">  
-              <p id="titulo_Error" class="col-md-12" style=""></p>
-              <p id="fInicio_Error" class="col-md-12" style=""></p>
-              <p id="hFin_Error" class="col-md-12" style=""></p>
-              <p id="fEvento_Error" class="col-md-12" style=""></p>
-              <p id="fFin_Error" class="col-md-12" style=""></p>
-              <p id="dias_Error" class="col-md-12" style=""></p>
-            </div>
-
-
-            <!-- título -->
-            <div class="form-group" id="titulo">
-              <label for="titulo"  class="control-label col-sm-2" >Título: </label>   
-              <div class = "col-sm-10">  
-                <input type="text" name = "titulo" class="form-control" placeholder="Introducir título de la reserva" id="newReservaTitle" />
-              </div>             
-            </div>
+          <!-- Errores --> 
+          <div id = 'errorsModalAdd' class = "col-md-12 alert alert-danger text-center is_slide" style = "display:none">  
+            <p id="titulo_Error" class="col-md-12" style=""></p>
+            <p id="fInicio_Error" class="col-md-12" style=""></p>
+            <p id="hFin_Error" class="col-md-12" style=""></p>
+            <p id="fEvento_Error" class="col-md-12" style=""></p>
+            <p id="fFin_Error" class="col-md-12" style=""></p>
+            <p id="dias_Error" class="col-md-12" style=""></p>
+          </div>
+          
+          <!-- título -->
+          <div class="form-group" id="titulo">
+            <label for="titulo"  class="control-label col-sm-2" >Título: </label>   
+            <div class = "col-sm-10">  
+              <input type="text" name = "titulo" class="form-control" placeholder="Introducir título de la reserva" id="newReservaTitle" />
+            </div>             
+          </div>
            
-            <!-- Actividad -->
-            <div class="form-group">
-              <label class="control-label col-sm-2">Actividad:</label>
-              <div class="col-sm-8">
-                <select class="form-control"  name="actividad" id="tipoActividad">
+          <!-- Actividad -->
+          <div class="form-group">
+            
+            <label class="control-label col-sm-2">Actividad:</label>
+            <div class="col-sm-8">
+            
+              <select class="form-control"  name="actividad" id="tipoActividad">
                   
-                  @foreach ($tipoActividades as $actividad)
-                    <option value=" {{ $actividad['codigo'] }} ">{{ $actividad['actividad'] }}
-                    </option>
-                  @endforeach
-                  
-                </select>
-              </div>
+                @foreach ($tipoActividades as $actividad)
+                  <option value=" {{ $actividad['codigo'] }} ">{{ $actividad['actividad'] }}</option>
+                @endforeach
+              </select>
+            </div>
             </div>
 
             <!-- Fecha  evento -->
@@ -225,35 +214,43 @@
           </div>
       
           <div id="divPeriocidad" @if (ACL::withOutRepetition()) {{'style="display:none"'}} @endif>
+          
             <h4 style = "border-bottom:1px solid #bbb;color:#999;margin:0px;margin-bottom:10px;">Periocidad</h4>
 
-            <!-- repetición?? -->
+            
             <div class="form-group">
+          
               <label  class="control-label col-md-2">Repetir.... </label> 
               <div class="col-md-10">  
+          
                   <select class="form-control" name="repetir" id="newReservaRepetir" >
+          
                     <option value="SR">Sin repetición</option>
                     <option value="CS">Cada Semana</option>
                   </select>
               </div>
             </div>
 
-            <!-- fecha inicio, fecha finalización y días -->            
+            <!-- fecha inicio, fecha finalización y días -->         
             <div id="inputRepeticion">
               <!-- fecha inicio -->
+              
               <div class="form-group" id="fInicio">
-                  <label for="fInicio"  class="control-label col-md-2" >Empieza el: </label> 
-                  <div class="col-md-4">  
-                    <input type="text" name="fInicio"  class="form-control"   id="datepickerFevento"  />
-                  </div>
+              
+                <label for="fInicio"  class="control-label col-md-2" >Empieza el: </label> 
+                <div class="col-md-4">  
+                  <input type="text" name="fInicio"  class="form-control"   id="datepickerFevento"  />
+                </div>
               </div>    
+              
               <!-- fecha finalización -->
               <div class="form-group" id="fIni">
-                  <label for="fFin"  class="control-label col-md-2">Finaliza el: </label> 
-                    <div class="col-md-4">  
-                      <input type="text" name="fFin" class="form-control" id="datepickerFfin" />
-                    </div>
+                <label for="fFin"  class="control-label col-md-2">Finaliza el: </label> 
+                  <div class="col-md-4">  
+                    <input type="text" name="fFin" class="form-control" id="datepickerFfin" />
+                  </div>
               </div>
+              
               <!-- días -->
               <div class="form-group" id="dias">
                 <label  class="control-label col-md-2">Los días: </label>
@@ -283,8 +280,10 @@
               </div>        
             </div>
           </div>  
+        
           <!-- técnicos y administradores de SGR: Reservas para otros usurios -->
           @if((Auth::user()->capacidad == 3 || Auth::user()->capacidad == 4) && !empty($uvusUser))
+            
             <h4 style = "border-bottom:1px solid #bbb;color:#999;margin:0px;margin-bottom:10px;">Reserva delegada </h4>
             <!-- observaciones -->  
             <div class="form-group" id="para">
@@ -295,38 +294,37 @@
             </div>
 
             <div class="form-group" id="por">
+            
               <label for="reservadoPor"  class="control-label col-md-2" >Reservado por</label>   
               <div class = "col-md-10">  
                 <input type="text" name = "reservadoPor" class="form-control"  value="{{Auth::user()->nombre}} {{Auth::user()->apellidos}} ({{Auth::user()->username}})" readonly />
               </div>             
             </div>
-            
           @endif
+        
             <h4 style = "border-bottom:1px solid #bbb;color:#999;margin:0px;margin-bottom:10px;">Resumen</h4>
             <div class="alert alert-info text-center" role="alert" id="resumen"><p></p></div>
             <!-- fin elementos de edición -->
             
             <input type="hidden" name="id_recurso" id="idRecurso" value="" />
             <input type="hidden" name="action"  id="actionType" value="" />
-            
-          </form>
-        </div><!-- ./body -->
+        </form>
+      </div><!-- ./body -->
         
 
-        <div class="modal-footer">
-          <div class="col-md-12 " style = "display:none" id = "editOptions">
-            <button type="button" class="btn btn-primary  optionedit" id="editOption1" data-id-serie="" data-id-evento="">Modificar evento</button>
-          </div>
-          <div class="col-lg-12" style="margin-top:10px">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" id="save">Salvar</button>
-          </div>
-        </div><!-- ./footer -->
-
-      </div>
-    </div>
-</div>
-<!-- ./modal addEvent & editEvent -->
+      <div class="modal-footer">
+       
+        <div class="col-md-12 " style = "display:none" id = "editOptions">
+          <button type="button" class="btn btn-primary  optionedit" id="editOption1" data-id-serie="" data-id-evento="">Modificar evento</button>
+        </div>
+        <div class="col-lg-12" style="margin-top:10px">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="save">Salvar</button>
+        </div>
+      </div><!-- ./footer -->
+    </div><!-- ./modal-content -->
+  </div><!-- ./modal-dialog -->
+</div><!-- ./modal -->
 
 <!-- Modal print -->
 <div class="modal fade printModal-md " id="printModal" tabindex="-3" role="dialog" aria-labelledby="print" aria-hidden="true">
@@ -389,14 +387,12 @@
       </div><!-- ./content -->
     </div><!-- ./modal-dialog -->
 </div>
-<!-- ./modal print -->
 
+{{$modaldescripcion or ''}}
+{{$modalMsg         or ''}}
 
+@stop
 
-  {{$modaldescripcion or ''}}
-  {{$modalMsg         or ''}}
-
- @stop
 @section('js')
   {{HTML::script('assets/js/calendar.js')}}
   {{HTML::script('assets/js/imprimir.js')}}

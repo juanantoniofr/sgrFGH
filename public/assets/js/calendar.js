@@ -129,7 +129,6 @@ $(function(e){
 			showGifEspera();
 			$('#message').fadeOut("slow");
 			
-			//$('form#selectRecurse ').serialize());
 			$.ajax({
 				type:"GET",
 				url:"ajaxGetRecursoByGroup",
@@ -618,15 +617,12 @@ $(function(e){
 				data:{viewActive: $viewActive,day: $aDate[0],month: $aDate[1], year: $aDate[2],id_recurso: $id_recurso,groupID: $grupo_id},
 				success: function(respuesta){
 					if ($('select#recurse option:selected').val()) {$('#alert').css('display','none');}
-					//if ($('select#recurse option:selected').data('disabled')) $('#warning').html('Espacio Deshabilitado temporalmente..... <br />No es posible añadir nuevas reservas.').fadeIn('slow');
-					//else $('#warning').fadeOut('fast');
-
+					
 					$('#tableCaption').fadeIn('slow').html(respuesta['tCaption']);
 					$('#tableHead').fadeIn('slow').html(respuesta['tHead']);
 					$('#tableBody').fadeIn('slow').html(respuesta['tBody']);
 					
 					init();
-					//if (!$('select#recurse option:selected').data('disabled')) programerEventClickToCalendarCell();
 					
                     programerEventClickToCalendarCell();
 					if ($viewActive == 'agenda') {
@@ -645,17 +641,14 @@ $(function(e){
              
                     }
 
-
 					hideGifEspera();
-					},
-					error: function(xhr, ajaxOptions, thrownError){
-						hideGifEspera();
-						alert(xhr.responseText + ' (codeError: ' + xhr.status +')');
-					}
-				});
-				
+				},
+				error: function(xhr, ajaxOptions, thrownError){
+					hideGifEspera();
+					alert(xhr.responseText + ' (codeError: ' + xhr.status +')');
+				}
+			});
 		}
-
 	}
 	
 
@@ -1224,6 +1217,7 @@ $(function(e){
 			$strCalendar = 'todos lo espacios o medios';
 		} 
 		else {
+			
 			$strCalendar = $('select#recurse option:selected').text();
 			$idrecurso = $('select#recurse option:selected').val();
 			//Ajax para obtener descripcion recurso y muestra botón si no vacio
@@ -1237,20 +1231,20 @@ $(function(e){
 						$('#nombrerecurso').html($strCalendar);
 						$('#descripcionRecurso').html($respuesta);
 						if ($respuesta != '') $('#infoButton').fadeIn();
-						}
-					else $('#infoButton').fadeOut();
-					},
-					error: function(xhr, ajaxOptions, thrownError){
-						$('#infoButton').fadeOut();
-						hideGifEspera();
-						alert(xhr.responseText + ' (codeError: ' + xhr.status +')');
 					}
-				});
-			
-			
-
-			}
-			$('#recurseName').html($strCalendar).fadeIn();
+					else $('#infoButton').fadeOut();
+				},
+				error: function(xhr, ajaxOptions, thrownError){
+					$('#infoButton').fadeOut();
+					hideGifEspera();
+					alert(xhr.responseText + ' (codeError: ' + xhr.status +')');
+				}
+			});
+		}
+		$strCalendar += '<br /><small>Aforo Máximo:<b> ' + $('select#recurse option:selected').data('aforomaximo') + '</b>, </small>';
+		$strCalendar += '<small>Aforo Exámenes:<b> ' + $('select#recurse option:selected').data('aforoexamenes') + '</b>, </small>';
+		$strCalendar += '<small>Medios disponibles:<b> ' + $('select#recurse option:selected').data('mediosdisponibles') + '</b></small>';
+		$('#recurseName').html($strCalendar).fadeIn();
 	}
 
 	//Other functions

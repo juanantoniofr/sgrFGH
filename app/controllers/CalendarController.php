@@ -230,10 +230,7 @@ class CalendarController extends BaseController {
 		$tBody = Calendar::getBodytableMonth($numMonth,$year);
 		
 		//Se obtinen todos los grupos de recursos
-		$grupos = DB::table('recursos')->select('id', 'acl', 'grupo','grupo_id')->groupby('grupo')->get();
-		//$grupos = Recurso::all()->unique('grupo_id');
-		//$grupos = $grupos->unique('grupo');//DB::table('recursos')->select('id', 'acl', 'grupo','grupo_id')->getunique('grupo'); 
-		
+		$grupos = Recurso::groupBy('grupo')->get();
 		
 		//se filtran para obtener sólo aquellos con acceso para el usuario logeado
 		$groupWithAccess = array();
@@ -241,8 +238,7 @@ class CalendarController extends BaseController {
 			if (ACL::canReservation($grupo->id,$grupo->acl))
 				$groupWithAccess[] = $grupo;
 		}
-		
-		
+				
 		$dropdown = Auth::user()->dropdownMenu();		
 		//se devuelve la vista calendario.
 		return View::make('calendarios')->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tCaption',$tCaption)->with('tHead',$tHead)->with('tBody',$tBody)->with('nh',$nh)->with('viewActive',$viewActive)->with('uvusUser',$uvus)->nest('sidebar','sidebar',array('msg' => $msg,'grupos' => $groupWithAccess))->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg');
@@ -336,8 +332,15 @@ class CalendarController extends BaseController {
 
 			$showdisabled = $recurso->disabled;
 			if ( Auth::user()->isValidador() ) $showdisabled = 0;
-			//Falta: if puede reservar => seguimos
-			$html .= '<option '.$selected.' value="'.$recurso->id.'" data-disabled="'.$showdisabled.'">'.$recurso->nombre;
+			
+			$aCodigosMediosRecurso = explode(',',json_decode($recurso->mediosdisponibles)->medios);
+			$aNombresMedios = array();
+			foreach (Config::get('mediosdisponibles.medios') as $medio) {
+				if (in_array($medio['codigo'],$aCodigosMediosRecurso) )
+					$aNombresMedios[] = $medio['nombre'];
+						
+			}
+			$html .= '<option '.$selected.' value="'.$recurso->id.'" data-disabled="'.$showdisabled.'" data-aforomaximo ="'.$recurso->aforomaximo.'" data-aforoexamenes="'.$recurso->aforoexamen.'" data-mediosdisponibles="'.implode(', ',$aNombresMedios).'" >'.$recurso->nombre;
 			if ($recurso->disabled) {
 				$itemsdisabled++;
 				$html .= ' (Deshabilitado)';

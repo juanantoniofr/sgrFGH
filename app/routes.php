@@ -58,16 +58,8 @@ Route::get('hola',array('as'=>'hola',function(){
 //*********
 
 Route::get('/admin/titulaciones.html',array('as' => 'titulaciones','uses' => 'TitulacionController@listar'));
-
-
-
 Route::post('admin/salvaNuevaTitulacion',array('as' => 'salvaNuevaTitulacion','uses' => 'TitulacionController@nuevaTitulacion','before' => array(/*'auth',*/'ajax_check'/*,'capacidad:4-6,msg'*/)) );//Nueva Titulacion 
-
 Route::get('admin/getTitulacion',array('as' => 'getTitulacion','uses' => 'TitulacionController@getTitulacion','before' => array(/*'auth',*/'ajax_check'/*,'capacidad:4-6,msg'*/)) );//Nueva Titulacion 
-
-
-
-
 
 //*********
 // Login
@@ -76,7 +68,6 @@ Route::get('admin/getTitulacion',array('as' => 'getTitulacion','uses' => 'Titula
 Route::get('/',array('as' => 'loginsso','uses' => 'AuthController@doLogin'));
 Route::post('login', 'AuthController@postLogin'); // Verificar datos
 Route::get('logout',array('as' => 'logout','uses' => 'AuthController@doLogout'));
-
 
 //*********
 // Admin (capacidad = 4)
@@ -89,6 +80,8 @@ Route::get('admin/home.html',array('as' => 'adminHome.html','uses' => 'UsersCont
 Route::get('calendariosFCOM.html',array('as' => 'calendariosFCOM.html','uses' => 'CalendarController@showCalendarViewMonth','before' => array('auth','inicioCurso','capacidad:1-2-3-4-5-6,msg')));
 
 Route::get('calendarios.html',array('as' => 'calendarios.html','uses' => 'CalendarControllerFGH@showCalendarViewMonth','before' => array('auth','inicioCurso','capacidad:1-2-3-4-5-6,msg')));
+Route::get('ajaxGetRecursoByGroup',array('as' => 'getRecursoByAjax','uses' => 'CalendarController@getRecursosByAjax','before' => array('auth','ajax_check')));
+
 
 //*********
 // Recursos (capacidad = 4)
@@ -241,8 +234,6 @@ Route::get('admin/logs.html',array('as' => 'logs.html',function(){
 
 
 //Ajax function
-//Evento: cambio grupo de recursos
-Route::get('ajaxGetRecursoByGroup',array('as' => 'getRecursoByAjax','uses' => 'CalendarController@getRecursosByAjax','before' => array('auth','ajax_check')));
 //Evento: cambio recurso seleccionado
 Route::get('ajaxCalendar',array('uses' => 'CalendarController@getTablebyajax','before' => array('auth','ajax_check')));
 Route::get('enableInputRepeticion',array('uses' => 'CalendarController@enableInputRepeticion','before' => array('auth','ajax_check')));
