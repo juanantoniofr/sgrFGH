@@ -41,6 +41,25 @@ class Recurso extends Eloquent {
         
     }
 
+    /**
+    * Nombres de los medios desde el código almacenado en DB 
+    * 
+    * @return $aNombresMedios :array
+    */
+    public function getNombreMedios(){
+        
+        $aNombresMedios = array();
+        
+        $aCodigosMediosRecurso = explode(',',json_decode($this->mediosdisponibles)->medios);
+            
+        foreach (Config::get('mediosdisponibles.medios') as $medio) {
+            if (in_array($medio['codigo'],$aCodigosMediosRecurso) )
+                    $aNombresMedios[] = $medio['nombre'];
+                        
+            }
+        return $aNombresMedios;        
+    }
+
     public function tipoGestionReservas(){
 
         $result = 'No está definida....';

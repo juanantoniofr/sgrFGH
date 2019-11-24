@@ -206,4 +206,5 @@ $(function(e){
         $('#nuevoGrupo_edit').toggle('slow');
     });
 
+    $('[data-toggle="tooltip"]').tooltip();
 });

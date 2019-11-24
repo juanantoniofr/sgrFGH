@@ -93,9 +93,9 @@ Route::get('admin/salvarNuevoRecurso',array('as' => 'postAddRecurso','uses' => '
 //??
 Route::get('admin/editarecurso.html',array('as' => 'editarecurso.html','uses' => 'recursosController@formEdit','before' => array('auth','capacidad:4-6,msg')));
 //<./-- ?? -->
+
 //return ventana modal edición de recurso
 Route::get('admin/getrecurso',array('uses'=>'recursosController@getrecurso','before' => array('auth','capacidad:4-6,msg')));
-
 Route::post('admin/updateRecurso.html',array('uses' => 'recursosController@editRecurso','before' => array('auth','ajax_check','capacidad:4-6,msg')));
 
 

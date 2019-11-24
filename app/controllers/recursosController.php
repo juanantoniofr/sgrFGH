@@ -141,6 +141,7 @@ class recursosController extends BaseController {
     //@params
     $idgrupo = Input::get('idgrupo','');
     $nuevogrupo = Input::get('nuevogrupo','');
+    
     //@return
     $respuesta = array( 'error' => false,
                         'msg'   => 'Mensaje para el usuario....idgrupo = ' . $idgrupo .' y, nuevogrupo = ' . $nuevogrupo,
@@ -148,18 +149,18 @@ class recursosController extends BaseController {
     
     //Validación formulario 
     $rules = array(
-        'nombre'      => 'required|unique:recursos',
-        'nuevogrupo'  => 'required_if:idgrupo,0',
-        'aforomaximo' => 'integer',
-        'aforoexamen' => 'integer',        
-        );
+      'nombre'      => 'required|unique:recursos',
+      'nuevogrupo'  => 'required_if:idgrupo,0',
+      'aforomaximo' => 'integer',
+      'aforoexamen' => 'integer',        
+    );
 
      $messages = array(
-          'required'      => 'El campo <strong>:attribute</strong> es obligatorio.',
-          'unique'        => 'Existe un recurso con el mismo nombre.',
-          'nuevogrupo.required_if'  => 'Campo requerido.',
-          'integer' => 'El campo <strong>:attribute</strong> debe ser un número entero.'
-        );
+      'required'  => 'El campo <strong>:attribute</strong> es obligatorio.',
+      'unique'  => 'Existe un recurso con el mismo nombre.',
+      'nuevogrupo.required_if'  => 'Campo requerido.',
+      'integer' => 'El campo <strong>:attribute</strong> debe ser un número entero.'
+      );
     
     $validator = Validator::make(Input::all(), $rules, $messages);
 
@@ -222,15 +223,15 @@ class recursosController extends BaseController {
 
     if (Auth::user()->capacidad == '4'){
       //administrador puede ver todo
-      $recursos = Recurso::where('nombre','like',"%$search%")/*->sortby($sortby,$order)*/->paginate($offset);
+      $recursos = Recurso::where('nombre','like',"%$search%")->paginate($offset);
       //ONLY_FULL_GROUP_BY delete for sql_mode servidor mysql
       $grupos = Recurso::groupby('grupo_id')->orderby('grupo','asc')->get();
-      //$grupos = Recurso::all();
+      
       if (!empty($idgruposelected)) 
-        $recursos = Recurso::where('nombre','like',"%$search%")->where('grupo_id','=',$idgruposelected)/*->orderby($sortby,$order)*/->paginate($offset);
+        $recursos = Recurso::where('nombre','like',"%$search%")->where('grupo_id','=',$idgruposelected)->paginate($offset);
       else
         return View::make('admin.recurselist')->with(compact('recursos','sortby','order','grupos','idgruposelected','recursosListados'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos')->nest('modalAdd','admin.recurseModalAdd',compact('grupos','mediosdisponibles'))->nest('modalEdit','admin.recurseModalEdit',array('recursos'=>$grupos))->nest('modalEditGrupo','admin.modaleditgrupo');
-      }
+    }
     
     $recursos = User::find(Auth::user()->id)->supervisa()->where('nombre','like',"%$search%")->orderby($sortby,$order)->paginate($offset);
     $grupos = User::find(Auth::user()->id)->supervisa()->groupby('grupo_id')->orderby('grupo','asc')->get();
@@ -296,25 +297,13 @@ class recursosController extends BaseController {
     $result['visibilidad'] = explode(',',$acl->r);
     $result['medios'] = explode(',', json_decode($recurso['mediosdisponibles'])->medios);
    
-    /* códigos de los medios del recurso con id = Input::get('id') */
-      //$aCodigosMediosRecurso = explode(',',json_decode($recurso['mediosdisponibles'])->medios);
-    /*
-      de todos los medios disponibles (Config::get('mediosdisponibles.medios')), obtengo array('codigo','nombre') solo si el ?código' existe entre los códigos de medios del recurso
-    */
-    
-    //foreach (Config::get('mediosdisponibles.medios') as $medio) {
-    //    if (in_array($medio['codigo'],$aCodigosMediosRecurso) )
-    //      $result['medios'][$medio['codigo']] = $medio['nombre'];
-    //}    
-   
     return $result;
   }
 
   /**
-    * Devuelve el formulario de edición de un recurso
+    * Actualiza recurso en BD con id = Input::get('id')
     * @param Input::get('id') :integer
-    * @param Input::get('idgrupo') :integer
-    * @param Input::get('nuevogrupo') :string
+    * @param Input::all() :object Recurso
     *
     * @return $respuesta :array, errores de validación de formulario | mesnaje de éxito
   */
@@ -325,19 +314,27 @@ class recursosController extends BaseController {
     $id = Input::get('id');
     $idgrupo = Input::get('idgrupo','');
     $nuevogrupo = Input::get('nuevogrupo','');
+    
     //@return
-    $respuesta = array( 'errores'   => array(),
-                        'hasError'  => false);
+    $respuesta = array(
+      'errores'   => array(),
+      'hasError'  => false
+    );
     
     //Validación de formulario
-    $rules = array( 'nombre'  => 'required|unique:recursos,nombre,'.$id,
-                    'nuevogrupo'  => 'required_if:idgrupo,0',
-              );
+    $rules = array(
+      'nombre'  => 'required|unique:recursos,nombre,'.$id,
+      'nuevogrupo'  => 'required_if:idgrupo,0',
+      'aforomaximo' => 'integer',
+      'aforoexamen' => 'integer',
+    );
 
-     $messages = array( 'required'  => 'El campo <strong>:attribute</strong> es obligatorio....',
-                        'unique'  => 'Existe un recurso con el mismo nombre....',
-                        'nuevogrupo.required_if'  => 'El valor no puede quedar vacio....',
-                      );
+    $messages = array(
+      'required'  => 'El campo <strong>:attribute</strong> es obligatorio....',
+      'unique'  => 'Existe un recurso con el mismo nombre....',
+      'nuevogrupo.required_if'  => 'El valor no puede quedar vacio....',
+      'integer' => 'El campo <strong>:attribute</strong> debe ser un número entero.',
+    );
     
     $validator = Validator::make(Input::all(), $rules, $messages);
 
@@ -351,12 +348,21 @@ class recursosController extends BaseController {
       
       $recurso = Recurso::find($id);
       $recurso->nombre = Input::get('nombre');
+      $recurso->aforomaximo = Input::get('aforomaximo');
+      $recurso->aforoexamen = Input::get('aforoexamen');
       $recurso->grupo = $this->getNombre();
       $recurso->grupo_id = $this->getIdGrupo();
       $recurso->tipo = Input::get('tipo','espacio');
       $recurso->descripcion = Input::get('descripcion');
       $recurso->acl = $this->getACL();
       $recurso->id_lugar = Input::get('id_lugar');
+      $aMediosDisponibles = Input::get('medios',array());
+      $medios = implode(',', $aMediosDisponibles);
+      $recurso->mediosdisponibles = json_encode(
+          array(
+                'medios' => $medios )
+        );
+
 
       if ($recurso->save()) Session::flash('message', 'Cambios en <strong>'. $recurso->nombre .' </strong> salvados...');
     }

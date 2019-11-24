@@ -28,22 +28,21 @@
                         
             <div class="row">
     
-            <form class="navbar-form navbar-right">    
-                <div class="form-group ">
-                    <select class="form-control" id="selectRecurso" name="grupoid" >
-                        <option value ="">Seleccione grupo.....</option>
-                        @foreach ($grupos as $grupo)
-                            <option value="{{$grupo->grupo_id}}" placeholder="Seleccione recurso...">{{$grupo->grupo}}</option>
-                        @endforeach
-                    </select>
-                    <button type="submit" class="btn btn-primary form-control" role="submit"><i class="fa fa-filter fa-fw"></i> Filtrar</button> 
-                </div>
-            </form>
-            <form class="navbar-form navbar-right" >    
-                           
-            </form>
-
-            </div>
+	            <form class="navbar-form navbar-right">    
+	                <div class="form-group ">
+	                    <select class="form-control" id="selectRecurso" name="grupoid" >
+	                        <option value ="">Seleccione grupo.....</option>
+	                        @foreach ($grupos as $grupo)
+	                            <option value="{{$grupo->grupo_id}}" placeholder="Seleccione recurso...">{{$grupo->grupo}}</option>
+	                        @endforeach
+	                    </select>
+	                    <button type="submit" class="btn btn-primary form-control" role="submit"><i class="fa fa-filter fa-fw"></i> Filtrar</button> 
+	                </div>
+	            </form>
+	            <form class="navbar-form navbar-right" >    
+	                           
+	            </form>
+				</div>
 
             @if (Session::has('message'))
                 <div class="alert alert-success alert-dismissable">
@@ -53,35 +52,38 @@
             @endif
             
             <table class="table table-hover table-striped">
-                <thead>
-                    <th style="width:5%" >Id. de Lugar</th>
-                    <!-- Order column by nombre de equipo--> 
-                    <th style="" >
-                        @if ($sortby == 'nombre' && $order == 'asc') {{
-                            link_to_action(
-                                'recursosController@listar',
-                                'Nombre',
-                                array(
-                                    'sortby' => 'nombre',
-                                    'order' => 'desc',
-                                )
-                            )
-                        }}
-                        @else {{
-                            link_to_action(
-                               'recursosController@listar',
-                                'Nombre',
-                                array(
-                                    'sortby' => 'nombre',
-                                    'order' => 'asc',
-                                    )
-                                )
-                            }}
-                        @endif
-                        <i class="fa fa-sort fa-fw text-info"></i>
-                    </th>
-                    <!-- Order column by grupo --> 
-                    <th style="">
+                
+               <thead>
+                  <th style="width:5%" >Id. de Lugar</th>
+                  <!-- Order column by nombre de equipo--> 
+                  <th style="" >
+                     @if ($sortby == 'nombre' && $order == 'asc') {{
+                           link_to_action(
+                              'recursosController@listar',
+                              'Nombre',
+                           array(
+                              'sortby' => 'nombre',
+                              'order' => 'desc',
+                           )
+                        )
+                     }}
+                     @else {{
+                        link_to_action(
+                           'recursosController@listar',
+               		         'Nombre',
+                              array(
+                                 'sortby' => 'nombre',
+                                 'order' => 'asc',
+                     	         )
+                              )
+                       	}}
+                     @endif
+                     <i class="fa fa-sort fa-fw text-info"></i>
+                  </th>
+                  <th>Aforo</th>
+                  <th>Medios</th>
+                  <!-- Order column by grupo --> 
+                  <th style="">
                         @if ($sortby == 'grupo' && $order == 'asc') {{
                             link_to_action(
                                 'recursosController@listar',
@@ -104,103 +106,90 @@
                             }}
                         @endif
                         <i class="fa fa-sort fa-fw text-info"></i>
-                    </th>
-                     <!-- Order column by tipo --> 
-                    <th style="width:5%">
-                        @if ($sortby == 'tipo' && $order == 'asc') {{
-                            link_to_action(
-                                'recursosController@listar',
-                                'Tipo',
-                                array(
-                                    'sortby' => 'tipo',
-                                    'order' => 'desc'
-                                    )
-                                )
-                            }}
-                        @else {{
-                            link_to_action(
-                                'recursosController@listar',
-                                'Tipo',
-                                    array(
-                                        'sortby' => 'tipo',
-                                        'order' => 'asc',
-                                    )
-                                )
-                            }}
-                        @endif
-                        <i class="fa fa-sort fa-fw text-info"></i>
-                    </th>
-                    <th style="width:20%">Disponible para...</th>
-                    <th>Tipo de gestión de reservas</th>
-                    @if (Auth::user()->capacidad == 4)<th>Gestores</th>@endif
-                </thead>
-                <tbody>
-                    @foreach($recursos as $recurso)
-                        <tr >
-                            <td>
-                                @if($recurso->disabled)  
-                                    <i class="fa fa-ban fa-fw text-danger" title="Deshabilitado"></i>
-                                @else
-                                    <i class="fa fa-check fa-fw text-success" title= "Habilitado"></i>    
-                                @endif
-                                {{$recurso->id_lugar}}</td>
-                            <td>
-                                
-                                
-                                @if (Auth::user()->capacidad == 4)
-                                    <a href="{{route('admins',['idRecurso' => $recurso->id])}}" title="Administradores"><i class="fa fa-users fa-fw"></i></a>
-                                @endif
-                                <!-- editar -->
-                                <a href="{{route('editarecurso.html',array('id' => $recurso->id))}}" title="Editar recurso" class="linkEditrecurso" data-idrecurso="{{$recurso->id}}"><i class="fa fa-pencil fa-fw"></i></a>
-                                
-                                <!-- eliminar -->
-                                <a href="" class = "eliminarRecurso" data-idrecurso="{{$recurso->id}}" data-nombrerecurso="{{$recurso->nombre}}" title = "Eliminar recurso"><i class="fa fa-trash-o fa-fw"></i></a>
-                                
-                                @if(!$recurso->disabled)
-                                    <!-- deshabilitar -->
-                                    <a href="" class = "deshabilitarRecurso" data-idrecurso="{{$recurso->id}}" data-nombrerecurso="{{$recurso->nombre}}" title = "Deshabilitar recurso"><i class="fa fa-toggle-off fa-fw "></i></a>
-                                @else    
-                                    <!-- habilitar -->
-                                    <a href="" class = "habilitarRecurso" data-idrecurso="{{$recurso->id}}" data-nombrerecurso="{{$recurso->nombre}}" title = "Habilitar recurso"><i class="fa fa-toggle-on fa-fw"></i></a>
-                                @endif
-                                {{$recurso->nombre}}
-                                
-                            </td>
-                            <td>
-                                {{$recurso->grupo}}
-                                <!-- editar grupo --><a href="" title="Editar grupo" class="linkEditgrupo" data-descripciongrupo="{{$recurso->descripcionGrupo}}" data-nombregrupo="{{$recurso->grupo}}" data-idrecurso="{{$recurso->id}}"><i class="fa fa-pencil fa-fw"></i></a></td>
-                            <td>{{$recurso->tipo}}</td>
-                            <td>
-                                <ul class="list-unstyled">
-                                @foreach($recurso->perfiles() as $perfil)
-                                    <li>{{$perfil}}</li>
-                                @endforeach
-                                </ul>
-                            </td>
-                            <td>{{$recurso->tipoGestionReservas()}}</td>
-                             @if (Auth::user()->capacidad == 4)
-                            <td>
-                                <ul class="list-unstyled">
-                                @foreach($recurso->administradores as $administrador)
-                                    <li>{{$administrador->nombre}} {{$administrador->apellidos}} ({{$administrador->username}})</li>
-                                @endforeach
-                                </ul>
-                            </td>
-                            @endif
-                        </tr>
-                    @endforeach
-                </tbody>
+                  </th>
+                  <th></th>
+               </thead>
+               
+               <tbody>
+                 	@foreach($recursos as $recurso)
+                     <tr >
+                      	<td>
+                       	   @if($recurso->disabled)  
+                        	   <i class="fa fa-ban fa-fw text-danger" title="Deshabilitado"></i>
+                          	@else
+                           	<i class="fa fa-check fa-fw text-success" title= "Habilitado"></i>    
+                          	@endif
+                          	{{$recurso->id_lugar}}
+                       	</td>
+                      	
+                      	<td>
+                        	@if (Auth::user()->capacidad == 4)
+                              <a href="{{route('admins',['idRecurso' => $recurso->id])}}" title="Administradores"><i class="fa fa-users fa-fw"></i></a>
+                          	@endif
+                          	<!-- editar -->
+                          	<a href="{{route('editarecurso.html',array('id' => $recurso->id))}}" title="Editar recurso" class="linkEditrecurso" data-idrecurso="{{$recurso->id}}"><i class="fa fa-pencil fa-fw"></i></a>
+                          	<!-- eliminar -->
+                          	<a href="" class = "eliminarRecurso" data-idrecurso="{{$recurso->id}}" data-nombrerecurso="{{$recurso->nombre}}" title = "Eliminar recurso"><i class="fa fa-trash-o fa-fw"></i></a>
+                          
+                          	@if(!$recurso->disabled)
+                              <!-- deshabilitar -->
+                              <a href="" class = "deshabilitarRecurso" data-idrecurso="{{$recurso->id}}" data-nombrerecurso="{{$recurso->nombre}}" title = "Deshabilitar recurso"><i class="fa fa-toggle-off fa-fw "></i></a>
+                          	@else    
+                              <!-- habilitar -->
+                              <a href="" class = "habilitarRecurso" data-idrecurso="{{$recurso->id}}" data-nombrerecurso="{{$recurso->nombre}}" title = "Habilitar recurso"><i class="fa fa-toggle-on fa-fw"></i></a>
+                          	@endif
+                          	{{$recurso->nombre}}
+                     	</td>
+                         	
+                      	<td>
+                      		<div>Máximo: {{$recurso->aforomaximo}}</div>
+                      		<div>Examen: {{$recurso->aforoexamen}}</div>
+                      	</td>
+                         	
+                      	<td>
+                      		<ul class="list-unstyled" style="margin:0px">
+                          		@foreach($recurso->getNombreMedios() as $medio)
+                              	<li>{{$medio}}</li>
+                          		@endforeach
+                          	</ul>
+                      	</td>
+                         	
+                      	<td>
+                        	{{$recurso->grupo}}
+                          	<!-- editar grupo -->
+                          	<a href="" title="Editar grupo" class="linkEditgrupo" data-descripciongrupo="{{$recurso->descripcionGrupo}}" data-nombregrupo="{{$recurso->grupo}}" data-idrecurso="{{$recurso->id}}"><i class="fa fa-pencil fa-fw"></i></a>
+                       	</td>
+
+                       	<td>
+                       		
+                       		<a href="#" data-toggle="tooltip" data-html="true" 
+                       		title="
+                       			<hr />
+                       			<div>Tipo Recurso: <b>{{$recurso->tipo}}</b></div>
+                       			<hr />
+                       			<div>
+                       				Accesos: <br /><br /><b>{{implode(', ',$recurso->perfiles())}}</b>
+                            	</div>
+                            	<hr />
+                            	<div>Gestión de reservas: <b>{{$recurso->tipoGestionReservas()}}</b></div>
+                            	<hr />
+
+                            	" >
+                       			+Info
+                       		</a>
+                       		
+                       	</td>
+                         	
+                        
+                     </tr>
+                 	@endforeach
+               </tbody>
             </table>
 
-                {{$recursos->appends(Input::except('page','result'))->links();}}
-                
-            </div><!-- /.panel-body -->
-
-        </div>
-        <!-- /.panel-default -->
-    
-</div>
-<!-- /.row -->    
+               {{$recursos->appends(Input::except('page','result'))->links();}}
+         </div><!-- /.panel-body -->
+      </div><!-- /.panel-default -->
+	</div><!-- /.row -->    
 </div> <!-- .container-fluid -->    
 
 <!-- modal eliminar recurso -->
