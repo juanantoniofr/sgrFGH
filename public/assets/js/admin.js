@@ -11,18 +11,20 @@ $(function(e){
             success: function($respuesta){
                 
                 $atributos = $respuesta['atributos'];
-                //console.log($('#modalEditRecurso input#editdescripcion'));
-                //$('#modalEditRecurso input#editdescripcion').val();
+                console.log($respuesta);
                 CKEDITOR.instances['editdescripcion'].setData($atributos['descripcion']);
                 CKEDITOR.instances['editdescripcion'].updateElement();
-                //console.log($atributos['descripcion']);
+                
                 $.each($atributos,function(key,value){ 
-                                            $('#modalEditRecurso input#'+key).val(value);
-                                            $('#modalEditRecurso #select_'+key).val(value);
-                                        });
+                    $('#modalEditRecurso input#'+key).val(value);
+                    $('#modalEditRecurso #select_'+key).val(value);
+                });
+                
                 //updateChkeditorInstances();
                 $('#modalEditRecurso #select_modo').val($.parseJSON($atributos['acl']).m);
                 $('#modalEditRecurso .check_colectivos').val($respuesta['visibilidad']);
+                $('#modalEditRecurso .check_medios').val($respuesta['medios']);
+                
                 $('#modalEditRecurso .text-danger').slideDown();
                 $('#modalEditRecurso').modal('show');
             },

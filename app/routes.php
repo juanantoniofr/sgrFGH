@@ -90,15 +90,20 @@ Route::get('admin/listarecursos.html',array('as' => 'recursos','uses' => 'recurs
 
 Route::get('admin/addrecurso.html',array('as' => 'addRecurso','uses' => 'recursosController@formAdd','before' => array('auth','capacidad:4-6,msg')));
 Route::get('admin/salvarNuevoRecurso',array('as' => 'postAddRecurso','uses' => 'recursosController@addRecurso','before' => array('auth','ajax_check','capacidad:4-6,msg')));
-
+//??
 Route::get('admin/editarecurso.html',array('as' => 'editarecurso.html','uses' => 'recursosController@formEdit','before' => array('auth','capacidad:4-6,msg')));
-Route::post('admin/updateRecurso.html',array('uses' => 'recursosController@editRecurso','before' => array('auth','ajax_check','capacidad:4-6,msg')));//Update propiedades recurso
+//<./-- ?? -->
+//return ventana modal edición de recurso
+Route::get('admin/getrecurso',array('uses'=>'recursosController@getrecurso','before' => array('auth','capacidad:4-6,msg')));
+
+Route::post('admin/updateRecurso.html',array('uses' => 'recursosController@editRecurso','before' => array('auth','ajax_check','capacidad:4-6,msg')));
+
+
 Route::post('admin/salvarDesecripcion.html',array('as' => 'updateDescripcionGrupo','uses' => 'recursosController@updateDescripcionGrupo','before' => array('auth','ajax_check','capacidad:4-6,msg')));//Update propiedades grupo (nombre y descripción)
 Route::get('admin/eliminarecurso.html',array('uses'=>'recursosController@eliminar','before' => array('auth','capacidad:4-6,msg')));
 Route::get('admin/deshabilitarRecurso.html',array('uses'=>'recursosController@deshabilitar','before' => array('auth','capacidad:4-6,msg')));
 Route::get('admin/habilitarRecurso.html',array('uses'=>'recursosController@habilitar','before' => array('auth','capacidad:4-6,msg')));
 
-Route::get('admin/getrecurso',array('uses'=>'recursosController@getrecurso','before' => array('auth','capacidad:4-6,msg')));
 
 
 

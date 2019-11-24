@@ -1,48 +1,57 @@
 <div class="modal fade" id="modalAddRecurso" tabindex="-1" role="dialog" aria-labelledby="modalAddRecursoLabel">
   {{Form::open(array('method' => 'POST','route' => 'postAddRecurso','role' => 'form','id'=>'nuevoRecurso'))}}
   <div class="modal-dialog modal-lg">
+    
     <div class="modal-content">
 
       <div class="modal-header">
+      
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h3 class="modal-title"><i class="fa fa-institution fa-fw"></i> Añadir nuevo recurso (espacio/puesto/equipo)</h3>
       </div><!-- ./modal-header -->
 
       <div class="modal-body">
-              <div class="alert alert-danger" role="alert" style="display:none" id="aviso">Revise el formulario para corregir errores.... </div>
+        
+        <div class="alert alert-danger" role="alert" style="display:none" id="aviso">Revise el formulario para corregir errores.... </div>
                          
-              <div class="form-group">  
-                {{Form::label('id_lugar', 'Identificador de Lugar')}}
-                {{Form::text('id_lugar',Input::old('id_lugar'),array('class' => 'form-control'))}}
-              </div>
+        <div class="form-group">  
+        
+          {{Form::label('id_lugar', 'Identificador de Lugar')}}
+          {{Form::text('id_lugar',Input::old('id_lugar'),array('class' => 'form-control'))}}
+        </div>
               
-              <div class="form-group" id="fgnombre">
-                {{Form::label('nombre', 'Nombre')}}
-                <span id="nombre_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span id='text_error'></span></span>
-                {{Form::text('nombre',Input::old('nombre'),array('class' => 'form-control'))}}
-              </div>
+        <div class="form-group" id="fgnombre">
+        
+          {{Form::label('nombre', 'Nombre')}}
+          <span id="nombre_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span id='text_error'></span></span>
+          {{Form::text('nombre',Input::old('nombre'),array('class' => 'form-control'))}}
+        </div>
 
-              <div class="form-group col-md-6" id="fgaforomax">
-                {{Form::label('aforomax', 'Aforo Máximo')}}
-                <span id="aforomax_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span id='text_error'></span></span>
-                {{Form::text('aforomax',Input::old('aforomax'),array('class' => 'form-control'))}}
-              </div>
+        <div class="form-group col-md-6" id="fgaforomax">
+  
+          {{Form::label('aforomax', 'Aforo Máximo')}}
+          <span id="aforomax_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span id='text_error'></span></span>
+          {{Form::text('aforomax',Input::old('aforomax'),array('class' => 'form-control'))}}
+        </div>
 
+        <div class="form-group col-md-6" id="fgaforoexam">
 
-              <div class="form-group col-md-6" id="fgaforoexam">
-                {{Form::label('aforoexam', 'Aforo Examen')}}
-                <span id="aforoexam_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span id='text_error'></span></span>
-                {{Form::text('aforoexam',Input::old('aforoexam'),array('class' => 'form-control'))}}
-              </div>
+          {{Form::label('aforoexam', 'Aforo Examen')}}
+            <span id="aforoexam_error" style="display:none" class="text-danger spanerror">
+              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+              <span id='text_error'></span>
+            </span>
+            {{Form::text('aforoexam',Input::old('aforoexam'),array('class' => 'form-control'))}}
+        </div>
 
-              <div class="form-group">
-                <label>Medios disponibles:</label><br />  
-                @foreach($mediosdisponibles as $medio) 
-                  <label class="checkbox-inline">
-                    <input type="checkbox" name = "mediosdisponibles[]" value="{{$medio['codigo']}}" > {{$medio['nombre']}}
-                  </label>
-                @endforeach
-              </div>
+        <div class="form-group">
+          <label>Medios disponibles:</label><br />  
+          @foreach($mediosdisponibles as $medio) 
+            <label class="checkbox-inline">
+              <input type="checkbox" name = "mediosdisponibles[]" value="{{$medio['codigo']}}" > {{$medio['nombre']}}
+            </label>
+          @endforeach
+        </div>
 
               
               <div class="form-group" id="fgnuevogrupo">

@@ -1,50 +1,56 @@
 @extends('layout')
 
 @section('title')
-    SGR: Editar recurso
+    SGR {{Config::get('options.nombreUnidad')}}: Editar recurso
 @stop
  
 @section('content')
 <div class="container">
   
   <div class="row">
+
     {{$menuRecursos or ''}}
   </div>
 
   <div class="row">
+    
     <div class="col-lg-12">
+      
       <div class="panel panel-info">
         
         <div class="panel-heading">
-         <h4><i class="fa fa-pencil fa-fw"></i> Editar Recurso</h4>
+      
+          <h4><i class="fa fa-pencil fa-fw"></i> Editar Recurso</h4>
         </div>
         
         <div class="panel-body">
           
           <div class="row">
-
             
             @if (Session::has('message'))
+      
                 <div class="alert alert-success alert-dismissable">
+      
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                   {{ Session::get('message') }}
                 </div>
             @endif
 
-            
             <div class="col-lg-12">
-            {{Form::open(array('method' => 'POST','route' => 'postEditRecurso','role' => 'form'))}}
+              {{Form::open(array('method' => 'POST','route' => 'postEditRecurso','role' => 'form'))}}
                          
-              <div class="form-group">  
-                {{Form::label('id_lugar', 'Identificador de Lugar')}}
-                {{Form::text('id_lugar',$recurso->id_lugar,array('class' => 'form-control'))}}
-              </div>
+                <div class="form-group">  
+                
+                  {{Form::label('id_lugar', 'Identificador de Lugar')}}
+                  {{Form::text('id_lugar',$recurso->id_lugar,array('class' => 'form-control'))}}
+                </div>
               
-              <div class="form-group">  
-                {{Form::label('nombre', 'Nombre')}}
-                {{ $errors->first('nombre', '<span class="text-danger"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> :message</span>') }}
-                {{Form::text('nombre',$recurso->nombre,array('class' => 'form-control'))}}
-              </div>
+                <div class="form-group">  
+                  
+                  {{Form::label('nombre', 'Nombre')}}
+                  {{ $errors->first('nombre', '<span class="text-danger"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> :message</span>') }}
+                  {{Form::text('nombre',$recurso->nombre,array('class' => 'form-control'))}}
+                </div>
             
               <div class="form-group">  
                 {{Form::label('idgrupo', 'Grupo')}}

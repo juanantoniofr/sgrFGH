@@ -2,18 +2,6 @@
 
 class recursosController extends BaseController {
 
-  public function getrecurso(){
-    $result = array('atributos' => '',
-                    'visibilidad' => array());
-    $id = Input::get('id','');
-    $recurso = Recurso::find($id)->toArray();
-    $result['atributos'] = $recurso;
-    $acl = json_decode($recurso['acl']);
-    $result['visibilidad'] = explode(',',$acl->r);
-    //$result['acl'] = $acl->r;
-    return $result;
-  }
-
 
   public function eliminar(){
  
@@ -252,54 +240,116 @@ class recursosController extends BaseController {
     return View::make('admin.recurselist')->with(compact('recursos','sortby','order','grupos','idgruposelected','recursosListados'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos')->nest('modalAdd','admin.recurseModalAdd',compact('grupos','mediosdisponibles'))->nest('modalEdit','admin.recurseModalEdit',array('recursos'=>$grupos))->nest('modalEditGrupo','admin.modaleditgrupo');
   } 
 
+  
+  //edición
+  /**
+    * 
+    * ??????
+    * Devuelve formulario de edición de recurso 
+    * 
+    * @param Input:get('id') :integer
+    * 
+    * @return View::make('admin.recurseAdd') :string
+  */  
 
   public function formEdit(){
 
+    //@param
     $id = Input::get('id');
-    $recursos = Recurso::groupby('grupo_id')->orderby('grupo','asc')->get();
-    $recurso = Recurso::find($id);
     
+    $recurso = Recurso::find($id);
+
+    $recursos = Recurso::groupby('grupo_id')->orderby('grupo','asc')->get();
+        
     $modo = 0;//Con validación
     if (ACL::automaticAuthorization($id)) $modo = 1;//sin validación
     
     $permisos = json_decode($recurso->acl,true);
     $capacidades = $permisos['r']; //array con los valores de la capacidades con acceso
+    $aMediosdisponibles = json_decode($recurso->mediosdisponibles,true);
+    $aMedios = $aMediosdisponibles['medios'];
 
-    return View::make('admin.recurseEdit')->with(compact('recursos','recurso','modo','capacidades'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos');
+    return View::make('admin.recurseEdit')->with(compact('recursos','recurso','modo','capacidades','aMedios'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos');
   }
+
+  /**
+    * Devuelve las propiedades de un recurso 
+    * 
+    * @param Input:get('id') :integer
+    * 
+    * @return $result :array
+  */ 
+  
+  public function getrecurso(){
+    
+    //@param
+    $id = Input::get('id','');
+
+    //@return
+    $result = array('atributos' => '',
+                    'visibilidad' => array(),
+                    'medios'  => array());
+    
+    $recurso = Recurso::find($id)->toArray();
+    $result['atributos'] = $recurso;
+    $acl = json_decode($recurso['acl']);
+    $result['visibilidad'] = explode(',',$acl->r);
+    $result['medios'] = explode(',', json_decode($recurso['mediosdisponibles'])->medios);
+   
+    /* códigos de los medios del recurso con id = Input::get('id') */
+      //$aCodigosMediosRecurso = explode(',',json_decode($recurso['mediosdisponibles'])->medios);
+    /*
+      de todos los medios disponibles (Config::get('mediosdisponibles.medios')), obtengo array('codigo','nombre') solo si el ?código' existe entre los códigos de medios del recurso
+    */
+    
+    //foreach (Config::get('mediosdisponibles.medios') as $medio) {
+    //    if (in_array($medio['codigo'],$aCodigosMediosRecurso) )
+    //      $result['medios'][$medio['codigo']] = $medio['nombre'];
+    //}    
+   
+    return $result;
+  }
+
+  /**
+    * Devuelve el formulario de edición de un recurso
+    * @param Input::get('id') :integer
+    * @param Input::get('idgrupo') :integer
+    * @param Input::get('nuevogrupo') :string
+    *
+    * @return $respuesta :array, errores de validación de formulario | mesnaje de éxito
+  */
 
   public function editRecurso(){
    
+    //@param
     $id = Input::get('id');
     $idgrupo = Input::get('idgrupo','');
     $nuevogrupo = Input::get('nuevogrupo','');
-    //Output
+    //@return
     $respuesta = array( 'errores'   => array(),
                         'hasError'  => false);
-    $rules = array(
-        'nombre'      => 'required|unique:recursos,nombre,'.$id,
-        'nuevogrupo'  => 'required_if:idgrupo,0',
-        );
+    
+    //Validación de formulario
+    $rules = array( 'nombre'  => 'required|unique:recursos,nombre,'.$id,
+                    'nuevogrupo'  => 'required_if:idgrupo,0',
+              );
 
-     $messages = array(
-          'required'      => 'El campo <strong>:attribute</strong> es obligatorio....',
-          'unique'        => 'Existe un recurso con el mismo nombre....',
-          'nuevogrupo.required_if'  => 'El valor no puede quedar vacio....',
-        );
+     $messages = array( 'required'  => 'El campo <strong>:attribute</strong> es obligatorio....',
+                        'unique'  => 'Existe un recurso con el mismo nombre....',
+                        'nuevogrupo.required_if'  => 'El valor no puede quedar vacio....',
+                      );
     
     $validator = Validator::make(Input::all(), $rules, $messages);
 
-    //$url = URL::route('editarecurso.html',['id' => $id]); 
     if ($validator->fails()){
-        //return Redirect::to($url)->withErrors($validator->errors())->withInput(Input::all());;
-        $respuesta['errores'] = $validator->errors()->toArray();
-        $respuesta['hasError'] = true;
-        return $respuesta;
-      }
+    
+      $respuesta['errores'] = $validator->errors()->toArray();
+      $respuesta['hasError'] = true;
+      return $respuesta;
+    }
     else{  
       
       $recurso = Recurso::find($id);
-
       $recurso->nombre = Input::get('nombre');
       $recurso->grupo = $this->getNombre();
       $recurso->grupo_id = $this->getIdGrupo();
@@ -311,7 +361,6 @@ class recursosController extends BaseController {
       if ($recurso->save()) Session::flash('message', 'Cambios en <strong>'. $recurso->nombre .' </strong> salvados...');
     }
 
-    
     return $respuesta;
   }
 
