@@ -50,7 +50,11 @@ class Recurso extends Eloquent {
         
         $aNombresMedios = array();
         
-        $aCodigosMediosRecurso = explode(',',json_decode($this->mediosdisponibles)->medios);
+        $objMediosDisponibles = json_decode($this->mediosdisponibles);
+        if (empty($objMediosDisponibles))
+            return $aNombresMedios;
+
+        $aCodigosMediosRecurso = explode(',',$objMediosDisponibles->medios);
             
         foreach (Config::get('mediosdisponibles.medios') as $medio) {
             if (in_array($medio['codigo'],$aCodigosMediosRecurso) )

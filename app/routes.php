@@ -54,6 +54,13 @@ Route::get('hola',array('as'=>'hola',function(){
 }));
 
 //*********
+// Busquedas
+//*********
+
+Route::get('/admin/busquedas.html',array('as' => 'busqueda','uses' => 'BusquedaController@index'));
+
+
+//*********
 // Titulaciones
 //*********
 

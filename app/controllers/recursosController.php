@@ -295,7 +295,10 @@ class recursosController extends BaseController {
     $result['atributos'] = $recurso;
     $acl = json_decode($recurso['acl']);
     $result['visibilidad'] = explode(',',$acl->r);
-    $result['medios'] = explode(',', json_decode($recurso['mediosdisponibles'])->medios);
+    $objMediosDisponibles = json_decode($recurso['mediosdisponibles']);
+    $result['medios'] = array();
+    if (!empty($objMediosDisponibles))
+      $result['medios'] = explode(',', $objMediosDisponibles->medios);
    
     return $result;
   }

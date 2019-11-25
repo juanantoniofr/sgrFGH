@@ -77,7 +77,7 @@
         </table>
       </div>
     </div><!-- /#calendario -->   
- </div><!-- /.row -->
+  </div><!-- /.row -->
 </div><!-- /#page-wrapper -->
 
 <!-- Modal deleteEvent-->
