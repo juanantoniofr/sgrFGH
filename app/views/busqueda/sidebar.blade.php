@@ -1,17 +1,18 @@
-  <div class="col-sm-6 col-md-3 sidebar">
+  
+  <div class="col-lg-3 col-md-3 ">
     {{Form::open(array('method' => 'POST',/*'route' => '',*/'role' => 'form','id'=>'fBuscaDisponible'))}}
     
       
       <h2>Filtros</h2>
       <h3>Equipamiento</h3>  
-      <div class="form-group" id="fgaforomax">
+      <div class="form-group col-lg-10" id="fgaforomax">
 
         {{Form::label('aforomax', 'Aforo Máximo')}}
         <span id="aforomax_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span id='text_error'></span></span>
         {{Form::text('aforomax',Input::old('aforomax'),array('class' => 'form-control'))}}
       </div>
 
-      <div class="form-group" id="fgaforoexam">
+      <div class="form-group col-lg-10" id="fgaforoexam">
 
         {{Form::label('aforoexam', 'Aforo Examen')}}
           <span id="aforoexam_error" style="display:none" class="text-danger spanerror">
@@ -21,8 +22,8 @@
           {{Form::text('aforoexam',Input::old('aforoexam'),array('class' => 'form-control'))}}
       </div> 
 
-      <div class="form-group">
-        <h4>Medios disponibles:</h4>  
+      <div class="form-group col-lg-10">
+        {{Form::label('medios', 'Medios')}}  
         @foreach($aMediosDisponibles as $medio) 
           <div class="checkbox">
             <label>
@@ -33,13 +34,15 @@
       </div>
     
 
-      <h2>Evento</h2>
-      <p>Fecha inicio: <input type="text" id="datepickerIni"></p>
-      <p>Fecha fin: <input type="text" id="datepickerFin"></p>
+      <h3>Evento</h3>
+      <div class="form-group col-lg-10">
+      <p>{{Form::label('fi', 'Fecha inicio')}}: <input class="form-control" type="text" id="datepickerIni"></p>
+      <p>{{Form::label('ff', 'Fecha fin')}}: <input class="form-control" type="text" id="datepickerFin"></p>
+      </div>
       <!-- días -->
-      <div class="form-group" id="dias">
+      <div class="form-group col-lg-10" id="dias">
       
-          <h4  class="">días:</h4>
+          {{Form::label('d', 'Días')}}
       
           <div class="checkbox-inline" style="display:none">
               <label><input type="checkbox" value = "0" name="dias[]"> D</label>
@@ -70,9 +73,9 @@
           </div>
       </div><!-- /#dias -->    
       
-      <div class="form-group" id="hFin">
+      <div class="form-group col-lg-10" id="hFin">
         
-        <h4 class="">Horario:</h4>
+        {{Form::label('h', 'Horario')}}
         
         <div class="">
           <select class="form-control"  name="hInicio" id="newReservaHinicio">
