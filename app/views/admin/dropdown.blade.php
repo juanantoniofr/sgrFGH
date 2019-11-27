@@ -8,19 +8,12 @@
     <li><a href="{{route('calendarios.html')}}"><i class="fa fa-calendar fa-fw"></i> Calendarios</a></li>
     
     <li><a href="{{route('pod.html')}}"><i class="fa fa-upload fa-fw"></i>P.O.D</a></li>
-    <!--
-    <li><a  href="route('validadorHome.html',array('verpendientes' => 1))"><i class="fa fa-check"></i> Validaciones</a></li>
-   
-    <li><a  href="route('users',array('veractivados' => 1))"><i class="fa fa-user fa-fw"></i> Usuarios<span class="fa arrow"></span></a></li>
-    -->
-    <li><a  href="{{route('recursos')}}"><i class="fa fa-institution fa-fw"></i> Espacios y equipos<span class="fa arrow"></span></a></li>
-    <!--
-    <li><a  href="route('tecnicoHome.html')"><i class="fa fa-credit-card fa-fw"></i> Atención de reservas<span class="fa arrow"></span></a></li>
-                
-    <li><a href="config.html"><i class="fa fa-wrench fa-fw"></i> Configuración</a></li>
     
-    <li><a href="logs.html"><i class="fa fa-files-o fa-fw"></i> Logs</a></li>
-    -->        
+    <li><a  href="{{route('recursos')}}"><i class="fa fa-institution fa-fw"></i> Espacios y equipos<span class="fa arrow"></span></a></li>
+    
+    <li><a href="{{route('disponibilidad.html')}}"><i class="fa fa-search fa-fw"></i> Disponibilidad</a></li>  
+
+    <li><a href="{{route('titulaciones.html')}}"><i class="fa fa-graduation-cap fa-fw"></i> Titulaciones</a></li>  
 
   </ul>
             

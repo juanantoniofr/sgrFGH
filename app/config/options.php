@@ -48,7 +48,7 @@ return array (
 	),
 	'dropdownMenu' => array('1' =>	'emptydropdown',
 							'2'	=>	'emptydropdown',
-							'3'	=>	'emptydropdown',
+							'3'	=>	'publicador.dropdown',
 							'4'	=>	'admin.dropdown',
 							'5'	=>	'validador.dropdown',
 							'6'	=>	'tecnico.dropdown',

@@ -6,8 +6,8 @@
 
 
 @section('content')
-    <div id="page-wrapper" style="margin-right: 10px">
-        <div class="row col-sm-12 col-md-12 col-lg-12">
+    
+        <div class="row col-sm-9 col-md-9 col-lg-9">
             <div id = "espera" style="display:none"></div>
 
             <div style="margin:20px auto">
@@ -39,7 +39,6 @@
                 </div> <!-- /.panel-info -->   
             </div><!-- / -->
         </div><!-- /.row -->
-    </div><!-- /#page-wrapper -->    
 @stop
 
 

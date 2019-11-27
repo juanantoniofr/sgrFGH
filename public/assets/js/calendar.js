@@ -1241,9 +1241,9 @@ $(function(e){
 				}
 			});
 		}
-		$strCalendar += '<br /><small>Aforo Máximo:<b> ' + $('select#recurse option:selected').data('aforomaximo') + '</b>, </small>';
-		$strCalendar += '<small>Aforo Exámenes:<b> ' + $('select#recurse option:selected').data('aforoexamenes') + '</b>, </small>';
-		$strCalendar += '<small>Medios disponibles:<b> ' + $('select#recurse option:selected').data('mediosdisponibles') + '</b></small>';
+		$strCalendar += '<br /><small class="text-info">{Aforo Máximo:<b> ' + $('select#recurse option:selected').data('aforomaximo') + '</b>, </small>';
+		$strCalendar += '<small class="text-info">Aforo Exámenes:<b> ' + $('select#recurse option:selected').data('aforoexamenes') + '</b>, </small>';
+		$strCalendar += '<small class="text-info">Medios disponibles:<b> ' + $('select#recurse option:selected').data('mediosdisponibles') + '</b>}</small>';
 		$('#recurseName').html($strCalendar).fadeIn();
 	}
 

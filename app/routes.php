@@ -57,14 +57,14 @@ Route::get('hola',array('as'=>'hola',function(){
 // Busquedas
 //*********
 
-Route::get('/admin/disponibilidad.html',array('as' => 'disponibilidad','uses' => 'DisponibilidadController@index'));
+Route::get('/admin/disponibilidad.html',array('as' => 'disponibilidad.html','uses' => 'DisponibilidadController@index','before' => array('auth','capacidad:2-3-4-5-6,msg')));
 
 
 //*********
 // Titulaciones
 //*********
 
-Route::get('/admin/titulaciones.html',array('as' => 'titulaciones','uses' => 'TitulacionController@listar'));
+Route::get('/admin/titulaciones.html',array('as' => 'titulaciones.html','uses' => 'TitulacionController@listar'));
 Route::post('admin/salvaNuevaTitulacion',array('as' => 'salvaNuevaTitulacion','uses' => 'TitulacionController@nuevaTitulacion','before' => array(/*'auth',*/'ajax_check'/*,'capacidad:4-6,msg'*/)) );//Nueva Titulacion 
 Route::get('admin/getTitulacion',array('as' => 'getTitulacion','uses' => 'TitulacionController@getTitulacion','before' => array(/*'auth',*/'ajax_check'/*,'capacidad:4-6,msg'*/)) );//Nueva Titulacion 
 

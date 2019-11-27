@@ -22,7 +22,7 @@ class TitulacionController extends BaseController {
     	//$search = Input::get('search','');
 
 
-    	$titulaciones=Titulacion::orderBy('nombre','ASC')->get();
+    	$titulaciones=Titulacion::orderBy('titulacion','ASC')->get();
 
     	/*echo "<pre>";
     		var_dump($titulaciones);
@@ -47,7 +47,7 @@ class TitulacionController extends BaseController {
 
         //@params
         $codigo = Input::get('codigo','');
-        $nombre = Input::get('nombre','');
+        $nombre = Input::get('titulacion','');
         
         //@return
         $respuesta = array( 'error' => false, 
@@ -58,7 +58,7 @@ class TitulacionController extends BaseController {
         //Validación datos formulario.
         $rules = array(
             'codigo'      => 'required|unique:titulaciones',
-            'nombre'  => 'required|unique:titulaciones',
+            'titulacion'  => 'required|unique:titulaciones',
         );
 
         $messages = array( 'required'   => 'El campo <strong>:attribute</strong> es obligatorio....',
@@ -78,7 +78,7 @@ class TitulacionController extends BaseController {
 
         $nuevaTitulacion = new Titulacion;
         $nuevaTitulacion->codigo = $codigo;
-        $nuevaTitulacion->nombre = $nombre;
+        $nuevaTitulacion->titulacion = $nombre;
 
 
         if ($nuevaTitulacion->save())
@@ -140,6 +140,5 @@ class TitulacionController extends BaseController {
         return $respuesta;
     }
 
->>>>>>> 563425ffca17e43a5024c60fbf44010b76bda215
 
 } //fin del controlador

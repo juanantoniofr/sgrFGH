@@ -1,54 +1,14 @@
-  
-  <div class="col-lg-3 col-md-3 ">
-    {{Form::open(array('method' => 'POST',/*'route' => '',*/'role' => 'form','id'=>'fBuscaDisponible'))}}
+<div class="col-lg-3 col-md-3 ">
+  {{Form::open(array('method' => 'POST',/*'route' => '',*/'role' => 'form','id'=>'fBuscaDisponible'))}}
     
-      <h2>Opciones de busqueda</h2>
-      
-      <div class="titulo-acordeon" >
-        
-        <h3>
-          <a href="#" >Equipamiento</a>
-        </h3>
-        
-        <div class="fila-acordeon" style="display:none">
-        
-          <div class="form-group col-lg-10 form-equipamiento" id="fgaforomax">
-
-            {{Form::label('aforomax', 'Aforo Máximo')}}
-            <span id="aforomax_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span id='text_error'></span></span>
-            {{Form::text('aforomax',Input::old('aforomax'),array('class' => 'form-control'))}}
-          </div>
-
-          <div class="form-group col-lg-10" id="fgaforoexam">
-
-            {{Form::label('aforoexam', 'Aforo Examen')}}
-              <span id="aforoexam_error" style="display:none" class="text-danger spanerror">
-                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-                <span id='text_error'></span>
-              </span>
-              {{Form::text('aforoexam',Input::old('aforoexam'),array('class' => 'form-control'))}}
-          </div> 
-
-          <div class="form-group col-lg-10">
-          {{Form::label('medios', 'Medios')}}  
-          @foreach($aMediosDisponibles as $medio) 
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" name = "mediosdisponibles[]" value="{{$medio['codigo']}}" > {{$medio['nombre']}}
-              </label>
-            </div>
-          @endforeach
-          </div>
-        </div>
-      </div>    
-    
+    <h3>Opciones de busqueda</h3>
       <div class="titulo-acordeon" >
 
-        <h3>
+        <h4>
           <a href="#">Evento</a>
-        </h3>
+        </h4>
         
-        <div class="fila-acordeon" style="display:none">
+        <div class="fila-acordeon" >
           <div class="form-group col-lg-10">
             <p>{{Form::label('fi', 'Fecha inicio')}}: <input class="form-control" type="text" id="datepickerIni"></p>
             <p>{{Form::label('ff', 'Fecha fin')}}: <input class="form-control" type="text" id="datepickerFin"></p>
@@ -57,7 +17,8 @@
           <div class="form-group col-lg-10" id="dias">
           
               {{Form::label('d', 'Días')}}
-          
+              <br />
+            
               <div class="checkbox-inline" style="display:none">
                   <label><input type="checkbox" value = "0" name="dias[]"> D</label>
               </div>
@@ -130,6 +91,45 @@
           </div>
         </div>
       </div>
-    {{Form::close()}}
-  </div>
+
+      <div class="titulo-acordeon" >
+        
+        <h4>
+          <a href="#" >Equipamiento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
+        </h4>
+        
+        <div class="fila-acordeon" style="display:none">
+        
+          <div class="form-group col-lg-10 form-equipamiento" id="fgaforomax">
+
+            {{Form::label('aforomax', 'Aforo Máximo')}}
+            <span id="aforomax_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span id='text_error'></span></span>
+            {{Form::text('aforomax',Input::old('aforomax'),array('class' => 'form-control'))}}
+          </div>
+
+          <div class="form-group col-lg-10" id="fgaforoexam">
+
+            {{Form::label('aforoexam', 'Aforo Examen')}}
+              <span id="aforoexam_error" style="display:none" class="text-danger spanerror">
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <span id='text_error'></span>
+              </span>
+              {{Form::text('aforoexam',Input::old('aforoexam'),array('class' => 'form-control'))}}
+          </div> 
+
+          <div class="form-group col-lg-10">
+          {{Form::label('medios', 'Medios')}}  
+          @foreach($aMediosDisponibles as $medio) 
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name = "mediosdisponibles[]" value="{{$medio['codigo']}}" > {{$medio['nombre']}}
+              </label>
+            </div>
+          @endforeach
+          </div>
+        </div>
+      </div>    
+     
+  {{Form::close()}}
+</div>
 

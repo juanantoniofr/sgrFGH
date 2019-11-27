@@ -14,8 +14,8 @@
 
     <div id="calendario">
     
-      <h2>
-        Calendario: <span id ="recurseName"></span> 
+      <h2 >
+        Calendario: <span  id ="recurseName"></span> 
       </h2>
      
       <a id ="pdfseprus" style="display:none" class="btn btn-danger right" alt="Plan de Autoportección F. de Comunicación: Organización de Actos Públicos y Cesión de Espacios" href="{{asset('assets/organizacionActosPublicosyCesionDeEspacios.pdf')}}" target="_blank"><i class="fa fa-file-pdf-o fa-fw" ></i> Instrucciones de seguridad generales y normas de actuación ante emergencias</a>
@@ -71,7 +71,7 @@
     
       <div id="loadCalendar">  
         <table class="pull-left " style = "table-layout: fixed;width: 100%;" id="tableCalendar" >
-          <caption id="tableCaption">{{$tCaption}}</caption>
+          <caption id="tableCaption" >{{$tCaption}}</caption>
           <thead id="tableHead">{{$tHead}}</thead>
           <tbody id="tableBody">{{$tBody}}</tbody>
         </table>
