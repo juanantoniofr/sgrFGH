@@ -57,7 +57,7 @@ Route::get('hola',array('as'=>'hola',function(){
 // Busquedas
 //*********
 
-Route::get('/admin/busquedas.html',array('as' => 'busqueda','uses' => 'BusquedaController@index'));
+Route::get('/admin/disponibilidad.html',array('as' => 'disponibilidad','uses' => 'DisponibilidadController@index'));
 
 
 //*********

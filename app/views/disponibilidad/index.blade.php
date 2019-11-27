@@ -7,7 +7,7 @@
 
 @section('content')
     <div id="page-wrapper" style="margin-right: 10px">
-        <div class="row col-sm-6 col-md-9">
+        <div class="row col-sm-12 col-md-12 col-lg-12">
             <div id = "espera" style="display:none"></div>
 
             <div style="margin:20px auto">
@@ -21,7 +21,7 @@
                 <div class="panel panel-info">
                     
                     <div class="panel-heading">
-                        <h2><i class="fa fa-list fa-fw"></i> Busquedas. {{ Config::get('options.nombreSitio') }}</h2>
+                        <h2><i class="fa fa-list fa-fw"></i> Disponibilidad. {{ Config::get('options.nombreSitio') }}</h2>
                     </div>
 
                     <div class="panel-body">
@@ -33,17 +33,8 @@
                             </div>
                         @endif
 
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead><th>Código</th><th>Nombre</th><th>Update At</th></thead>
-                                <tbody>
-                                    <tr>
-                                        <td> Resultado de la busqueda, listado de espacios</td>
-                                    </tr>
-                                
-                                </tbody>
-                            </table>
-                        </div>
+                        {{ $disponibilidad or '' }}
+                        
                     </div> <!-- /.panel-body  -->           
                 </div> <!-- /.panel-info -->   
             </div><!-- / -->
@@ -60,7 +51,7 @@
 
 @section('js')
 
-    {{HTML::script('assets/js/busqueda.js')}}
+    {{HTML::script('assets/js/disponibilidad.js')}}
     {{HTML::script('assets/js/datepicker-es.js')}}
 
 @stop
