@@ -26,13 +26,13 @@
             <td> Aula Docencia 3.1 </td>
             <td>
             	<ul style="list-style:none; list-style-position: inside ;padding-left: 0px">
-            		<li><i class="fa fa-check fa-fw"></i>Aforo 150</li>
+            		<li><i class="fa fa-check fa-fw"></i>Aforo 100</li>
             		<li><i class="fa fa-check fa-fw"></i>PC</li>
             		<li><i class="fa fa-check fa-fw"></i>Micrófono</li>
             		<li><i class="fa fa-check fa-fw"></i>Videoconferencia IP</li>
             	</ul>
             </td>
-            <td> Este también valdria</td>
+            <td> Este también valdria (puede haber más de uno)</td>
          </tr>
       </tbody>
    </table>
@@ -52,8 +52,18 @@
    	      <tr>
             <td> <i class="fa fa-exclamation-triangle"></i> Aula Docencia 2.6 
             	<ol style=" list-style-position: inside ; padding: 10px auto; margin-top: 5px">
-            		<li class="text-warning"> Actividad X: Coindicen el lunes 20 de enero, de 12:30 a 13:30</li>
-            		<li class="text-warning"> Actividad Y: coinciden todos los martes desde el 15 al 30 de Enreo.</li>
+            		<li class="text-warning"> Coindicen con <a href="#" data-toggle="tooltip" data-html="true" 
+                       		title="
+                       			<hr />
+                       			<div>Podemos desde aquí modificar o eliminar esta reserva</div>
+                            	<hr />
+                            	" > Título actividad X</a> el lunes 20 de enero, de 12:30 a 13:30</li>
+            		<li class="text-warning"> Coincide con <a href="#" data-toggle="tooltip" data-html="true" 
+                       		title="
+                       			<hr />
+                       			<div>Podemos desde aquí modificar o eliminar esta reserva</div>
+                            	<hr />
+                            	" > Título actividad Y</a> todos los martes desde el 15 al 30 de Enreo.</li>
             	</ol>
             </td>
             <td>
