@@ -40,11 +40,12 @@
                                 <td>{{ $titulacion->codigo}}</td>
                                 <td>
                                     <!-- editar -->
+                                    {{ $titulacion->titulacion }}
                                     <a href="" title="Editar Titulación" class="editaTitulacion" data-idtitulo="{{ $titulacion->id }}" ><i class="fa fa-pencil fa-fw"></i></a>
                                 
                                     <!-- eliminar -->
                                     <a class = "eliminaTitulacion" data-idtitulo="{{$titulacion->id}}" title = "Eliminar Titulación"><i class="fa fa-trash-o fa-fw"></i></a>
-                                    {{ $titulacion->nombre }}
+                                    
                                 </td>
                                 
                                 <td> Update: {{ $titulacion->updated_at}}</td>

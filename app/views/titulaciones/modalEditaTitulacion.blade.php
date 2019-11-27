@@ -26,12 +26,12 @@
           {{Form::text('codigo','',array('class' => 'form-control'))}}
         </div>
               
-        <div class="form-group" id="nombre">
-          {{Form::label('nombre', 'Titulación')}}
-          <span id="nombre_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+        <div class="form-group" id="Titulacion">
+          {{Form::label('titulacion', 'Titulación')}}
+          <span id="titulacion_error" style="display:none" class="text-danger spanerror"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>
             <span id='text_error'></span>
           </span>
-          {{Form::text('nombre','',array('class' => 'form-control'))}}
+          {{Form::text('titulacion','',array('class' => 'form-control'))}}
         </div>
 
         <div class="form-group hidden">
@@ -42,7 +42,7 @@
     
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" id ="botonEditaNuevaTitulacion">
+        <button type="submit" class="btn btn-primary" id ="botonEditaTitulacion">
           <i class="fa fa-save fa-fw"></i> Salvar
         </button>
       </div>

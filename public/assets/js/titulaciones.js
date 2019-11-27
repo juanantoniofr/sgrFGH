@@ -22,7 +22,7 @@ $(function(e){
                 console.log('Resouesta: ' + $respuesta.titulacion.id);
                 $('#modalEditaTitulacion input#id').val($respuesta.titulacion.id);
                 $('#modalEditaTitulacion input#codigo').val($respuesta.titulacion.codigo);
-                $('#modalEditaTitulacion input#nombre').val($respuesta.titulacion.nombre);
+                $('#modalEditaTitulacion input#titulacion').val($respuesta.titulacion.titulacion);
                 //$('#modalEditaTitulacion .text-danger').slideDown();
                 $('#modalEditaTitulacion').modal('show');
                
@@ -74,4 +74,9 @@ $(function(e){
             });
     }); // --end Ajax function
 
+    //Ajax function para salvar nuevo recurso
+    $('#botonEditaTitulacion').on('click',function(e){
+        e.preventDefault();
+        alert('aún en desarrollo....');
+    });
 });
