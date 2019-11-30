@@ -17,7 +17,7 @@
       <div class="panel panel-info">
         
         <div class="panel-heading">
-        <h4><i class="fa fa-upload fa-fw"></i> Cargar P.O.D</h4>
+          <h4><i class="fa fa-upload fa-fw"></i> Cargar P.O.D</h4>
         </div>
         
         <div class="panel-body">

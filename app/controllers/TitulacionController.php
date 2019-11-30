@@ -91,14 +91,14 @@ class TitulacionController extends BaseController {
     
 
     /**
-    * 
-    * Obtiene una Titulación desde su id
-    * 
-    * @param Input::get('id') :int
-    * 
-    * @return $respuesta :array   
-    *
-    *
+        * 
+        * Obtiene una Titulación desde su id
+        * 
+        * @param Input::get('id') :int
+        * 
+        * @return $respuesta :array   
+        *
+        *
     */
 
     public function getTitulacion(){
@@ -140,5 +140,76 @@ class TitulacionController extends BaseController {
         return $respuesta;
     }
 
+    /**
+        * 
+        * Muestra vista para upload csv file
+        * 
+        * @return View::make('titulaciones.csv') :string   
+        *
+        *
+    */
+
+    public function csv(){
+
+        return View::make('titulaciones.csv');
+    }
+
+    /**
+        * 
+        * Procesa archivo csv
+        * 
+        * @param Input::file('csvfile') :file
+        * 
+        * @return $respuesta :array   
+        *
+        *
+    */
+    public function saveCSV(){
+
+        $numFila = 1;
+
+        //$csv = new csv();
+        
+        $file = Input::file('csvfile'); //controlar que no sea vacio !!!!!
+        if (empty($file)){
+            Session::put('msg', 'No se ha seleccionado ningún archivo *.csv');
+            return View::make('titulaciones.csv');  
+        }
+
+
+        $f = fopen($file,"r");
+        $columnas = fgetcsv($f,0,',','"');
+        $fila = fgetcsv($f,0,',','"');
+        
+        $indice = 0;
+        foreach ($columnas as $columna) {
+            $datos[$columna] = $fila[$indice];
+            $indice = $indice + 1;
+        }
+        
+        $titulacion = $this->getValue($datos,'DES_CARRERA');
+        $pd[] = array(  'asignatura' => $this->getValue($datos,'DES_ASIG'),
+                        'profesor'  =>  $this->getValue($datos,'PROFESOR'),
+                );
+        
+        while (($fila = fgetcsv($f,0,',','"')) !== false){
+            $indice = 0;
+            foreach ($columnas as $columna) {
+                $datos[$columna] = $fila[$indice];
+                $indice = $indice + 1;
+            }
+
+            $pd[] = array(  'asignatura' => $this->getValue($datos,'DES_ASIG'),
+                            'profesor'  =>  $this->getValue($datos,'PROFESOR'),
+                    );
+        }
+
+        return View::make('titulaciones.csv')->with(compact('datos','titulacion','pd'));
+    }
+
+    public function getValue($fila,$columna){
+
+        return $fila[$columna];
+    }
 
 } //fin del controlador
