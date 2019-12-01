@@ -66,13 +66,9 @@
                     @endif
 
                     <div>
-                        <p>{{ $titulacion or '' }}</p>
+                        <p>Número de filas {{ count($pod) }}</p>
                         <pre>
-                            {{ var_dump($pd)  or ''}}            
-                        </pre>
-                        <pre>
-                            Resultado de la lectura CSV
-                            {{ var_dump($datos)  or ''}}
+                            {{ var_dump($pod)  or '' }}
                         </pre>
                     </div>
 

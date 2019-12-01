@@ -37,7 +37,7 @@ $(function(e){
         });
         
     //Ajax function para salvar nuevo recurso
-    $('#botonSalvarNuevaTitulacion').on('click',function(e){
+    $('#botonSalvaTitulacion').on('click',function(e){
         e.preventDefault();
         $data = $('form#nuevaTitulacion').serialize();
         $.ajax({
@@ -51,7 +51,7 @@ $(function(e){
                 }
                 //Hay errores de validación del formulario
                 else {
-                   //console.log($respuesta);
+                   console.log($respuesta);
                    //resetea errores anteriores
                    $('#modalNuevaTitulacion div#aviso span').html($respuesta.msg).fadeIn();
                    //console.log($respuesta.msg);

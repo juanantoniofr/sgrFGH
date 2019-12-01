@@ -34,7 +34,7 @@
     
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" id ="botonEditaNuevaTitulacion">
+        <button type="submit" class="btn btn-primary" id ="botonSalvaTitulacion">
           <i class="fa fa-save fa-fw"></i> Salvar
         </button>
       </div>

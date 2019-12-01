@@ -178,38 +178,64 @@ class TitulacionController extends BaseController {
 
 
         $f = fopen($file,"r");
-        $columnas = fgetcsv($f,0,',','"');
-        $fila = fgetcsv($f,0,',','"');
-        
-        $indice = 0;
-        foreach ($columnas as $columna) {
-            $datos[$columna] = $fila[$indice];
-            $indice = $indice + 1;
-        }
-        
-        $titulacion = $this->getValue($datos,'DES_CARRERA');
-        $pd[] = array(  'asignatura' => $this->getValue($datos,'DES_ASIG'),
-                        'profesor'  =>  $this->getValue($datos,'PROFESOR'),
-                );
-        
-        while (($fila = fgetcsv($f,0,',','"')) !== false){
-            $indice = 0;
-            foreach ($columnas as $columna) {
-                $datos[$columna] = $fila[$indice];
-                $indice = $indice + 1;
-            }
+        $columnas = fgetcsv($f,0,',','"'); //en la primera fila del csv, están los nombres de las columnas
+               
+        //Hasta final del fichero csv
+        $fila = fgetcsv($f,0,',','"'); 
+        $i=0;
+        while ($fila !== false){
+                       
+            $datos = $this->matchColumnas($columnas,$fila); // $datos = array('nombreColumna' => valor);
+            $codigoAsignatura = $this->getValue($datos,'ASS_CODNUM1');
+            
+            $pod[$i] = array(   'asignatura' => $this->getValue($datos,'ASIGNATURA'),
+                                'codigo-asignatura' => $this->getValue($datos,'ASS_CODNUM1'),
+                        );
+            $pod[$i]['grupos'][] =  array(  'grupo' => $this->getValue($datos,'DES_GRP'),
+                                            'profesor'   => $this->getValue($datos,'NOMCOM'), 
+                                    );
+            
+            do{
 
-            $pd[] = array(  'asignatura' => $this->getValue($datos,'DES_ASIG'),
-                            'profesor'  =>  $this->getValue($datos,'PROFESOR'),
-                    );
+                $fila = fgetcsv($f,0,',','"');
+                if ($fila !== false) {
+                    $datos = $this->matchColumnas($columnas,$fila); // $datos = array('nombreColumna' => valor);
+                    if ($codigoAsignatura == $this->getValue($datos,'ASS_CODNUM1')){
+                        $pod[$i]['grupos'][] = array(   'grupo' => $this->getValue($datos,'DES_GRP'),
+                                                        'profesor'   => $this->getValue($datos,'NOMCOM'),
+                                                );
+                    }
+                } 
+
+            }while ($codigoAsignatura == $this->getValue($datos,'ASS_CODNUM1') && $fila !== false );
+            $i = $i + 1; 
         }
 
-        return View::make('titulaciones.csv')->with(compact('datos','titulacion','pd'));
+        $this->salvaPod($pod);
+
+        return View::make('titulaciones.csv')->with(compact('pod'));
+    }
+
+    public function salvaPod($pod){
+
+        return true;
     }
 
     public function getValue($fila,$columna){
 
         return $fila[$columna];
+    }
+
+    public function matchColumnas($columnas,$fila){
+
+        $datos = array();
+        $indice = 0;
+        foreach ($columnas as $columna) {
+            $datos[$columna] = $fila[$indice];
+            $indice = $indice + 1;
+        }
+
+        return $datos;
     }
 
 } //fin del controlador

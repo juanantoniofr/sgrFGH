@@ -41,13 +41,13 @@ Route::get('hola',array('as'=>'hola',function(){
 	
 	
 	
-	//$tipoActividad = ACL::getTipoActividadPorRol();
+	$titulacion = Titulacion::find(1);
 	
 	
 
 	echo "<pre>";
 
-	var_dump(Titulacion::find('2')->toArray());
+	var_dump($titulacion);
 
 	echo "</pre>";
 	
@@ -63,10 +63,10 @@ Route::get('/admin/disponibilidad.html',array('as' => 'disponibilidad.html','use
 //*********
 // Titulaciones
 //*********
-Route::get('/admin/titulaciones/ulploadCSV.html',array('as' => 'csv', 'uses' => 'TitulacionController@csv'));
+Route::get('admin/titulaciones/ulploadCSV.html',array('as' => 'csv', 'uses' => 'TitulacionController@csv'));
 Route::post('admin/saveCSV.html',array('as' => 'titulacionesUpload','uses' => 'TitulacionController@savecsv'));
 
-Route::get('/admin/titulaciones.html',array('as' => 'titulaciones.html','uses' => 'TitulacionController@listar','before' => array('auth','capacidad:2-3-4-5-6,msg')));
+Route::get('admin/titulaciones.html',array('as' => 'titulaciones.html','uses' => 'TitulacionController@listar','before' => array('auth','capacidad:2-3-4-5-6,msg')));
 Route::post('admin/salvaNuevaTitulacion',array('as' => 'salvaNuevaTitulacion','uses' => 'TitulacionController@nuevaTitulacion','before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg')) );//Nueva Titulacion 
 Route::get('admin/getTitulacion',array('as' => 'getTitulacion','uses' => 'TitulacionController@getTitulacion','before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg')) );//Nueva Titulacion 
 
