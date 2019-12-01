@@ -211,13 +211,22 @@ class TitulacionController extends BaseController {
             $i = $i + 1; 
         }
 
-        $this->salvaPod($pod);
+        $result = $this->salvaPod($pod);
+        
 
         return View::make('titulaciones.csv')->with(compact('pod'));
     }
 
     public function salvaPod($pod){
 
+        foreach ($pod as $asignatura) {
+            $codigoTitulacion = substr($pod[0]['codigo-asignatura'],0,4);
+            $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->get();
+            if (!empty($titulacion)) {
+                $titulacion->asignaturas->asignatura = $asignatura['asignatura'];
+                $titulacion->asignaturas->codigo = $aisgnatura['codigo-asignatura'];
+            }
+        }
         return true;
     }
 
