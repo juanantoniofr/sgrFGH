@@ -41,16 +41,19 @@ Route::get('hola',array('as'=>'hola',function(){
 	
 	
 	
-	$titulacion = Titulacion::find(1);
-	
-	
+	$codigoTitulacion = '2100';
+    $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
+    if (!empty($titulacion)) {
+        $asignatura = new Asignatura(array('asignatura' => 'Una Nueva', 'codigo' => '2100'));
 
+		$asignatura = $titulacion->asignaturas()->save($asignatura);
+    }
+    echo "<pre>";
+    var_dump($asignatura);
+    echo "</pre>";
 	echo "<pre>";
-
-	var_dump($titulacion);
-
-	echo "</pre>";
-	
+    var_dump($titulacion);
+    echo "</pre>";
 }));
 
 //*********
@@ -63,7 +66,7 @@ Route::get('/admin/disponibilidad.html',array('as' => 'disponibilidad.html','use
 //*********
 // Titulaciones
 //*********
-Route::get('admin/titulaciones/ulploadCSV.html',array('as' => 'csv', 'uses' => 'TitulacionController@csv'));
+Route::get('admin/titulaciones/uploadCSV.html',array('as' => 'csv', 'uses' => 'TitulacionController@csv'));
 Route::post('admin/saveCSV.html',array('as' => 'titulacionesUpload','uses' => 'TitulacionController@savecsv'));
 
 Route::get('admin/titulaciones.html',array('as' => 'titulaciones.html','uses' => 'TitulacionController@listar','before' => array('auth','capacidad:2-3-4-5-6,msg')));

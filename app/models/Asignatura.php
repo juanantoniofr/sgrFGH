@@ -4,7 +4,7 @@ class Asignatura extends Eloquent {
 
  	protected $table = 'asignaturas';
 
- 	protected $fillable = array('codigo', 'asignatura','curso','titulacion_id');
+ 	protected $fillable = array('codigo', 'asignatura','curso');
 
 
 	
@@ -14,7 +14,9 @@ class Asignatura extends Eloquent {
      */
     
     public function titulacion(){
-        return $this->hasOne('Titulacion');
+        
+        return $this->belongsTo('Titulacion');
+        //return $this->hasOne('Titulacion');
     }
 
     /**
