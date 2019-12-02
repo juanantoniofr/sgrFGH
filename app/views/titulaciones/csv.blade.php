@@ -70,10 +70,6 @@
                         <pre>
                             {{ var_dump($result)  or '' }}
                         </pre>
-                        <p>Número de filas {{ count($pod) }}</p>
-                        <pre>
-                            {{ var_dump($pod)  or '' }}
-                        </pre>
                     </div>
 
                 </div> <!-- /.panel-body  -->           

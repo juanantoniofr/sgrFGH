@@ -166,86 +166,106 @@ class TitulacionController extends BaseController {
         *
         *
     */
+
     public function saveCSV(){
 
         $numFila = 1;
-
-        //$csv = new csv();
-        
-        $file = Input::file('csvfile'); //controlar que no sea vacio !!!!!
+       
+        $file = Input::file('csvfile'); 
+        //controlar que no sea vacio !!!!!
         if (empty($file)){
-            Session::put('msg', 'No se ha seleccionado ningún archivo *.csv');
-            return View::make('titulaciones.csv');  
+           Session::put('msg', 'No se ha seleccionado ningún archivo *.csv');
+           return View::make('titulaciones.csv');  
         }
 
-
         $f = fopen($file,"r");
-        $columnas = fgetcsv($f,0,',','"'); //en la primera fila del csv, están los nombres de las columnas
-               
+        //Lee nombres de las columnas
+        $columnas = fgetcsv($f,0,',','"'); 
+
         //Hasta final del fichero csv
         $fila = fgetcsv($f,0,',','"'); 
-        $i=0;
+        $result = array();
         while ($fila !== false){
                        
             $datos = $this->matchColumnas($columnas,$fila); // $datos = array('nombreColumna' => valor);
-            $codigoAsignatura = $this->getValue($datos,'ASS_CODNUM1');
-            
-            $pod[$i] = array(   'asignatura' => $this->getValue($datos,'ASIGNATURA'),
-                                'codigo-asignatura' => $this->getValue($datos,'ASS_CODNUM1'),
+            $aAsignatura = array(
+                        'asignatura' => $this->getValue($datos,'ASIGNATURA'),
+                        'codigo' => $this->getValue($datos,'ASS_CODNUM1'),
                         );
-            $pod[$i]['grupos'][] =  array(  'grupo' => $this->getValue($datos,'DES_GRP'),
-                                            'profesor'   => $this->getValue($datos,'NOMCOM'), 
-                                    );
+            $aGrupoAsignatura = array(
+                        'grupo' => $this->getValue($datos,'DES_GRP'));
+            $aProfesor = array(
+                        'profesor' => $this->getValue($datos,'NOMCOM'));
             
-            do{
-
-                $fila = fgetcsv($f,0,',','"');
-                if ($fila !== false) {
-                    $datos = $this->matchColumnas($columnas,$fila); // $datos = array('nombreColumna' => valor);
-                    if ($codigoAsignatura == $this->getValue($datos,'ASS_CODNUM1')){
-                        $pod[$i]['grupos'][] = array(   'grupo' => $this->getValue($datos,'DES_GRP'),
-                                                        'profesor'   => $this->getValue($datos,'NOMCOM'),
-                                                );
-                    }
-                } 
-
-            }while ($codigoAsignatura == $this->getValue($datos,'ASS_CODNUM1') && $fila !== false );
-            $i = $i + 1; 
+            $result[] = $this->salvaFila($aAsignatura,$aGrupoAsignatura,$aProfesor);   
+            $fila = fgetcsv($f,0,',','"');
+                
         }
 
-        $result = array();
-        $result = $this->salvaPod($pod);
-        
-
-        return View::make('titulaciones.csv')->with(compact('pod','result'));
+        return View::make('titulaciones.csv')->with(compact('result'));
     }
 
-    public function salvaPod($pod){
+    /**
+        * 
+        * Salva a DB los valores de Asignaturas, gruposAsisgnatura y profesor
+        * 
+        * @param $aAsignatura :array
+        * @param $aGrupoAsignatura :array
+        * @param $aProfesor :array
+        * 
+        * @return $result :array   
+        *
+        *
+    */
+
+    public function salvaFila($aAsignatura,$aGrupoAsignatura,$aProfesor){
 
         $result = array();
 
-        foreach ($pod as $p) {
-            $codigoTitulacion = substr($p['codigo-asignatura'],0,4);
-            $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
-            if (!empty($titulacion)) {
-
-                $asignatura = $titulacion->asignaturas()->where('codigo','=',$p['codigo-asignatura'])->first();
-                if (empty($asignatura)){ 
-                    $objAsignatura = new Asignatura(array('asignatura' => $p['asignatura'], 'codigo' => $p['codigo-asignatura']));
-                    $result[] = $titulacion->asignaturas()->save($objAsignatura);
-                }
-                
+        $codigoTitulacion = substr($aAsignatura['codigo'],0,4);
+        $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
+        if (!empty($titulacion)){
+            $asignatura = $titulacion->asignaturas()->where('codigo','=',$aAsignatura['codigo'])->first();
+            if (empty($asignatura)){
+               $result[] = $titulacion->asignaturas()->save(new Asignatura($aAsignatura));
+               //falta añadir el grupo
+            }
+            else {
+               //Añade nuevo grupo.
             }
         }
-
+      
         return $result;
     }
+
+    /**
+        * 
+        * Devuelve el valor de la Key=$columna del array $fila
+        * 
+        * @param $fila :array
+        * @param $columna :string
+        * 
+        * @return $fila :array   
+        *
+        *
+    */   
 
     public function getValue($fila,$columna){
 
         return $fila[$columna];
     }
-
+    
+    /**
+        * 
+        * Devuelve array asociativo con Key=$columna y value=$fila[posión $i]
+        * 
+        * @param $columnas :array
+        * @param $fila :array
+        * 
+        * @return $datos :array   
+        *
+        *
+    */ 
     public function matchColumnas($columnas,$fila){
 
         $datos = array();

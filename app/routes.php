@@ -77,7 +77,7 @@ Route::get('/admin/disponibilidad.html',array('as' => 'disponibilidad.html','use
 // Titulaciones
 //*********
 Route::get('admin/titulaciones/uploadCSV.html',array('as' => 'csv', 'uses' => 'TitulacionController@csv'));
-Route::post('admin/saveCSV.html',array('as' => 'titulacionesUpload','uses' => 'TitulacionController@savecsv'));
+Route::post('admin/saveCSV.html',array('as' => 'titulacionesUpload','uses' => 'TitulacionController@saveCSV'));
 
 Route::get('admin/titulaciones.html',array('as' => 'titulaciones.html','uses' => 'TitulacionController@listar','before' => array('auth','capacidad:2-3-4-5-6,msg')));
 Route::post('admin/salvaNuevaTitulacion',array('as' => 'salvaNuevaTitulacion','uses' => 'TitulacionController@nuevaTitulacion','before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg')) );//Nueva Titulacion 
