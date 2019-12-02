@@ -39,20 +39,30 @@ Route::get('newUser',array('as'=>'newUser',function(){
 
 Route::get('hola',array('as'=>'hola',function(){
 	
+	$pod[] = array(	"asignatura" => "2110014 Tecnología de los Medios Audiovisuales",				"codigo-asignatura" => "2110014" ,
+						"grupos" => [
+									array( 	"grupo" => "2 Grp 2",
+											"profesor" => "" ),
+									array(	"grupo" => "2 Grp 2",
+											"profesor" => "")
+									],
+				);
+      
 	
-	
-	$codigoTitulacion = '2100';
-    $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
-    if (!empty($titulacion)) {
-        $asignatura = new Asignatura(array('asignatura' => 'Una Nueva', 'codigo' => '2100'));
-
-		$asignatura = $titulacion->asignaturas()->save($asignatura);
-    }
+	foreach ($pod as $p) {
+            $codigoTitulacion = substr($p['codigo-asignatura'],0,4);
+            $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
+            if (!empty($titulacion)) {
+                $asignatura = new Asignatura(array('asignatura' => $p['asignatura'], 'codigo' => $p['codigo-asignatura']));
+                //var_dump(array('asignatura' => $p['asignatura'], 'codigo' => $p['codigo-asignatura']));
+                $result[] = $titulacion->asignaturas()->save($asignatura);
+            }
+        }
     echo "<pre>";
-    var_dump($asignatura);
+    var_dump($result);
     echo "</pre>";
 	echo "<pre>";
-    var_dump($titulacion);
+    var_dump($asignatura);
     echo "</pre>";
 }));
 

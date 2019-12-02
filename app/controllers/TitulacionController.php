@@ -152,7 +152,8 @@ class TitulacionController extends BaseController {
     public function csv(){
 
         $pod = array();
-        return View::make('titulaciones.csv')->with(compact('pod'));
+        $result = array();
+        return View::make('titulaciones.csv')->with(compact('pod','result'));
     }
 
     /**
@@ -212,23 +213,32 @@ class TitulacionController extends BaseController {
             $i = $i + 1; 
         }
 
+        $result = array();
         $result = $this->salvaPod($pod);
         
 
-        return View::make('titulaciones.csv')->with(compact('pod'));
+        return View::make('titulaciones.csv')->with(compact('pod','result'));
     }
 
     public function salvaPod($pod){
 
-        foreach ($pod as $asignatura) {
-            $codigoTitulacion = substr($pod[0]['codigo-asignatura'],0,4);
-            $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->get();
+        $result = array();
+
+        foreach ($pod as $p) {
+            $codigoTitulacion = substr($p['codigo-asignatura'],0,4);
+            $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
             if (!empty($titulacion)) {
-                $titulacion->asignaturas()->asignatura = $asignatura['asignatura'];
-                $titulacion->asignaturas()->codigo = $aisgnatura['codigo-asignatura'];
+
+                $asignatura = $titulacion->asignaturas()->where('codigo','=',$p['codigo-asignatura'])->first();
+                if (empty($asignatura)){ 
+                    $objAsignatura = new Asignatura(array('asignatura' => $p['asignatura'], 'codigo' => $p['codigo-asignatura']));
+                    $result[] = $titulacion->asignaturas()->save($objAsignatura);
+                }
+                
             }
         }
-        return true;
+
+        return $result;
     }
 
     public function getValue($fila,$columna){
