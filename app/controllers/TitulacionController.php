@@ -220,8 +220,9 @@ class TitulacionController extends BaseController {
         if (!empty($titulacion)){
             $asignatura = $titulacion->asignaturas()->where('codigo','=',$aAsignatura['codigo'])->first();
             if (empty($asignatura)){
-                $result['Asignatura'][]= $titulacion->asignaturas()->save(new Asignatura($aAsignatura));
-                $result['GrupoAsignatura'] = $titulacion->asignaturas()->gruposAsignatura()->save(new GrupoAsignatura($aGrupoAsignatura));
+                $nuevaAsignatura = new Asignatura($aAsignatura);
+                $result['Asignatura'][]= $titulacion->asignaturas()->save($nuevaAsignatura);
+                $result['GrupoAsignatura'] = $nuevaAsignatura->gruposAsignatura()->save(new GrupoAsignatura($aGrupoAsignatura));
                //falta añadir el grupo
             }
             else {

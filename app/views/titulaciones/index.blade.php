@@ -48,7 +48,14 @@
                                     <div class="col-lg-10 fila-acordeon" style="display: none;">
                                         <ul>
                                             @foreach( $titulacion->asignaturas as $asignatura )
-                                                <li> {{ $asignatura->asignatura }} </li>
+                                                <li> 
+                                                    {{ $asignatura->asignatura }} 
+                                                    <small>(
+                                                        @foreach($asignatura->gruposAsignatura as $grupo)
+                                                            {{  $grupo }} |
+                                                        @endforeach
+                                                    )</small>
+                                                </li>
                                             @endforeach
                                         </ul>
                                     </div>
