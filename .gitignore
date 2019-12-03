@@ -8,6 +8,7 @@ app/storage/
 app/commands/
 app/tests/
 app/database/
+._*
 
 # Laravel 5 & Lumen specific
 public/storage
