@@ -223,10 +223,18 @@ class TitulacionController extends BaseController {
                 $nuevaAsignatura = new Asignatura($aAsignatura);
                 $result['Asignatura'][]= $titulacion->asignaturas()->save($nuevaAsignatura);
                 $result['GrupoAsignatura'] = $nuevaAsignatura->gruposAsignatura()->save(new GrupoAsignatura($aGrupoAsignatura));
-               //falta añadir el grupo
             }
             else {
-               //Añade nuevo grupo.
+                $result['Asignatura'][]= $asignatura->update($aAsignatura);
+                $asignatura->gruposAsignatura()->save(new GrupoAsignatura($aGrupoAsignatura)); 
+                /*$grupoAsignatura = $asignatura->gruposAsignatura()->where('grupo','=',$aGrupoAsignatura['grupo'])->first();
+                if (empty($grupoAsignatura)) {
+                    $result['GrupoAsignatura'] = $asignatura->gruposAsignatura()->save(new GrupoAsignatura($aGrupoAsignatura)); 
+                }
+                else {
+                    $result['GrupoAsignatura'] = $asignatura->gruposAsignatura()->update($aGrupoAsignatura);
+                }
+                */
             }
         }
       

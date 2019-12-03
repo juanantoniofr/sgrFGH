@@ -52,7 +52,7 @@
                                                     {{ $asignatura->asignatura }} 
                                                     <small>(
                                                         @foreach($asignatura->gruposAsignatura as $grupo)
-                                                            {{  $grupo }} |
+                                                            {{  $grupo->grupo }} |
                                                         @endforeach
                                                     )</small>
                                                 </li>
