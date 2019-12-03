@@ -1,6 +1,6 @@
 <?php
 
-class GruposAsignatura extends Eloquent {
+class GrupoAsignatura extends Eloquent {
 
  	protected $table = 'gruposAsignatura';
 

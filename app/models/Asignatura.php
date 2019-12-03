@@ -20,6 +20,14 @@ class Asignatura extends Eloquent {
     }
 
     /**
+        * Relación: 1 asignatura tiene uno o varios grupos de alumnos
+    */
+
+    public function gruposAsignatura(){
+        return $this->hasMany('GrupoAsignatura','asignatura_id','id');
+    }
+
+    /**
     * Relación: 1 asignatura se imparte por profesores a través de los grupos que tiene la asignatura
     */
 

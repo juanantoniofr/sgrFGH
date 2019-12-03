@@ -16,17 +16,10 @@ class TitulacionController extends BaseController {
 
 	public function listar(){
       
-   		//$sortby = Input::get('sortby','nombre');
-    	//$order = Input::get('order','asc');
-    	//$offset = Input::get('offset','10');
-    	//$search = Input::get('search','');
-
-
+   	
     	$titulaciones=Titulacion::orderBy('titulacion','ASC')->get();
 
-    	/*echo "<pre>";
-    		var_dump($titulaciones);
-    	echo "</pre>";*/
+    	
         $dropdown = Auth::user()->dropdownMenu();
 
         return View::make('titulaciones.index')->with(compact('titulaciones'))->nest('dropdown',$dropdown)->nest('header','titulaciones.headerMainContainer')->nest('modalNuevaTitulacion','titulaciones.modalNuevaTitulacion')->nest('modalEditaTitulacion','titulaciones.modalEditaTitulacion');  
@@ -227,7 +220,8 @@ class TitulacionController extends BaseController {
         if (!empty($titulacion)){
             $asignatura = $titulacion->asignaturas()->where('codigo','=',$aAsignatura['codigo'])->first();
             if (empty($asignatura)){
-               $result[] = $titulacion->asignaturas()->save(new Asignatura($aAsignatura));
+                $result['Asignatura'][]= $titulacion->asignaturas()->save(new Asignatura($aAsignatura));
+                $result['GrupoAsignatura'] = $titulacion->asignaturas()->gruposAsignatura()->save(new GrupoAsignatura($aGrupoAsignatura));
                //falta añadir el grupo
             }
             else {

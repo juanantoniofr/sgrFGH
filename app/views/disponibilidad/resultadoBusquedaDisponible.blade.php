@@ -3,14 +3,14 @@
 	<p>Tendrías dos bloques. (Me invento las respuesta). </p>
 </div>
 <div class="table-responsive">
+  
+  
+  <table class="table table-striped">
+    <caption>Disponible</caption> 
+   	<thead><th style="width:40%">Espacio</th><th style="width:30%">Medios</th><th style="width:30%">Esta columna no estaría</th></thead>
    
-   <table class="table table-striped">
-   
-   	<caption>Disponible</caption>
-      <thead><th style="width:40%">Espacio</th><th style="width:30%">Medios</th><th style="width:30%">Esta columna no estaría</th></thead>
-   
-      <tbody class="text-success">
-   	   <tr >
+    <tbody class="text-success">
+    	   <tr >
             <td> Aula Docencia 2.3 <br />
               <button class="btn btn-danger" id="btnNuevaReserva" data-fristday=""
               data-toggle="tooltip" data-html="true" 
@@ -20,6 +20,7 @@
                               <hr />
                               " >
                 <small><i class="fa fa-external-link" aria-hidden="true"></i> Reservar</small>
+              </button>
             </td>
             <td>
             	<ul style="list-style:none; list-style-position: inside ;padding-left: 0px">
@@ -54,7 +55,7 @@
             </td>
             <td> Este también valdria (puede haber más de uno)</td>
          </tr>
-      </tbody>
+        </tbody>
    </table>
 </div>
 
@@ -106,6 +107,7 @@
                               <hr />
                               " >
                 <small><i class="fa fa-external-link" aria-hidden="true"></i> Reservar</small>
+              </button>
             </td>
             <td>
             	<ul style="list-style:none; list-style-position: inside ;padding-left: 0px">

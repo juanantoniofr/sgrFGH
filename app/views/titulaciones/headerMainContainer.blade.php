@@ -6,10 +6,7 @@
 
                 <a href="" class="active btn btn-danger" id="botonMuestraModalNuevaTitulacion" title="Añadir nueva titulacion"><i class="fa fa-plus fa-fw"></i> Añadir titulación</a>
 
-            </div>
-            <div class="form-group ">
-                <a href="{{route('recursos')}}" class="btn btn-primary" title="Listar Espacios o Medios"><i class="fa fa-list fa-fw"></i> Listar todos</a>
-            </div>                            
+            </div>                           
                 
         </form>
         

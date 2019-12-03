@@ -79,4 +79,11 @@ $(function(e){
         e.preventDefault();
         alert('aún en desarrollo....');
     });
+
+    $( '.titulo-acordeon').click(function(e){;
+        e.preventDefault();
+        e.stopPropagation();
+        $( this ).next().toggle('slow');
+        //$( 'div.fila-acordeon', this).toggle('slow');
+    });
 });

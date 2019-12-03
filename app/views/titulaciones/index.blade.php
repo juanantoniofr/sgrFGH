@@ -14,8 +14,6 @@
             {{ $header or '' }}
         </div>
 
-    
-    
         <div class="panel panel-info">
             
             <div class="panel-heading">
@@ -39,13 +37,21 @@
                             <tr>
                                 <td>{{ $titulacion->codigo}}</td>
                                 <td>
+                                    <div class="titulo-acordeon" >
+                                    <a href="">{{ $titulacion->titulacion }} <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
                                     <!-- editar -->
-                                    {{ $titulacion->titulacion }}
                                     <a href="" title="Editar Titulación" class="editaTitulacion" data-idtitulo="{{ $titulacion->id }}" ><i class="fa fa-pencil fa-fw"></i></a>
                                 
                                     <!-- eliminar -->
                                     <a class = "eliminaTitulacion" data-idtitulo="{{$titulacion->id}}" title = "Eliminar Titulación"><i class="fa fa-trash-o fa-fw"></i></a>
-                                    
+                                    </div>
+                                    <div class="col-lg-10 fila-acordeon" style="display: none;">
+                                        <ul>
+                                            @foreach( $titulacion->asignaturas as $asignatura )
+                                                <li> {{ $asignatura->asignatura }} </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </td>
                                 
                                 <td> Update: {{ $titulacion->updated_at}}</td>
