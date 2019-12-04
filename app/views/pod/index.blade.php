@@ -29,7 +29,7 @@
       <div class="panel-body">
         
         <div class="col-lg-12">
-          
+                                               
           {{Form::open( array( 'url' => route('compruebaCsv'), 'files' => true ) )}}
             
             <div class="form-group">
@@ -68,6 +68,6 @@
 
 @section('js')
 
-    {{-- HTML::script('assets/js/pod.js') --}}
+    {{ HTML::script('assets/js/pod.js') }}
 
 @stop

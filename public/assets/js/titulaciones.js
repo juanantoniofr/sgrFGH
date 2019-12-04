@@ -24,7 +24,7 @@ $(function(e){
                 $('#modalEditaTitulacion').modal('show'); 
             },
             error: function(xhr, ajaxOptions, thrownError){
-                lert(xhr.responseText + ' (codeError: ' + xhr.status +')');
+                alert(xhr.responseText + ' (codeError: ' + xhr.status +')');
             }
         });
     });

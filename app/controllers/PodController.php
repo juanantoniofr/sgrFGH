@@ -7,6 +7,16 @@ class PodController extends BaseController {
 	private $success		 	= array();
 	private $warningNoLugar		= array();
 
+	
+	/**
+        * Index: formulario input file csv
+        *
+		* @param void
+		*
+        * @return View :View::make()
+        *
+        *
+    */
 	public function index(){
 
 		$dropdown = Auth::user()->dropdownMenu();
@@ -85,9 +95,83 @@ class PodController extends BaseController {
 		 	if ($this->solapaBD($evento)) {$aSolapesBD[] = $evento; $exclude = true;}   
 			if(!$exclude) $aEventosValidos[] = $evento;
 		}
-		//$resultadoComprobacionCsv = View::make('pod.resultadoComprobacionCsv')->with(compact('aSinAula','aSolapesCsv','aSolapesBD','aEventosValidos'));
+		
 		return View::make('pod.index')->nest('resultadoComprobacionCsv','pod.resultadoComprobacionCsv',compact('aSinAula','aSolapesCsv','aSolapesBD','aEventosValidos'))->nest('dropdown',$dropdown);
 	}
+
+
+	/**
+        * 
+        * Salva eventos válidos definidos en csv a BD 
+        * 
+        * @param $eventos :Json // Eventos válidos cvs
+        *
+        * @return $resultado :View::make()
+        *
+        *
+    */
+	public function salvaEventosCsv(  ){
+		
+		$resultado = Input::get('eventos', '');
+
+		return 'Respuesta: <br />' . $resultado;
+
+		/*
+		$result = true;
+		$fechaDesde = Date::dateCSVtoSpanish($data['F_DESDE_HORARIO1']);
+		$fechaHasta = Date::dateCSVtoSpanish($data['F_HASTA_HORARIO1']);
+		
+		$nRepeticiones = Date::numRepeticiones($fechaDesde,$fechaHasta,$data['COD_DIA_SEMANA']);
+
+		for($j=0;$j < $nRepeticiones; $j++ ){ //foreach 
+				$evento = new Evento();
+	
+				//evento periodico o puntual??			
+				if ($nRepeticiones == 1) $evento->repeticion = 0;
+				else $evento->repeticion = 1;
+				
+				$evento->evento_id = $evento_id;
+				//fechas de inicio y fin
+				$evento->fechaFin = Date::toDB(Date::dateCSVtoSpanish($data['F_HASTA_HORARIO1']),'-');//¿por que, no es $fechaDesde ya calculado??
+				$evento->fechaInicio = Date::toDB(Date::dateCSVtoSpanish($data['F_DESDE_HORARIO1']),'-');
+				
+				//fecha Evento
+				$startDate = Date::timeStamp_fristDayNextToDate(Date::dateCSVtoSpanish($data['F_DESDE_HORARIO1']),$data['COD_DIA_SEMANA']);
+				$currentfecha = Date::currentFecha($startDate,$j);
+				$evento->fechaEvento = Date::toDB($currentfecha,'-');
+
+				//horario
+				$evento->horaInicio = $data['INI'];
+				$evento->horaFin = $data['FIN'];
+
+				//obtner identificador de recurso (espacio o medio)
+				//$evento->recurso_id = $this->getRecursoByIdLugar($data['ID_LUGAR']);
+				$evento->recurso_id = $recurso->id;
+				
+				$evento->estado = 'aprobada';
+				//código día de la semana
+				$evento->diasRepeticion = json_encode($data['COD_DIA_SEMANA']);
+				$evento->dia = $data['COD_DIA_SEMANA'];
+			
+				$evento->titulo = $data['ASIGNATURA'] . ' - ' . $data['NOMCOM'];
+				$evento->asignatura = $data['ASIGNATURA'];
+				$evento->profesor = $data['NOMCOM'];
+				$evento->actividad = 'Docencia Reglada P.O.D';
+				
+				$evento->dia = $data['COD_DIA_SEMANA'];
+				//Asignamos a usuario que carga el pod
+				$userPOD = User::where('username','=','pod')->first(); 
+				//$evento->user_id = Auth::user()->id;
+				$evento->user_id      = $userPOD->id;
+				$evento->reservadoPor = $userPOD->id;
+				$evento->save();
+			
+		}//fin foreach
+		
+
+		*/
+	}
+
 
 	private function save($data,$numFila,$recurso,$evento_id){
 		
@@ -224,7 +308,7 @@ class PodController extends BaseController {
         *
         *
     */
-	public function solapaCsv($eventos,$evento){
+	private function solapaCsv($eventos,$evento){
 
 		$aula = $evento['aula'];
 		$f_desde = $evento['f_desde'];//d-m-Y

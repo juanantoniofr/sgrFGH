@@ -1,10 +1,28 @@
 $(function(e){
 
-    showGifEspera();
 
-    $( '.container' ).load(function() {
-        hideGifEspera();
+    $(' #botonSalvaEventos ').on('click',function(e){
+
+        e.preventDefault();
+        e.stopPropagation();
         
+        showGifEspera();
+        $.ajax({
+            type: "POST",
+            url:  "salvaEventosCsv",
+            data: {eventos:$(this).data('eventos')},
+            success: function($respuesta){
+                
+                $(' #respuestaSalvaEventos ').html( $respuesta );
+
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                hideGifEspera();
+                alert(xhr.responseText + ' (codeError: ' + xhr.status +')');
+            }
+        });
+        hideGifEspera();
+
     });
     
     function showGifEspera(){

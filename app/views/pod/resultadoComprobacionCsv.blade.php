@@ -10,9 +10,13 @@
             <i class="fa fa-check fa-fw"></i> Eventos sin errores
           </div>
           <div class = "col-lg-6 text-right">
-            {{Form::open( array( 'url' => route('salvaCsv')) )}}
-              <button type="submit" class="btn btn-primary"><i class="fa fa-save fa-fw"></i> Salvar eventos</button>
-            {{Form::close()}}
+              
+              <a href="" class="btn btn-primary" id="botonSalvaEventos" title="Salvar eventos a BD" data-eventos=' {{ json_encode($aEventosValidos)  }}'><i class="fa fa-save fa-fw"></i> Salva eventos a DB</a>
+          </div>
+        </div>
+        <div class = 'row'>
+          <div id = 'respuestaSalvaEventos'>
+            
           </div>
         </div>
       </div>

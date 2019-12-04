@@ -84,9 +84,10 @@ Route::get('/admin/disponibilidad.html',array('as' => 'disponibilidad.html','use
 // POD
 //*********
 
-Route::get('admin/pod.html',array('as' => 'pod.html','uses' => 'PodController@index','before' => array('auth','capacidad:2-3-4-5-6,msg')));
+Route::get('admin/pod.html',array('as' => 'pod.html','uses' => 'PodController@index','before' => array('auth','capacidad:2-3-4-5-6,msg'))); 
 Route::post('admin/pod.html',array('as' => 'compruebaCsv','uses' => 'PodController@compruebaCsv','before' => array('auth','capacidad:2-3-4-5-6,msg')));
-Route::post('admin/salvaCsv.html',array('as' => 'salvaCsv','uses' => 'PodController@salvaCsv','before' => array('auth','capacidad:2-3-4-5-6,msg')));
+Route::post('admin/salvaEventosCsv',array('as' => 'salvaEventosCsv','uses' => 'PodController@salvaEventosCsv','before' =>
+array('auth','capacidad:2-3-4-5-6,msg')));
 
 
 //*********
