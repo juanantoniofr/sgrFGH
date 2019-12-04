@@ -18,7 +18,7 @@ class GrupoAsignatura extends Eloquent {
     }
 
     /**
-    * Relación: 1 grupo puede tener varios profesores y 1 profesor puede impaertir clase en varios grupos
+    * Relación: 1 grupo puede tener varios profesores y 1 profesor puede impartir clase en varios grupos
     */
 
     public function profesores(){

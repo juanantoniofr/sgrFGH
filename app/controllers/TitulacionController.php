@@ -5,12 +5,12 @@ class TitulacionController extends BaseController {
 
 
     /**
-     * Listado de titulaciones o estudios
-     * 
-     * 
-     * @return View::make('titulaciones.index') listado de titulaciones // cursos // asignaturas // grupos de alumnos // profesor
-     * 
-     * 
+         * Listado de titulaciones o estudios
+         * 
+         * 
+         * @return View::make('titulaciones.index') listado de titulaciones // cursos // asignaturas // grupos de alumnos // profesor
+         * 
+         * 
     */
 
 
@@ -28,12 +28,12 @@ class TitulacionController extends BaseController {
 
 
     /**
-     * Guarda en BD nueva títulacion o estudios
-     * 
-     * @param Input::get('codigo') :varchar(32) 
-     * @param Input::get('titulacion') :varchar(256)
-     *
-     * @return $respuesta :array, errores de validación de formulario o mensaje de éxito
+        * Guarda en BD nueva títulacion o estudios
+        * 
+        * @param Input::get('codigo') :varchar(32) 
+        * @param Input::get('titulacion') :varchar(256)
+        *
+        * @return $respuesta :array, errores de validación de formulario o mensaje de éxito
     */
 
     public function nuevaTitulacion(){
@@ -190,7 +190,7 @@ class TitulacionController extends BaseController {
             $aProfesor = array(
                         'profesor' => $this->getValue($datos,'NOMCOM'));
             
-            $result[] = $this->salvaFila($aAsignatura,$aGrupoAsignatura,$aProfesor);   
+            $result[] = $this->salvaFila2($aAsignatura,$aGrupoAsignatura,$aProfesor);   
             $fila = fgetcsv($f,0,',','"');
                 
         }
@@ -210,6 +210,27 @@ class TitulacionController extends BaseController {
         *
         *
     */
+
+
+    public function salvaFila2($aAsignatura,$aGrupoAsignatura,$aProfesor){
+
+        $result = array();
+
+        $codigoTitulacion = substr($aAsignatura['codigo'],0,4);
+        $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
+        if (!empty($titulacion)){
+            // Obtiene $asignatura o la instancia si no existe en DB
+            $asignatura = Asignatura::firstorNew($aAsignatura);
+            $titulacion->asignaturas()->save($asignatura);
+            $grupoAsignatura = GrupoAsignatura::firstOrNew($aGrupoAsignatura);
+            $asignatura->gruposAsignatura()->save($grupoAsignatura);
+        }
+        else {
+            //msg de error: No existe la titulacion
+        }
+      
+        return $result;
+    }
 
     public function salvaFila($aAsignatura,$aGrupoAsignatura,$aProfesor){
 
