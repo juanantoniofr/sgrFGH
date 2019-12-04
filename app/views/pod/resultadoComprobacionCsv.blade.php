@@ -7,11 +7,12 @@
       <div class="panel-heading">
         <div class="row">
           <div class = "col-lg-6">
-            <i class="fa fa-check fa-fw"></i> Eventos sin errores
+            <p><b><i class="fa fa-check fa-fw"></i> Eventos sin errores</b></p>
           </div>
           <div class = "col-lg-6 text-right">
-              
-              <a href="" class="btn btn-primary" id="botonSalvaEventos" title="Salvar eventos a BD" data-eventos=' {{ json_encode($aEventosValidos)  }}'><i class="fa fa-save fa-fw"></i> Salva eventos a DB</a>
+            <p> 
+              <a href="" class="btn btn-primary" id="botonSalvaEventos" title="Salvar eventos a BD" data-eventos=' {{ json_encode($aEventosValidos,JSON_FORCE_OBJECT)  }}'><i class="fa fa-save fa-fw"></i> Salva eventos a DB</a>
+            </p>
           </div>
         </div>
         <div class = 'row'>
@@ -74,7 +75,7 @@
         
       <div class="panel-heading">
       
-        <i class="fa fa-ban fa-fw"></i> <b>Error: No existe Espacio o Aula.</b>
+        <p><i class="fa fa-ban fa-fw"></i> <b>Error: No existe Espacio o Aula.</b></p>
       </div>
           
       <div class="panel-body">  
@@ -115,7 +116,7 @@
       
       <div class="panel-heading">
 
-        <i class="fa fa-check fa-fw"></i> Aviso 
+        <p><i class="fa fa-check fa-fw"></i> Aviso </p>
       </div>
       
       <div class="panel-body">
@@ -131,7 +132,7 @@
         
       <div class="panel-heading">
     
-        <i class="fa fa-ban fa-fw"></i> <b>Error: Solapamientos en archivo csv.</b>.  
+        <p><i class="fa fa-ban fa-fw"></i> <b>Error: Solapamientos en archivo csv.</b></p>  
       </div>
         
       <div class="panel-body">  
@@ -172,7 +173,7 @@
       
       <div class="panel-heading">
 
-        <i class="fa fa-check fa-fw"></i> Aviso 
+        <p><i class="fa fa-check fa-fw"></i> Aviso </p> 
       </div>
       
       <div class="panel-body">
@@ -188,7 +189,7 @@
         
       <div class="panel-heading">
     
-        <i class="fa fa-ban fa-fw"></i> <b>Error: Solapamientos en Base de Datos. Los eventos siguientes solapan con otras reservas/eventos existentes.</b>.  
+        <p><i class="fa fa-ban fa-fw"></i> <b>Error: Solapamientos en Base de Datos. Los eventos siguientes solapan con otras reservas/eventos existentes.</b></p>  
       </div>
         
       <div class="panel-body">  
@@ -229,7 +230,7 @@
       
       <div class="panel-heading">
 
-        <i class="fa fa-check fa-fw"></i> Aviso 
+        <p><i class="fa fa-check fa-fw"></i> Aviso </p>
       </div>
       
       <div class="panel-body">

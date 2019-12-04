@@ -110,11 +110,39 @@ class PodController extends BaseController {
         *
         *
     */
+    /*
+    json eventos:
+
+	{"0":{"numfila":26,"asignatura":"\"La Rep\u00fablica de Indios\": Status Jur\u00eddico, Social y Laboral","profesor":"DELIBES MATEOS ,ROCIO","aula":"AULA XV","f_desde":"24\/02\/2020","f_hasta":"26\/03\/2020","diaSemana":"1","h_inicio":"15:00","h_fin":"17:00","codigoDia":"1"},"1":{"numfila":27,"asignatura":"\"La Rep\u00fablica de Indios\": Status Jur\u00eddico, Social y Laboral","profesor":"DELIBES MATEOS ,ROCIO","aula":"AULA XV","f_desde":"24\/02\/2020","f_hasta":"26\/03\/2020","diaSemana":"3","h_inicio":"15:00","h_fin":"17:00","codigoDia":"3"},"2":{"numfila":28,"asignatura":"\"La Rep\u00fablica de Indios\": Status Jur\u00eddico, Social y Laboral","profesor":"DELIBES MATEOS ,ROCIO","aula":"AULA XV","f_desde":"24\/02\/2020","f_hasta":"26\/03\/2020","diaSemana":"5","h_inicio":"15:00","h_fin":"17:00","codigoDia":"5"},"3":{"numfila":29,"asignatura":"\"La Rep\u00fablica de Indios\": Status Jur\u00eddico, Social y Laboral","profesor":"DELIBES MATEOS ,ROCIO","aula":"AULA XV","f_desde":"27\/03\/2020","f_hasta":"27\/03\/2020","diaSemana":"5","h_inicio":"15:00","h_fin":"19:00","codigoDia":"5"}}
+    
+    */
 	public function salvaEventosCsv(  ){
 		
-		$resultado = Input::get('eventos', '');
+		$eventos = Input::get('eventos', '');
+		
+		if (empty($eventos)) return 'No hay eventos que salvar';
+		
+		$aEventos = json_decode($eventos);
 
-		return 'Respuesta: <br />' . $resultado;
+		$resultado = '';
+		foreach ($aEventos as $evento) {
+
+			$aula = $evento->aula;
+			$f_desde = $evento->f_desde; // 	formato --> d/m/Y
+			$f_hasta = $evento->f_hasta; //	formato --> d/m/Y
+			$h_inicio = $evento->h_inicio;
+			$h_fin = $evento->h_fin;
+			$diaSemana = $evento->codigoDia;
+			$numfila = $evento->numfila;
+			$asignatura = $evento->asignatura;
+			$profesor = $evento->profesor;
+			
+			$recurso = Recurso::where('nombre','=',$aula)->first();
+			if ( $recurso  == NULL ) return 'No se encontró Aula'; //No hay solape por que no hay recurso en BD.
+			$resultado = $resultado . '(Asig:  '. $asignatura .' )'; 
+		}
+
+		return $resultado;
 
 		/*
 		$result = true;
