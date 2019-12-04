@@ -31,7 +31,16 @@
                 </div>
                 
                 <div class="panel-body">
+
+                    @if (Session::has('msg-error'))
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            {{ Session::get('msg-error') }}
+                            {{ session::forget('msg-error')}}
+                        </div>
+                    @endif
                     
+
                     <div class="col-lg-12">
                         {{Form::open( array( 'url' => route('titulacionesUpload'), 'files' => true ) )}}
                 
@@ -57,18 +66,11 @@
                 </div>
 
                 <div class="panel-body">
-                            
-                    @if (Session::has('message'))
-                        <div class="alert alert-success alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            {{ Session::get('msg') }}
-                        </div>
-                    @endif
-
+                    
                     <div>
-                         <p>Número de filas {{ count($result) }}</p>
+                         <p>Número de filas {{ count($resultado) }}</p>
                         <pre>
-                            {{ var_dump($result)  or '' }}
+                            {{ var_dump($resultado)  or '' }}
                         </pre>
                     </div>
 

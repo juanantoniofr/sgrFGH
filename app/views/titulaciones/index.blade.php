@@ -49,10 +49,10 @@
                                         <ul>
                                             @foreach( $titulacion->asignaturas as $asignatura )
                                                 <li> 
-                                                    {{ $asignatura->asignatura }} 
+                                                    {{ $asignatura->asignatura }} <br />
                                                     <small>(
                                                         @foreach($asignatura->gruposAsignatura as $grupo)
-                                                            {{  $grupo->grupo }} |
+                                                            {{  $grupo->grupo }} : @foreach ($grupo->profesores as $profesor) {{  $profesor->profesor }} , @endforeach <br />
                                                         @endforeach
                                                     )</small>
                                                 </li>

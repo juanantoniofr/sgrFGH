@@ -145,8 +145,8 @@ class TitulacionController extends BaseController {
     public function csv(){
 
         $pod = array();
-        $result = array();
-        return View::make('titulaciones.csv')->with(compact('pod','result'));
+        $resultado = array();
+        return View::make('titulaciones.csv')->with(compact('pod','resultado'));
     }
 
     /**
@@ -155,20 +155,27 @@ class TitulacionController extends BaseController {
         * 
         * @param Input::file('csvfile') :file
         * 
-        * @return $respuesta :array   
+        * @return $resultado :array   
         *
         *
     */
 
     public function saveCSV(){
 
-        $numFila = 1;
-       
+        
+        $resultado = array();
+
         $file = Input::file('csvfile'); 
-        //controlar que no sea vacio !!!!!
+
+        //Falta por implementar
+        if (!$this->isValidCsv($file)){
+            Session::put('msg-error', 'Fichero csv no válido');
+            return View::make('titulaciones.csv')->with(compact('resultado'));            
+        }
+        //controlar que no sea vacio !!!!! poner dento de la funcion isvalidcsv
         if (empty($file)){
-           Session::put('msg', 'No se ha seleccionado ningún archivo *.csv');
-           return View::make('titulaciones.csv');  
+           Session::put('msg-error', 'No se ha seleccionado ningún archivo *.csv');
+           return View::make('titulaciones.csv')->with(compact('resultado'));  
         }
 
         $f = fopen($file,"r");
@@ -177,7 +184,7 @@ class TitulacionController extends BaseController {
 
         //Hasta final del fichero csv
         $fila = fgetcsv($f,0,',','"'); 
-        $result = array();
+        $resultado = array();
         while ($fila !== false){
                        
             $datos = $this->matchColumnas($columnas,$fila); // $datos = array('nombreColumna' => valor);
@@ -185,83 +192,77 @@ class TitulacionController extends BaseController {
                         'asignatura' => $this->getValue($datos,'ASIGNATURA'),
                         'codigo' => $this->getValue($datos,'ASS_CODNUM1'),
                         );
-            $aGrupoAsignatura = array(
-                        'grupo' => $this->getValue($datos,'DES_GRP'));
-            $aProfesor = array(
-                        'profesor' => $this->getValue($datos,'NOMCOM'));
+            $grupoAsignatura = $this->getValue($datos,'DES_GRP');
+            $profesor = $this->getValue($datos,'NOMCOM');
             
-            $result[] = $this->salvaFila2($aAsignatura,$aGrupoAsignatura,$aProfesor);   
+            $resultado[] = $this->salvaFila($aAsignatura,$grupoAsignatura,$profesor);   
             $fila = fgetcsv($f,0,',','"');
                 
         }
 
-        return View::make('titulaciones.csv')->with(compact('result'));
+        return View::make('titulaciones.csv')->with(compact('resultado'));
     }
+
+
+    /**
+        * 
+        * Comprueba que el fichero CSV contiene al menos las columnas esperadas
+        * 
+        * @param $file :file
+        *
+        * @return $resultado :array   
+        *
+        *
+    */
+
+
+    public function isValidCsv($file){
+        return true;
+    }
+
 
     /**
         * 
         * Salva a DB los valores de Asignaturas, gruposAsisgnatura y profesor
         * 
         * @param $aAsignatura :array
-        * @param $aGrupoAsignatura :array
-        * @param $aProfesor :array
+        * @param $grupoAsignatura :string
+        * @param $profesor :string
         * 
-        * @return $result :array   
+        * @return $resultado :array   
         *
         *
     */
 
 
-    public function salvaFila2($aAsignatura,$aGrupoAsignatura,$aProfesor){
+    public function salvaFila($aAsignatura,$grupoAsignatura,$profesor){
 
-        $result = array();
+        $resultado = array('error' => false,
+                            'exito' => array(),
+                    );
 
         $codigoTitulacion = substr($aAsignatura['codigo'],0,4);
         $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
-        if (!empty($titulacion)){
+          if (!empty($titulacion)){
             // Obtiene $asignatura o la instancia si no existe en DB
             $asignatura = Asignatura::firstorNew($aAsignatura);
-            $titulacion->asignaturas()->save($asignatura);
-            $grupoAsignatura = GrupoAsignatura::firstOrNew($aGrupoAsignatura);
-            $asignatura->gruposAsignatura()->save($grupoAsignatura);
+            $titulacion = $titulacion->asignaturas()->save($asignatura); 
+            $grupoAsignatura = GrupoAsignatura::firstOrNew(['grupo' => $grupoAsignatura, 'asignatura_id' => $asignatura->id]);
+            $grupoAsignatura = $asignatura->gruposAsignatura()->save($grupoAsignatura);
+            
+            $profesor = Profesor::firstOrNew(['profesor' => $profesor]);// 'grupoAsignatura_id' => $grupoAsignatura->id]);
+            $profesor->save();
+            $grupoAsignatura = $grupoAsignatura->profesores()->attach($profesor->id);
+            $resultado['exito'][] = 'Asignatura ' . $asignatura->asignatura . 'salvada con exito.';
         }
         else {
-            //msg de error: No existe la titulacion
+            $resultado['error'] = 'No existe la titulación con ID = ' . $codigoTitulacion;
         }
       
-        return $result;
+        return $resultado;
     }
 
-    public function salvaFila($aAsignatura,$aGrupoAsignatura,$aProfesor){
-
-        $result = array();
-
-        $codigoTitulacion = substr($aAsignatura['codigo'],0,4);
-        $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
-        if (!empty($titulacion)){
-            $asignatura = $titulacion->asignaturas()->where('codigo','=',$aAsignatura['codigo'])->first();
-            if (empty($asignatura)){
-                $nuevaAsignatura = new Asignatura($aAsignatura);
-                $result['Asignatura'][]= $titulacion->asignaturas()->save($nuevaAsignatura);
-                $result['GrupoAsignatura'] = $nuevaAsignatura->gruposAsignatura()->save(new GrupoAsignatura($aGrupoAsignatura));
-            }
-            else {
-                $result['Asignatura'][]= $asignatura->update($aAsignatura);
-                $asignatura->gruposAsignatura()->save(new GrupoAsignatura($aGrupoAsignatura)); 
-                /*$grupoAsignatura = $asignatura->gruposAsignatura()->where('grupo','=',$aGrupoAsignatura['grupo'])->first();
-                if (empty($grupoAsignatura)) {
-                    $result['GrupoAsignatura'] = $asignatura->gruposAsignatura()->save(new GrupoAsignatura($aGrupoAsignatura)); 
-                }
-                else {
-                    $result['GrupoAsignatura'] = $asignatura->gruposAsignatura()->update($aGrupoAsignatura);
-                }
-                */
-            }
-        }
-      
-        return $result;
-    }
-
+    
     /**
         * 
         * Devuelve el valor de la Key=$columna del array $fila
