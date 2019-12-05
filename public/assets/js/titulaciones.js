@@ -9,8 +9,9 @@ $(function(e){
     //Muestra ventana modal edita titulación
     $(".editaTitulacion").on('click',function(e){
         e.preventDefault();
+        e.stopPropagation();
         //console.log ( $(this).data('idTitulo') );
-        console.log ( $(this).data('idtitulo') );
+        //console.log ( $(this).data('idtitulo') );
         //Cargar valores del recurso a editar en #modalEditRecurso
        
         $.ajax({
@@ -33,6 +34,21 @@ $(function(e){
                     alert(xhr.responseText + ' (codeError: ' + xhr.status +')');
                     }
             });
+        
+        });
+
+    //Muestra ventana modal eliminar titulación
+    $(".eliminaTitulacion").on('click',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        console.log ( $(this).data('idtitulo') );
+        //console.log ( $(this).data('idtitulo') );
+        //Cargar valores del recurso a editar en #modalEditRecurso
+        console.log($(this).data('nombretitulo'));
+        $('div#modalEliminaTitulacion #nombretitulo').html($(this).data('nombretitulo'));
+        //$('div#modalEliminaTitulacion a#btnEliminaTitulacion').data('titulacionId',$(this).data('titulacionId'));
+        $('div#modalEliminaTitulacion a#btnEliminaTitulacion').attr('href', 'elimina-titulacion.html' + '?'+'id='+$(this).data('idtitulo'));
+        $('div#modalEliminaTitulacion').modal('show');
         
         });
         

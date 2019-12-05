@@ -22,13 +22,19 @@
 
             <div class="panel-body">
                         
-                @if (Session::has('message'))
+                @if (Session::has('msg-exito'))
                     <div class="alert alert-success alert-dismissable">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        {{ Session::get('message') }}
+                        {{ Session::get('msg-exito') }}
                     </div>
                 @endif
-
+                @if (Session::has('msg-error'))
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        {{ Session::get('msg-error') }}
+                    </div>
+                @endif
+                
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead><th>Código</th><th>Nombre</th><th>Update At</th></thead>
@@ -43,7 +49,7 @@
                                     <a href="" title="Editar Titulación" class="editaTitulacion" data-idtitulo="{{ $titulacion->id }}" ><i class="fa fa-pencil fa-fw"></i></a>
                                 
                                     <!-- eliminar -->
-                                    <a class = "eliminaTitulacion" data-idtitulo="{{$titulacion->id}}" title = "Eliminar Titulación"><i class="fa fa-trash-o fa-fw"></i></a>
+                                    <a href="" class="eliminaTitulacion" data-idtitulo="{{$titulacion->id}}" data-nombretitulo="{{ $titulacion->titulacion }}" title = "Eliminar Titulación"><i class="fa fa-trash-o fa-fw"></i></a>
                                     </div>
                                     <div class="col-lg-10 fila-acordeon" style="display: none;">
                                         <ul>
@@ -81,6 +87,8 @@
 
     {{ $modalNuevaTitulacion or '' }}
     {{ $modalEditaTitulacion or '' }}
+    {{ $modalEliminaTitulacion or '' }}
+
 @stop
 
 @section('js')

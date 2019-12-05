@@ -22,7 +22,7 @@ class TitulacionController extends BaseController {
     	
         $dropdown = Auth::user()->dropdownMenu();
 
-        return View::make('titulaciones.index')->with(compact('titulaciones'))->nest('dropdown',$dropdown)->nest('header','titulaciones.headerMainContainer')->nest('modalNuevaTitulacion','titulaciones.modalNuevaTitulacion')->nest('modalEditaTitulacion','titulaciones.modalEditaTitulacion');  
+        return View::make('titulaciones.index')->with(compact('titulaciones'))->nest('dropdown',$dropdown)->nest('header','titulaciones.headerMainContainer')->nest('modalNuevaTitulacion','titulaciones.modalNuevaTitulacion')->nest('modalEditaTitulacion','titulaciones.modalEditaTitulacion')->nest('modalEliminaTitulacion','titulaciones.modalEliminaTitulacion');  
 	    //return View::make('admin.recurselist')->with(compact('recursos','sortby','order','grupos','idgruposelected','recursosListados'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos')->nest('modalAdd','admin.recurseModalAdd',array('grupos'=>$grupos))->nest('modalEdit','admin.recurseModalEdit',array('recursos'=>$grupos))->nest('modalEditGrupo','admin.modaleditgrupo');
     }
 
@@ -302,5 +302,36 @@ class TitulacionController extends BaseController {
 
         return $datos;
     }
+
+    /**
+        * 
+        * Elimina titulación y sus asignaturas (con sus grupos)
+        * 
+        * @param Input::get('id') 
+        * 
+        * @return $datos :array   
+        *
+        *
+    */ 
+    public function elimina(){
+ 
+        $id = Input::get('id','');
+
+    
+        if ( ($titulacion = Titulacion::find($id)) === NULL ){
+            Session::flash('msg-error', 'No existe titulación con id = ' . $id);
+            return Redirect::to($url);
+        }
+
+
+        $titulacion->asignaturas()->gruposAsignatura()->profesores()->detach();
+        $titulacion->delete();
+        //$recurso->administradores()->detach();
+        //$recurso->delete();
+    
+        Session::flash('msg-exito', 'Titulación eliminada con éxito.');
+        return Redirect::back();
+    
+  }
 
 } //fin del controlador

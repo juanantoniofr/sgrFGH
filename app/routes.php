@@ -39,30 +39,21 @@ Route::get('newUser',array('as'=>'newUser',function(){
 
 Route::get('hola',array('as'=>'hola',function(){
 	
-	$pod[] = array(	"asignatura" => "2110014 Tecnología de los Medios Audiovisuales",				"codigo-asignatura" => "2110014" ,
-						"grupos" => [
-									array( 	"grupo" => "2 Grp 2",
-											"profesor" => "" ),
-									array(	"grupo" => "2 Grp 2",
-											"profesor" => "")
-									],
-				);
-      
-	
-	foreach ($pod as $p) {
-            $codigoTitulacion = substr($p['codigo-asignatura'],0,4);
-            $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
-            if (!empty($titulacion)) {
-                $asignatura = new Asignatura(array('asignatura' => $p['asignatura'], 'codigo' => $p['codigo-asignatura']));
-                //var_dump(array('asignatura' => $p['asignatura'], 'codigo' => $p['codigo-asignatura']));
-                $result[] = $titulacion->asignaturas()->save($asignatura);
-            }
-        }
-    echo "<pre>";
-    var_dump($result);
-    echo "</pre>";
+	$id = 1;
+	if ( ($titulacion = Titulacion::find($id)) === NULL ){
+            echo 'No existe titulación con id = ';
+            exit;
+    }
+
+    $t = $titulacion->asignaturas;
+    foreach ($t as $a)
+    	{
+    		echo "<pre>";
+    			var_dump($a->gruposAsignatura);
+    		echo "</pre>";}//()->profesores()->detach();
+    //$titulacion->delete();
 	echo "<pre>";
-    var_dump($asignatura);
+    //var_dump($t);
     echo "</pre>";
 }));
 
@@ -82,6 +73,8 @@ Route::post('admin/saveCSV.html',array('as' => 'titulacionesUpload','uses' => 'T
 Route::get('admin/titulaciones.html',array('as' => 'titulaciones.html','uses' => 'TitulacionController@listar','before' => array('auth','capacidad:2-3-4-5-6,msg')));
 Route::post('admin/salvaNuevaTitulacion',array('as' => 'salvaNuevaTitulacion','uses' => 'TitulacionController@nuevaTitulacion','before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg')) );//Nueva Titulacion 
 Route::get('admin/getTitulacion',array('as' => 'getTitulacion','uses' => 'TitulacionController@getTitulacion','before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg')) );//Nueva Titulacion 
+Route::get('admin/elimina-titulacion.html',array('uses'=>'TitulacionController@elimina','before' => array('auth','capacidad:2-3-4-5-6,msg')));
+
 
 //*********
 // Login
