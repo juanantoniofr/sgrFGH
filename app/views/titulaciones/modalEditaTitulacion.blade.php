@@ -6,7 +6,7 @@
 
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h3 class="modal-title"><i class="fa fa-institution fa-fw"></i> Editar Titulación</h3>
+        <h3 class="modal-title"><i class="fa fa-graduation-cap fa-fw"></i> Editar Titulación</h3>
       </div><!-- ./modal-header -->
 
       <div class="modal-body">

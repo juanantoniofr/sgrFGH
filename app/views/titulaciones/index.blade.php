@@ -6,7 +6,7 @@
 
 
 @section('content')
-<div id = "espera" style="display:none"></div>
+<div id ="espera" style="display:none"></div>
 
 <div class="container">
     
@@ -73,7 +73,7 @@
                         </tbody>
                     </table>
                 </div>
-
+            
             </div> <!-- /.panel-body  -->           
         </div> <!-- /.panel-info -->   
 
@@ -88,6 +88,7 @@
     {{ $modalNuevaTitulacion or '' }}
     {{ $modalEditaTitulacion or '' }}
     {{ $modalEliminaTitulacion or '' }}
+    {{ $modalUploadCsv or '' }}
 
 @stop
 

@@ -22,7 +22,7 @@ class TitulacionController extends BaseController {
     	
         $dropdown = Auth::user()->dropdownMenu();
 
-        return View::make('titulaciones.index')->with(compact('titulaciones'))->nest('dropdown',$dropdown)->nest('header','titulaciones.headerMainContainer')->nest('modalNuevaTitulacion','titulaciones.modalNuevaTitulacion')->nest('modalEditaTitulacion','titulaciones.modalEditaTitulacion')->nest('modalEliminaTitulacion','titulaciones.modalEliminaTitulacion');  
+        return View::make('titulaciones.index')->with(compact('titulaciones'))->nest('dropdown',$dropdown)->nest('header','titulaciones.headerMainContainer')->nest('modalNuevaTitulacion','titulaciones.modalNuevaTitulacion')->nest('modalEditaTitulacion','titulaciones.modalEditaTitulacion')->nest('modalEliminaTitulacion','titulaciones.modalEliminaTitulacion')->nest('modalUploadCsv','titulaciones.modalUploadCsv');  
 	    //return View::make('admin.recurselist')->with(compact('recursos','sortby','order','grupos','idgruposelected','recursosListados'))->nest('dropdown',Auth::user()->dropdownMenu())->nest('menuRecursos','admin.menuRecursos')->nest('modalAdd','admin.recurseModalAdd',array('grupos'=>$grupos))->nest('modalEdit','admin.recurseModalEdit',array('recursos'=>$grupos))->nest('modalEditGrupo','admin.modaleditgrupo');
     }
 
@@ -142,12 +142,14 @@ class TitulacionController extends BaseController {
         *
     */
 
-    public function csv(){
+   /* public function csv(){
 
         $pod = array();
         $resultado = array();
-        return View::make('titulaciones.csv')->with(compact('pod','resultado'));
-    }
+
+        $dropdown = Auth::user()->dropdownMenu();
+        return View::make('titulaciones.csv')->with(compact('pod','resultado'))->nest('dropdown',$dropdown)->nest('header','titulaciones.headerMainContainer');
+    }*/
 
     /**
         * 
@@ -163,44 +165,54 @@ class TitulacionController extends BaseController {
     public function saveCSV(){
 
         
-        $resultado = array();
+        $resultado = array('error' => true,
+                            'msgError' => '',
+                            'msgExito' => array(),
+                        );
 
         $file = Input::file('csvfile'); 
-
-        //Falta por implementar
+        
+        $hasError = false;
+        
+        //Falta por implementar la función isValidCsv
         if (!$this->isValidCsv($file)){
-            Session::put('msg-error', 'Fichero csv no válido');
-            return View::make('titulaciones.csv')->with(compact('resultado'));            
+            Session::flash('msg-error','Fichero csv no válido');
+            $hasError = true;            
         }
         //controlar que no sea vacio !!!!! poner dento de la funcion isvalidcsv
         if (empty($file)){
-           Session::put('msg-error', 'No se ha seleccionado ningún archivo *.csv');
-           return View::make('titulaciones.csv')->with(compact('resultado'));  
-        }
+           Session::flash('msg-error','No se ha seleccionado ningún archivo *.csv');
+           $hasError = true;
+           }
 
-        $f = fopen($file,"r");
-        //Lee nombres de las columnas
-        $columnas = fgetcsv($f,0,',','"'); 
+        if (!$hasError){
+        
+            $f = fopen($file,"r");
+            //Lee nombres de las columnas
+            $columnas = fgetcsv($f,0,',','"'); 
 
-        //Hasta final del fichero csv
-        $fila = fgetcsv($f,0,',','"'); 
-        $resultado = array();
-        while ($fila !== false){
-                       
-            $datos = $this->matchColumnas($columnas,$fila); // $datos = array('nombreColumna' => valor);
-            $aAsignatura = array(
-                        'asignatura' => $this->getValue($datos,'ASIGNATURA'),
-                        'codigo' => $this->getValue($datos,'ASS_CODNUM1'),
-                        );
-            $grupoAsignatura = $this->getValue($datos,'DES_GRP');
-            $profesor = $this->getValue($datos,'NOMCOM');
-            
-            $resultado[] = $this->salvaFila($aAsignatura,$grupoAsignatura,$profesor);   
-            $fila = fgetcsv($f,0,',','"');
+            //Hasta final del fichero csv
+            $fila = fgetcsv($f,0,',','"'); 
+            $resultado = array();
+            while ($fila !== false){
+                           
+                $datos = $this->matchColumnas($columnas,$fila); // $datos = array('nombreColumna' => valor);
+                $aAsignatura = array(
+                            'asignatura' => $this->getValue($datos,'ASIGNATURA'),
+                            'codigo' => $this->getValue($datos,'ASS_CODNUM1'),
+                            );
+                $grupoAsignatura = $this->getValue($datos,'DES_GRP');
+                $profesor = $this->getValue($datos,'NOMCOM');
                 
+                $resultado[] = $this->salvaFila($aAsignatura,$grupoAsignatura,$profesor);   
+                $fila = fgetcsv($f,0,',','"');
+                    
+            }
         }
 
-        return View::make('titulaciones.csv')->with(compact('resultado'));
+        $titulaciones=Titulacion::orderBy('titulacion','ASC')->get();
+        $dropdown = Auth::user()->dropdownMenu();
+        return View::make('titulaciones.index')->with(compact('titulaciones'))->nest('dropdown',$dropdown)->nest('header','titulaciones.headerMainContainer')->nest('modalNuevaTitulacion','titulaciones.modalNuevaTitulacion')->nest('modalEditaTitulacion','titulaciones.modalEditaTitulacion')->nest('modalEliminaTitulacion','titulaciones.modalEliminaTitulacion')->nest('modalUploadCsv','titulaciones.modalUploadCsv');
     }
 
 
@@ -217,7 +229,8 @@ class TitulacionController extends BaseController {
 
 
     public function isValidCsv($file){
-        return true;
+        return false;
+        $columnasValidas = Config::get('csvtitulaciones.columnas');
     }
 
 
@@ -324,11 +337,17 @@ class TitulacionController extends BaseController {
         }
 
 
-        $titulacion->asignaturas()->gruposAsignatura()->profesores()->detach();
+        $asignaturas = $titulacion->asignaturas;
+        foreach ($asignaturas as $asignatura) {
+            $gruposAsignatura = $asignatura->gruposAsignatura;
+            foreach ($gruposAsignatura as $grupo) {
+                $grupo->profesores()->detach();
+                $grupo->delete();
+            }
+            $asignatura->delete();
+        }
         $titulacion->delete();
-        //$recurso->administradores()->detach();
-        //$recurso->delete();
-    
+        
         Session::flash('msg-exito', 'Titulación eliminada con éxito.');
         return Redirect::back();
     

@@ -39,21 +39,8 @@ Route::get('newUser',array('as'=>'newUser',function(){
 
 Route::get('hola',array('as'=>'hola',function(){
 	
-	$id = 1;
-	if ( ($titulacion = Titulacion::find($id)) === NULL ){
-            echo 'No existe titulación con id = ';
-            exit;
-    }
-
-    $t = $titulacion->asignaturas;
-    foreach ($t as $a)
-    	{
-    		echo "<pre>";
-    			var_dump($a->gruposAsignatura);
-    		echo "</pre>";}//()->profesores()->detach();
-    //$titulacion->delete();
 	echo "<pre>";
-    //var_dump($t);
+    var_dump(Config::get('csvtitulaciones.columnas'));
     echo "</pre>";
 }));
 
@@ -67,8 +54,8 @@ Route::get('/admin/disponibilidad.html',array('as' => 'disponibilidad.html','use
 //*********
 // Titulaciones
 //*********
-Route::get('admin/titulaciones/uploadCSV.html',array('as' => 'csv', 'uses' => 'TitulacionController@csv'));
-Route::post('admin/saveCSV.html',array('as' => 'titulacionesUpload','uses' => 'TitulacionController@saveCSV'));
+
+Route::post('admin/titulaciones.html',array('as' => 'saveCsv','uses' => 'TitulacionController@saveCSV', ' before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg')));
 
 Route::get('admin/titulaciones.html',array('as' => 'titulaciones.html','uses' => 'TitulacionController@listar','before' => array('auth','capacidad:2-3-4-5-6,msg')));
 Route::post('admin/salvaNuevaTitulacion',array('as' => 'salvaNuevaTitulacion','uses' => 'TitulacionController@nuevaTitulacion','before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg')) );//Nueva Titulacion 

@@ -10,10 +10,7 @@ $(function(e){
     $(".editaTitulacion").on('click',function(e){
         e.preventDefault();
         e.stopPropagation();
-        //console.log ( $(this).data('idTitulo') );
-        //console.log ( $(this).data('idtitulo') );
-        //Cargar valores del recurso a editar en #modalEditRecurso
-       
+        
         $.ajax({
             type: "GET",
             url:  "getTitulacion",
@@ -24,38 +21,39 @@ $(function(e){
                 $('#modalEditaTitulacion input#id').val($respuesta.titulacion.id);
                 $('#modalEditaTitulacion input#codigo').val($respuesta.titulacion.codigo);
                 $('#modalEditaTitulacion input#titulacion').val($respuesta.titulacion.titulacion);
-                //$('#modalEditaTitulacion .text-danger').slideDown();
-                $('#modalEditaTitulacion').modal('show');
-               
-             
+                $('#modalEditaTitulacion').modal('show'); 
             },
             error: function(xhr, ajaxOptions, thrownError){
-                    //hideGifEspera();
-                    alert(xhr.responseText + ' (codeError: ' + xhr.status +')');
-                    }
-            });
-        
+                lert(xhr.responseText + ' (codeError: ' + xhr.status +')');
+            }
         });
+    });
 
     //Muestra ventana modal eliminar titulación
     $(".eliminaTitulacion").on('click',function(e){
         e.preventDefault();
         e.stopPropagation();
-        console.log ( $(this).data('idtitulo') );
-        //console.log ( $(this).data('idtitulo') );
-        //Cargar valores del recurso a editar en #modalEditRecurso
-        console.log($(this).data('nombretitulo'));
         $('div#modalEliminaTitulacion #nombretitulo').html($(this).data('nombretitulo'));
-        //$('div#modalEliminaTitulacion a#btnEliminaTitulacion').data('titulacionId',$(this).data('titulacionId'));
+        
         $('div#modalEliminaTitulacion a#btnEliminaTitulacion').attr('href', 'elimina-titulacion.html' + '?'+'id='+$(this).data('idtitulo'));
         $('div#modalEliminaTitulacion').modal('show');
-        
-        });
-        
+    });
+
+    //Muestra ventana modal fromulario upload fichero csv
+    $("#botonUploadCsv").on('click',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $('div#modalUploadCsv').modal('show');
+    });
+
+
+
+
     //Ajax function para salvar nuevo recurso
     $('#botonSalvaTitulacion').on('click',function(e){
         e.preventDefault();
         $data = $('form#nuevaTitulacion').serialize();
+        showGifEspera();
         $.ajax({
             type: "POST",
             url: "salvaNuevaTitulacion", /* terminar en controllador */
@@ -84,7 +82,7 @@ $(function(e){
                 }
             },
             error: function(xhr, ajaxOptions, thrownError){
-                    //hideGifEspera();
+                    hideGifEspera();
                     alert(xhr.responseText + ' (codeError: ' + xhr.status) +')';
                 }
             });
@@ -102,4 +100,12 @@ $(function(e){
         $( this ).next().toggle('slow');
         //$( 'div.fila-acordeon', this).toggle('slow');
     });
+
+    function showGifEspera(){
+        $('#espera').css('display','inline').css('z-index','100');
+    }
+
+    function hideGifEspera(){
+        $('#espera').css('display','none').css('z-index','-100');
+    }
 });
