@@ -4,7 +4,7 @@ class Asignatura extends Eloquent {
 
  	protected $table = 'asignaturas';
 
- 	protected $fillable = array('codigo', 'asignatura','curso');
+ 	protected $fillable = array('codigo', 'asignatura','cuatrimestre','curso');
 
 
 	

@@ -4,7 +4,7 @@ class Profesor extends Eloquent {
 
  	protected $table = 'profesores';
 
- 	protected $fillable = array('profesor');
+ 	protected $fillable = array('profesor', 'dni');
 
 
 	

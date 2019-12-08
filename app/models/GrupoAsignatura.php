@@ -4,7 +4,7 @@ class GrupoAsignatura extends Eloquent {
 
  	protected $table = 'gruposAsignatura';
 
- 	protected $fillable = array('grupo', 'asignatura_id');
+ 	protected $fillable = array('grupo', 'asignatura_id','capacidad');
 
 
 	

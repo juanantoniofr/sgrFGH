@@ -54,8 +54,8 @@ class TitulacionController extends BaseController {
             'titulacion'  => 'required|unique:titulaciones',
         );
 
-        $messages = array( 'required'   => 'El campo <strong>:attribute</strong> es obligatorio....',
-                           'unique'    => 'Existe una titulacion con el mismo nombre....',
+        $messages = array( 'required'   => 'El campo <strong>:attribute</strong> es obligatorio',
+                           'unique'    => 'Existe una titulacion con el mismo valor <strong>:attribute</strong>',
                           );
         
         $validator = Validator::make(Input::all(), $rules, $messages);
@@ -63,7 +63,7 @@ class TitulacionController extends BaseController {
         if ($validator->fails()){
             $respuesta['error']     =   true;
             $respuesta['msg']       =   'Errores de validación de formulario añadir nueva titulación';
-            $respuesta['errors']    = $validator->errors()->toArray();
+            $respuesta['errors']    =   $validator->errors()->toArray();
 
             return $respuesta;
         }
@@ -135,24 +135,6 @@ class TitulacionController extends BaseController {
 
     /**
         * 
-        * Muestra vista para upload csv file
-        * 
-        * @return View::make('titulaciones.csv') :string   
-        *
-        *
-    */
-
-   /* public function csv(){
-
-        $pod = array();
-        $resultado = array();
-
-        $dropdown = Auth::user()->dropdownMenu();
-        return View::make('titulaciones.csv')->with(compact('pod','resultado'))->nest('dropdown',$dropdown)->nest('header','titulaciones.headerMainContainer');
-    }*/
-
-    /**
-        * 
         * Procesa archivo csv
         * 
         * @param Input::file('csvfile') :file
@@ -173,18 +155,13 @@ class TitulacionController extends BaseController {
         $file = Input::file('csvfile'); 
         
         $hasError = false;
-        
-        //Falta por implementar la función isValidCsv
-        if (!$this->isValidCsv($file)){
-            Session::flash('msg-error','Fichero csv no válido');
+
+        $isValidCsv = $this->isValidCsv($file); 
+        if ($isValidCsv['error'] == true){
+            Session::flash('msg-error',$isValidCsv['msg-error']);
             $hasError = true;            
         }
-        //controlar que no sea vacio !!!!! poner dento de la funcion isvalidcsv
-        if (empty($file)){
-           Session::flash('msg-error','No se ha seleccionado ningún archivo *.csv');
-           $hasError = true;
-           }
-
+        
         if (!$hasError){
         
             $f = fopen($file,"r");
@@ -197,14 +174,30 @@ class TitulacionController extends BaseController {
             while ($fila !== false){
                            
                 $datos = $this->matchColumnas($columnas,$fila); // $datos = array('nombreColumna' => valor);
+                $columAsignatura = Config::get('csvtitulaciones.asignatura');
                 $aAsignatura = array(
-                            'asignatura' => $this->getValue($datos,'ASIGNATURA'),
-                            'codigo' => $this->getValue($datos,'ASS_CODNUM1'),
+                            'asignatura' => $this->getValue($datos,$columAsignatura['asignatura']),
+                            'codigo' => $this->getValue($datos,$columAsignatura['codigo']),
+                            'cuatrimestre' => $this->getValue($datos,$columAsignatura['cuatrimestre']),
                             );
-                $grupoAsignatura = $this->getValue($datos,'DES_GRP');
-                $profesor = $this->getValue($datos,'NOMCOM');
+                //return var_dump(($aAsignatura));
                 
-                $resultado[] = $this->salvaFila($aAsignatura,$grupoAsignatura,$profesor);   
+                $columGrupo = Config::get('csvtitulaciones.grupo');
+                $aGrupo = array (
+                            'grupo' => $this->getValue($datos,$columGrupo['grupo']),
+                            'capacidad' => $this->getValue($datos,$columGrupo['capacidad']),
+                        );
+
+                $columProfesor = Config::get('csvtitulaciones.profesor');
+                $aProfesor = array(
+                                'dni' => $this->getValue($datos,$columProfesor['dni']),
+                                'profesor' => $this->getValue($datos,$columProfesor['profesor']),
+                            );
+                
+                $columCodigoTitulacion = Config::get('csvtitulaciones.titulacion');
+                $codigoTitulacion = $this->getValue($datos,$columCodigoTitulacion['codigo']);
+                $resultado[] = $this->salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor);
+                //exit;  
                 $fila = fgetcsv($f,0,',','"');
                     
             }
@@ -229,8 +222,31 @@ class TitulacionController extends BaseController {
 
 
     public function isValidCsv($file){
-        return false;
+        
+        $resultado = array( 'error' => false,
+                            'columnasNoValiada' => array(),
+                            'msg-error' => 'Fichero no válido: <br />',
+                        );
+        
+        if (empty($file)){
+            $resultado['error'] = true;
+            $resultado['msg-error'] = 'No se ha seleccionado ningún archivo *.csv';
+            return $resultado;
+           }
+
         $columnasValidas = Config::get('csvtitulaciones.columnas');
+        $f = fopen($file,"r");
+        //Lee nombres de las columnas
+        $columnasCSV = fgetcsv($f,0,',','"');
+        foreach($columnasValidas as $columna){
+            if (in_array($columna, $columnasCSV) === false) {
+                $resultado['error'] = true;
+                $resultado['msg-error'] = $resultado['msg-error'] . 'columna ' . $columna . 'no encontrada <br />';
+                $resultado['columnasNoValiadas'][] = $columna;    
+            } 
+        }
+        fclose($f);
+        return $resultado;
     }
 
 
@@ -248,24 +264,31 @@ class TitulacionController extends BaseController {
     */
 
 
-    public function salvaFila($aAsignatura,$grupoAsignatura,$profesor){
+    public function salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor){
 
         $resultado = array('error' => false,
                             'exito' => array(),
                     );
 
-        $codigoTitulacion = substr($aAsignatura['codigo'],0,4);
         $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
-          if (!empty($titulacion)){
+        if (!empty($titulacion)){
             // Obtiene $asignatura o la instancia si no existe en DB
-            $asignatura = Asignatura::firstorNew($aAsignatura);
-            $titulacion = $titulacion->asignaturas()->save($asignatura); 
-            $grupoAsignatura = GrupoAsignatura::firstOrNew(['grupo' => $grupoAsignatura, 'asignatura_id' => $asignatura->id]);
-            $grupoAsignatura = $asignatura->gruposAsignatura()->save($grupoAsignatura);
             
-            $profesor = Profesor::firstOrNew(['profesor' => $profesor]);// 'grupoAsignatura_id' => $grupoAsignatura->id]);
+             
+            $asignatura = Asignatura::firstOrNew($aAsignatura);
+            //$asignatura->save();
+            $asignatura = $titulacion->asignaturas()->save($asignatura); 
+            
+            
+            $grupo = GrupoAsignatura::firstOrNew($aGrupo);
+            $grupo = $asignatura->gruposAsignatura()->save($grupo);
+            
+            $profesor = Profesor::firstOrNew($aProfesor);
             $profesor->save();
-            $grupoAsignatura = $grupoAsignatura->profesores()->attach($profesor->id);
+
+            if ( empty(($grupo->profesores()->where('profesor_id','=',$profesor->id)->first())) )
+                $grupo = $grupo->profesores()->attach($profesor->id);
+            
             $resultado['exito'][] = 'Asignatura ' . $asignatura->asignatura . 'salvada con exito.';
         }
         else {
