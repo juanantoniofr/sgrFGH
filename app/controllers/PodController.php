@@ -71,18 +71,20 @@ class PodController extends BaseController {
 		}
 		$csv->close();
 		
-		
+
 		$aSinAula = array();
 		$aSolapesCsv = array();
 		$aSolapesBD = array();
-
+		$aEventosValidos = array();
 		foreach ($eventos  as $evento) {
-			if ($this->existeAula($evento) == false) $aSinAula[] = $evento;
-		 	if ($this->solapaCsv($eventos,$evento)  == true ) $aSolapesCsv[] = $evento;
-		 	if ($this->solapaBD($evento)) $aSolapesBD[] = $evento;   
-		 }
-
-		return View::make('pod.index')->with(compact('test','aSinAula','aSolapesCsv'))->nest('dropdown',$dropdown);
+			$exclude = false;
+			if (!$this->existeAula($evento)) {$aSinAula[] = $evento; $exclude = true;}
+		 	if ($this->solapaCsv($eventos,$evento)) {$aSolapesCsv[] = $evento; $exclude = true;}
+		 	if ($this->solapaBD($evento)) {$aSolapesBD[] = $evento; $exclude = true;}   
+			if(!$exclude) $aEventosValidos[] = $evento;
+		}
+		
+		return View::make('pod.index')->with(compact('aSinAula','aSolapesCsv','aSolapesBD','aEventosValidos'))->nest('dropdown',$dropdown);
 	}
 
 	private function save($data,$numFila,$recurso,$evento_id){

@@ -35,7 +35,7 @@
               {{Form::file('csvfile', $attributes = array());}}
             </div>
             
-            <button type="submit" class="btn btn-primary">Importar POD</button>
+            <button type="submit" class="btn btn-primary">Comprobar csv</button>
           {{Form::close()}}
         </div><!-- /.col-lg-12 -->
       </div><!-- /.panel-body -->
@@ -62,39 +62,43 @@
  
   {{-- Resultado de la importación csv: Eventos salvados con éxito --}}
   <br /> 
-  @if (!empty($events))
+  @if (!empty($aEventosValidos))
   
-    {{-- Eventos salvados con éxito--}}
+    {{-- Eventos a salvar con éxito--}}
     <div class="panel panel-success">
       
       <div class="panel-heading">
 
-        <i class="fa fa-check fa-fw"></i> Eventos importados con éxito
+        <i class="fa fa-check fa-fw"></i> Eventos válidos
+        <a href="" class="active btn btn-info" id="botonSalvaEventosCsv" title="Salvar eventos"><i class="fa fa-save fa-fw"></i> Salvar Eventos</a>
       </div>
       
       <div class="panel-body">
         <table class="table table-striped">
-          <tr>
+          
+           <tr>
             <th>Fila</th>
-            <th>Id. Lugar</th>
-            <th>F. Inicio</th>
-            <th>F. Fin</th>
+            <th>Asignatura</th>
+            <th>Profesor</th>
+            <th>F. Desde</th>
+            <th>F. Hasta</th>
             <th>Día</th>
             <th>H. Inicio</th>
             <th>H. Fin</th>
-            <th>Lugar</th>
-            <th>Asignatura</th>
-            <th>Profesor</th>
-            <th>Cod. día Semana</th>
+            <th>Aula</th>
           </tr>
-          @foreach($events as $numFila => $contentFila)
+
+          @foreach($aEventosValidos as $evento)
             <tr>
-              <td>{{ $numFila }}</td>
-        
-              @foreach($contentFila as $valueColumn)  
-                <td>{{ $valueColumn }}</td>
-              @endforeach
-            
+              <td>{{ $evento['numfila'] }}</td>  
+              <td> {{ $evento['asignatura'] }} </td>
+              <td> {{ $evento['profesor'] }} </td>
+              <td> {{ $evento['f_desde'] }} </td>
+              <td> {{ $evento['f_hasta'] }} </td>
+              <td> {{ $evento['diaSemana'] }} </td>
+              <td> {{ $evento['h_inicio'] }} </td>
+              <td> {{ $evento['h_fin'] }} </td>
+              <td> {{ $evento['aula'] }} </td>
             </tr>
           @endforeach
           
@@ -110,7 +114,7 @@
       </div>
       
       <div class="panel-body">
-        <p class="text-center"><b>No se guardó ningún evento/reserva a la BD</b></p>
+        <p class="text-center"><b>No hay eventos válidos en el archivo csv</b></p>
       </div>
     </div>
   @endif
@@ -122,7 +126,7 @@
         
       <div class="panel-heading">
       
-        <i class="fa fa-ban fa-fw"></i> <b>Error: No existe Espacio o Aula. Los sigientes eventos no se guardaron.</b>
+        <i class="fa fa-ban fa-fw"></i> <b>Error: No existe Espacio o Aula.</b>
       </div>
           
       <div class="panel-body">  
@@ -179,7 +183,7 @@
         
       <div class="panel-heading">
     
-        <i class="fa fa-ban fa-fw"></i> <b>Error: Solapamientos en archivo css. Los eventos siguientes solapan entre si, y no se guardaron</b>.  
+        <i class="fa fa-ban fa-fw"></i> <b>Error: Solapamientos en archivo css. Los eventos siguientes solapan entre si.</b>.  
       </div>
         
       <div class="panel-body">  
