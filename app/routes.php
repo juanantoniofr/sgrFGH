@@ -38,10 +38,12 @@ Route::get('newUser',array('as'=>'newUser',function(){
 }));
 
 Route::get('hola',array('as'=>'hola',function(){
-	
+	$formato = 'd/m/Y';
+	$fecha ='2/3/2019';
+	$date = DateTime::createFromFormat($formato,$fecha);
 	echo "<pre>";
-    var_dump(Config::get('csvtitulaciones.columnas'));
-    echo "</pre>";
+	var_dump($date);
+	echo "</pre>";
 }));
 
 //*********

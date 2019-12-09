@@ -47,12 +47,14 @@
     <div class="alert alert-success alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         {{ Session::get('msg-exito') }}
+        {{ Session::forget('msg-exito') }}
     </div>
   @endif
   @if (Session::has('msg-error'))
     <div class="alert alert-danger alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         {{ Session::get('msg-error') }}
+        {{ Session::forget('msg-error') }}
     </div>
   @endif
 
@@ -70,7 +72,7 @@
         <i class="fa fa-check fa-fw"></i> Eventos importados con éxito
       </div>
       
-      <div class="panel-body" style="height:350px;overflow:scroll">
+      <div class="panel-body">
         <table class="table table-striped">
           <tr>
             <th>Fila</th>
@@ -99,6 +101,18 @@
         </table>
       </div><!-- .//panel-body -->
     </div><!-- .//panel-success -->   
+  @else
+    <div class="panel panel-danger">
+      
+      <div class="panel-heading">
+
+        <i class="fa fa-ban fa-fw"></i> Aviso 
+      </div>
+      
+      <div class="panel-body">
+        <p class="text-center"><b>No se guardó ningún evento/reserva a la BD</b></p>
+      </div>
+    </div>
   @endif
 
   {{-- Error: no existe espacio --}}
@@ -108,10 +122,10 @@
         
       <div class="panel-heading">
       
-        <i class="fa fa-ban fa-fw"></i> <strong>Error al guardar:</strong>: No existe Espacio o Aula, <b>los sigientes eventos no se guardaron.</b>
+        <i class="fa fa-ban fa-fw"></i> <b>Error: No existe Espacio o Aula. Los sigientes eventos no se guardaron.</b>
       </div>
           
-      <div class="panel-body" style="height:350px;overflow:scroll">  
+      <div class="panel-body">  
       
         <table class="table table-striped">
       
@@ -127,111 +141,92 @@
             <th>Aula</th>
           </tr>
 
-          @foreach($aSinAula as $indice => $evento)
+          @foreach($aSinAula as $evento)
             <tr>
-              <td>{{ $indice }}</td>  
+              <td>{{ $evento['numfila'] }}</td>  
               <td> {{ $evento['asignatura'] }} </td>
               <td> {{ $evento['profesor'] }} </td>
               <td> {{ $evento['f_desde'] }} </td>
-                <td> {{ $evento['f_hasta'] }} </td>
-                <td> {{ $evento['diaSemana'] }} </td>
-                <td> {{ $evento['h_inicio'] }} </td>
-                <td> {{ $evento['h_fin'] }} </td>
-                <td> {{ $evento['aula'] }} </td>
+              <td> {{ $evento['f_hasta'] }} </td>
+              <td> {{ $evento['diaSemana'] }} </td>
+              <td> {{ $evento['h_inicio'] }} </td>
+              <td> {{ $evento['h_fin'] }} </td>
+              <td> {{ $evento['aula'] }} </td>
             </tr>
           @endforeach
          
         </table>
       </div><!-- .//panel-body -->
     </div><!-- .//panel-danger -->
-  @endif 
+  @else
+    <div class="panel panel-success">
+      
+      <div class="panel-heading">
 
-   {{-- test clase sgrCsv --}}
-  <pre>
-    {{ var_dump($test) }}
-  </pre>   
+        <i class="fa fa-check fa-fw"></i> Aviso 
+      </div>
+      
+      <div class="panel-body">
+        <p class="text-center">Comprobación correcta de espacios y/o aulas definidas en el csv</p>
+      </div>
+    </div>
+  @endif    
   
-  {{-- Solapimientos en el archivo csv --}}  
-  @if (!empty($solapescsv))
+  {{-- Solapamientos en el archivo csv --}}  
+  @if (!empty($aSolapesCsv))
     
     <div class="panel panel-danger" >
         
       <div class="panel-heading">
     
-        <i class="fa fa-ban fa-fw"></i> <strong>Error al guardar:</strong> Solapamientos en archivo csv <small>(los eventos no se guardaron)</small>.  
+        <i class="fa fa-ban fa-fw"></i> <b>Error: Solapamientos en archivo css. Los eventos siguientes solapan entre si, y no se guardaron</b>.  
       </div>
         
-      <div class="panel-body" style="height:350px;overflow:scroll">  
+      <div class="panel-body">  
     
         <table class="table table-striped">
           
           <tr>
             <th>Fila</th>
-            <th>Id. Lugar</th>
-            <th>F. Inicio</th>
-            <th>F. Fin</th>
+            <th>Asignatura</th>
+            <th>Profesor</th>
+            <th>F. Desde</th>
+            <th>F. Hasta</th>
             <th>Día</th>
             <th>H. Inicio</th>
             <th>H. Fin</th>
-            <th>Lugar</th>
-            <th>Asignatura</th>
-            <th>Profesor</th>
-            <th>Cod. día Semana</th>
+            <th>Aula</th>
           </tr>
 
-          @foreach($solapescsv as $numerofila => $aFila)
+          @foreach($aSolapesCsv as $evento)
             <tr>
-              <td>{{ $numerofila }}</td>
-              @foreach($aFila as $valor)  
-                <td>{{ $valor }}</td>
-              @endforeach
+              <td>{{ $evento['numfila'] }}</td>  
+              <td> {{ $evento['asignatura'] }} </td>
+              <td> {{ $evento['profesor'] }} </td>
+              <td> {{ $evento['f_desde'] }} </td>
+              <td> {{ $evento['f_hasta'] }} </td>
+              <td> {{ $evento['diaSemana'] }} </td>
+              <td> {{ $evento['h_inicio'] }} </td>
+              <td> {{ $evento['h_fin'] }} </td>
+              <td> {{ $evento['aula'] }} </td>
             </tr>
           @endforeach
        
         </table>
       </div><!-- .//panel-body -->
     </div><!-- .//panel-danger -->
-  @endif
+    @else
+    <div class="panel panel-success">
+      
+      <div class="panel-heading">
 
-  {{-- Solapmientos con eventos ya salvados en la BD --}}
-  @if (!empty($solapesdb))
-    
-    <div class="panel panel-danger" style="height:350px;overflow:scroll">
-        
-        <div class="panel-heading">
-    
-          <i class="fa fa-ban fa-fw"></i> <strong>Error al guardar:</strong> Solapamientos con eventos existentes <small>(los eventos no se guardaron)</small>.  
-        </div>
-        
-        <div class="panel-body">  
-          
-          <table class="table table-striped">
-            <tr>
-              <th>Fila</th>
-              <th>Id. Lugar</th>
-              <th>F. Inicio</th>
-              <th>F. Fin</th>
-              <th>Día</th>
-              <th>H. Inicio</th>
-              <th>H. Fin</th>
-              <th>Lugar</th>
-              <th>Asignatura</th>
-              <th>Profesor</th>
-              <th>Cod. día Semana</th>
-            </tr>
-
-            @foreach($solapesdb as $numerofila => $aFila)
-              <tr>
-                <td>{{ $numerofila }}</td>
-                @foreach($aFila as $valor)  
-                  <td>{{ $valor }}</td>
-                @endforeach
-              </tr>
-            @endforeach
-       
-          </table>
-        </div><!-- .//panel-body -->
-    </div><!-- .//panel-danger -->
+        <i class="fa fa-check fa-fw"></i> Aviso 
+      </div>
+      
+      <div class="panel-body">
+        <p class="text-center">El arvhivo csv no define ningún solapamiento</p>
+      </div>
+    </div>
   @endif
 
 </div><!-- ./container -->

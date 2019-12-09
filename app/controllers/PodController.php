@@ -15,27 +15,33 @@ class PodController extends BaseController {
 		return View::make('pod.index')->with(compact('test'))->nest('dropdown',$dropdown);	
 	}
 
+	/**
+        * 
+        * Analiza ficehro csv y devuelve la vista con los errores que no se vuelcan a la BD y filas del csv salvadas a BD 
+        * 
+        * @param Input::file('csvfile') :File
+        *
+        * @return View :View::make()
+        *
+        *
+    */
 	public function savePOD(){
 
 		//control de errores formulario
 		$file = Input::file('csvfile');
+		$dropdown = Auth::user()->dropdownMenu();
 
 		if (empty($file)){
 			Session::flash('msg-error','No se ha seleccionado ningún archivo csv'); 
-			return View::make('pod.index');	
+			return View::make('pod.index')->nest('dropdown',$dropdown);	
 		}
 
 		$csv = new sgrCsv(Config::get('csvpod.columnas'),Config::get('csvpod.evento'),$file);
-		
-		$test = array();
-		$aSinAula = array();
-		$test['columnas_evento'] = $csv->columnas;
-		$test['columnasCsv'] = $csv->columnasCsv;
 
 		$isValid = $csv->isValidCsv();
 		if ($isValid['error'] == true){
 			Session::flash('msg-error','No se ha seleccionado ningún archivo csv'); 
-			return View::make('pod.index')->with(compact('test','aSinAula'));	
+			return View::make('pod.index')->with(compact('test','aSinAula'))->nest('dropdown',$dropdown);	
 		}
 
 		$f = $csv->open();
@@ -44,11 +50,13 @@ class PodController extends BaseController {
 		if ($csv->compruebaCabeceras() == false){
 			Session::flash('msg-error','Error al leer cabeceras archivos csv xxx');
 			$f = $csv->close();
-			return View::make('pod.index')->with(compact('test','aSinAula'));	
+			return View::make('pod.index')->with(compact('test','aSinAula'))->nest('dropdown',$dropdown); 
 		}
 		
 		$i = 0;
-		while ( $csv->leeFila() != false){
+		$numfila = 2;
+		while ( $csv->leeFila() != false ){
+			$eventos[$i]['numfila'] = $numfila;
 			$eventos[$i]['asignatura'] = $csv->getValue(Config::get('csvpod.evento')['asignatura']);
 			$eventos[$i]['profesor'] = $csv->getValue(Config::get('csvpod.evento')['profesor']);
 			$eventos[$i]['aula'] = $csv->getValue(Config::get('csvpod.evento')['aula']);
@@ -57,62 +65,24 @@ class PodController extends BaseController {
 			$eventos[$i]['diaSemana'] = $csv->getValue(Config::get('csvpod.evento')['codigoDia']);
 			$eventos[$i]['h_inicio'] = $csv->getValue(Config::get('csvpod.evento')['h_inicio']);
 			$eventos[$i]['h_fin'] = $csv->getValue(Config::get('csvpod.evento')['h_fin']);
+			$eventos[$i]['codigoDia'] = $csv->getValue(Config::get('csvpod.evento')['codigoDia']);
 			$i++;
+			$numfila++;
 		}
-
-		$test['eventos'] = $eventos;
-
 		$csv->close();
+		
+		
+		$aSinAula = array();
+		$aSolapesCsv = array();
+		$aSolapesBD = array();
+
 		foreach ($eventos  as $evento) {
 			if ($this->existeAula($evento) == false) $aSinAula[] = $evento;
-		 	//if ($this->solapaCsv($eventos,$evento)) $aSolapesCsv[] = $evento;
-		 	//if ($this->solapaBD($evento)) $aNoAulaLibre[] = $evento;   
+		 	if ($this->solapaCsv($eventos,$evento)  == true ) $aSolapesCsv[] = $evento;
+		 	if ($this->solapaBD($evento)) $aSolapesBD[] = $evento;   
 		 }
 
-		return View::make('pod.index')->with(compact('test','aSinAula'));
-		/*
-		while (($fila = fgetcsv($f,0,',','"')) !== false){
-			//$content es un array donde cada posición almacena los valores de las columnas del csv
-			$result = array();
-			$columnIdLugar = $csv->getNumColumnIdLugar();
-			$id_lugar = $fila[$columnIdLugar];
-			//echo $id_lugar .'<br />';
-			$datosfila = $csv->filterFila($fila); //nos quedamos con las columnas que hay que guardar en la Base de Datos.
-			//var_dump($datosfila);
-			if( $this->existeLugar($id_lugar) ){
-				//Conjunto de espacios a reservas: si el espacio tiene puestos, $recursos contiene cada uno de ellos.
-				$recursos = Recurso::where('id_lugar','=',$id_lugar)->get(); 
-				
-
-				//Comprueba si el csv tiene solapamientos
-				if ($this->existeSolapamientocsv($datosfila,$file,$numFila)){
-					$this->warningSolapesCSV[$numFila] = $datosfila;
-				}
-				elseif ($this->existeSolapamientodb($datosfila,$numFila,$recursos)){
-					$this->warningSolapesDB[$numFila] = $datosfila;
-				}
-				else{
-					//identificador único de la serie de eventos
-					do {
-						$evento_id = md5(microtime());
-					} while (Evento::where('evento_id','=',$evento_id)->count() > 0);					
-
-					foreach ($recursos as $recurso) {
-						$this->save($datosfila,$numFila,$recurso,$evento_id);
-					}
-					$this->success[$numFila] = $datosfila;
-				}
-			}
-			else 
-				$this->warningNoLugar[$numFila] = $datosfila;
-			
-			$numFila++;
-		}
-		
-		fclose($f);
-		
-		return View::make('admin.pod')->with(array('events' => $this->success,'noexistelugar' => $this->warningNoLugar,'solapesdb' => $this->warningSolapesDB,'solapescsv' => $this->warningSolapesCSV));
-		*/
+		return View::make('pod.index')->with(compact('test','aSinAula','aSolapesCsv'))->nest('dropdown',$dropdown);
 	}
 
 	private function save($data,$numFila,$recurso,$evento_id){
@@ -198,86 +168,103 @@ class PodController extends BaseController {
 		return $resultado;
 	}
 
-	private function existeLugar($idLugar){
-		$result = false;
-
-			$recurso = Recurso::where('id_lugar','=',$idLugar)->get();
-
-			if($recurso->count() > 0) $result = true;
-
-		return $result;
-	}
-
-	private function existeSolapamientodb($data,$numFila,$recursos){
+	/**
+        * 
+        * True si hay solapamiento con otro evento en BD, false en caso contrario
+        * 
+        * @param $evento :array
+        *
+        * @return $resultado :booleano   
+        *
+        *
+    */
+	private function solapaBD($evento){
 		
-	
-		$fechaDesde = Date::dateCSVtoSpanish($data['F_DESDE_HORARIO1']);
-		$fechaHasta = Date::dateCSVtoSpanish($data['F_HASTA_HORARIO1']);
+		$aula = $evento['aula'];
+		$f_desde = $evento['f_desde'];// 	formato --> d/m/Y
+		$f_hasta = $evento['f_hasta'];//	formato --> d/m/Y
+		$h_inicio = $evento['h_inicio'];
+		$h_fin = $evento['h_fin'];
+		$diaSemana = $evento['codigoDia'];
+		$numfila = $evento['numfila'];
 		
-		$nRepeticiones = Date::numRepeticiones($fechaDesde,$fechaHasta,$data['COD_DIA_SEMANA']);
+		$recurso = Recurso::where('nombre','=',$aula)->first();
+		if ( $recurso  == NULL ) return false; //No hay solape por que no hay recurso en BD.
+
+		$nRepeticiones = Date::numRepeticiones($f_desde,$f_hasta,$diaSemana);
 
 		for($j=0;$j < $nRepeticiones; $j++ ){ //foreach 
 			
 			//fecha Evento
-			$startDate = Date::timeStamp_fristDayNextToDate($fechaDesde,$data['COD_DIA_SEMANA']);
-			$currentfecha = Date::currentFecha($startDate,$j);
+			$start = Date::timeStamp_fristDayNextToDate($f_desde,$diaSemana);
+			$currentfecha = Date::currentFecha($start,$j);
 			
-			foreach ($recursos as $recurso) {
-				if ( 0 < Calendar::getNumSolapamientos($recurso->id,$currentfecha,$data['INI'],$data['FIN']) ){
+			if ( 0 < Calendar::getNumSolapamientos($recurso->id,$currentfecha,$h_inicio,$h_fin) ){
 					//hay solape: fin -> return true
 					return true;
 					}	
-			}//fin foreach cada puesto o equipo, (espacio el array recurso solo contiene un elemento)
 		}//fin foreach repeticion periodica
 		
 
 		return false;
 	}
 
-	private function existeSolapamientocsv($data,$file,$numFila){
+	/**
+        * 
+        * True si exite Aula en el evento leido del csv, false en caso contrario
+        * 
+        * @param $eventos: Array (todos los eventos leidos en el csv)
+        * @param $evento :Array (evento a verificar solapamiento)
+        *
+        * @return  :Booleano true si solapa, false en caso contrario
+        *
+        *
+    */
+	public function solapaCsv($eventos,$evento){
+
+		$aula = $evento['aula'];
+		$f_desde = $evento['f_desde'];//d-m-Y
+		$f_hasta = $evento['f_hasta'];//d-m-Y
+		$h_inicio = $evento['h_inicio'];
+		$h_fin = $evento['h_fin'];
+		$diaSemana = $evento['codigoDia'];
+		$numfila = $evento['numfila'];
 		
-		$solapamientos = false;
-		$csv = new csv();
-		//estado del evento?? (solapamientos)
-		$idLugar = $data['ID_LUGAR'];
-		$fechaDesde = Date::dateCSVtoSpanish($data['F_DESDE_HORARIO1']);//d-m-Y
-		$fechaHasta = Date::dateCSVtoSpanish($data['F_HASTA_HORARIO1']);//d-m-Y
-		$horaInicio = $data['INI'];
-		$horaFin = $data['FIN'];
-		$diaSemana = $data['COD_DIA_SEMANA'];
-		
-		$f = fopen($file,"r");
-		
-		$contadorfila = 1;
-		
-		
-		while (($fila = fgetcsv($f,0,',','"')) !== false && !$solapamientos){
-						
-			$datosfila = $csv->filterFila($fila);
-			if ($datosfila['ID_LUGAR'] == $idLugar && $datosfila['COD_DIA_SEMANA'] == $diaSemana && $contadorfila != $numFila){
-				//posible solapamiento
-				$filafechaDesde = Date::dateCSVtoSpanish($datosfila['F_DESDE_HORARIO1']);//d-m-Y
-				$filafechaHasta = Date::dateCSVtoSpanish($datosfila['F_HASTA_HORARIO1']);//d-m-Y
-				$filahoraInicio = $datosfila['INI'];
-				$filahoraFin = $datosfila['FIN'];
-				if (strtotime(Date::toDB($fechaDesde,'-')) <= strtotime(Date::toDB($filafechaHasta,'-')) &&
-					strtotime(Date::toDB($fechaHasta,'-')) >= strtotime(Date::toDB($filafechaDesde,'-')) ){
-						//posible solapamiento
-						if(strtotime($horaInicio) < strtotime($filahoraFin) && strtotime($horaFin) > strtotime($filahoraInicio)){
-							//hay solapamiento
-							$solapamientos = true;
+		foreach ($eventos as $eventoCsv) {
 							
-						}//tercer if
-					}//segundo if
+			if ($eventoCsv['aula'] == $aula && $eventoCsv['codigoDia'] == $diaSemana && $eventoCsv['numfila'] != $numfila){
+				//posible solapamiento
+				if ( 
+					(
+						( Date::getTimeStamp($eventoCsv['f_desde'],'/') <= Date::getTimeStamp($f_hasta,'/') && Date::getTimeStamp($f_hasta,'/') <= Date::getTimeStamp($eventoCsv['f_hasta'],'/') ) 
+					
+						|| 
+					 
+						( Date::getTimeStamp($eventoCsv['f_desde'],'/') <= Date::getTimeStamp($f_desde,'/') && Date::getTimeStamp($f_desde,'/') <= Date::getTimeStamp($eventoCsv['f_hasta'],'/') ) 
+					)
+
+					&&
+
+					(
+						( strtotime($eventoCsv['h_inicio']) <= strtotime($h_inicio) && strtotime($eventoCsv['h_fin']) > strtotime($h_inicio) )
+					
+						||
+
+						( strtotime($eventoCsv['h_inicio']) < strtotime($h_fin) && strtotime($eventoCsv['h_fin']) >= strtotime($h_fin) )	
+
+					)	
+					 ){
+					 //hay solapamiento
+						return true;//$solapamientos['eventoFila'] = $numfila;
+						//$solapamientos['filasSolapes'][] = $eventoCsv['numfila'];
+				}//segundo if
 			} //primer if
 				
-			
-			$contadorfila++;
-		}//fin del while
-		fclose($f);	
+		}//fin del foreach
 		
-		return $solapamientos;
+		return false;
 	}
+
 
 	private function delPOD(){
 		$userPOD = User::where('username','=','pod')->first();
