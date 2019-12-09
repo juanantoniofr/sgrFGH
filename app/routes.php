@@ -52,6 +52,14 @@ Route::get('/admin/disponibilidad.html',array('as' => 'disponibilidad.html','use
 
 
 //*********
+// POD
+//*********
+
+Route::get('admin/pod.html',array('as' => 'pod.html','uses' => 'PodController@index','before' => array('auth','capacidad:2-3-4-5-6,msg')));
+Route::post('admin/pod.html',array('as' => 'uploadPOD','uses' => 'PodController@savePOD','before' => array('auth','capacidad:2-3-4-5-6,msg')));
+
+
+//*********
 // Titulaciones
 //*********
 
@@ -203,10 +211,6 @@ Route::post('admin/salvarNuevoUsuario',array('as' => 'post_addUser','uses' => 'U
 
 Route::get('admin/eliminaUser.html',array('as' => 'eliminaUser.html','uses' => 'UsersController@delete','before' => array('auth','capacidad:4,msg')));
 Route::get('admin/ajaxBorraUser',array('as' => 'ajaxBorraUser','uses' => 'UsersController@ajaxDelete','before' => array('auth','capacidad:4,msg','ajax_check')));
-
-//routes POD
-Route::get('admin/pod.html',array('as' => 'pod.html','uses' => 'PodController@index','before' => array('auth','capacidad:4,msg')));
-Route::post('admin/pod.html',array('as' => 'uploadPOD','uses' => 'PodController@savePOD','before' => array('auth','capacidad:4,msg')));
 
 //routes logs & config
 /*

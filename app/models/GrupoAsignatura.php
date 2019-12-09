@@ -16,4 +16,9 @@ class GrupoAsignatura extends Eloquent {
     	return $this->belongsToMany('Profesor');
     } 
 
+    public function asignatura()
+    {
+        return $this->belongsTo('Asignatura');
+    }
+
 }

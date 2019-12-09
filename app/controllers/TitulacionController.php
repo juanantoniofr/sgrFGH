@@ -7,7 +7,6 @@ class TitulacionController extends BaseController {
     /**
          * Listado de titulaciones o estudios
          * 
-         * 
          * @return View::make('titulaciones.index') listado de titulaciones // cursos // asignaturas // grupos de alumnos // profesor
          * 
          * 
@@ -224,7 +223,7 @@ class TitulacionController extends BaseController {
     public function isValidCsv($file){
         
         $resultado = array( 'error' => false,
-                            'columnasNoValiada' => array(),
+                            'columnasNoValidas' => array(),
                             'msg-error' => 'Fichero no válido: <br />',
                         );
         
@@ -232,7 +231,7 @@ class TitulacionController extends BaseController {
             $resultado['error'] = true;
             $resultado['msg-error'] = 'No se ha seleccionado ningún archivo *.csv';
             return $resultado;
-           }
+        }
 
         $columnasValidas = Config::get('csvtitulaciones.columnas');
         $f = fopen($file,"r");
@@ -242,7 +241,7 @@ class TitulacionController extends BaseController {
             if (in_array($columna, $columnasCSV) === false) {
                 $resultado['error'] = true;
                 $resultado['msg-error'] = $resultado['msg-error'] . 'columna ' . $columna . 'no encontrada <br />';
-                $resultado['columnasNoValiadas'][] = $columna;    
+                $resultado['columnasNoValidas'][] = $columna;    
             } 
         }
         fclose($f);
@@ -273,14 +272,12 @@ class TitulacionController extends BaseController {
         $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
         if (!empty($titulacion)){
             // Obtiene $asignatura o la instancia si no existe en DB
-            
-             
             $asignatura = Asignatura::firstOrNew($aAsignatura);
-            //$asignatura->save();
             $asignatura = $titulacion->asignaturas()->save($asignatura); 
             
-            
-            $grupo = GrupoAsignatura::firstOrNew($aGrupo);
+            $grupo = GrupoAsignatura::firstOrNew( [ 'asignatura_id' => $asignatura->id ]);//$aGrupo);
+            $grupo->capacidad = $aGrupo['capacidad'];
+            $grupo->grupo = $aGrupo['grupo'];
             $grupo = $asignatura->gruposAsignatura()->save($grupo);
             
             $profesor = Profesor::firstOrNew($aProfesor);
