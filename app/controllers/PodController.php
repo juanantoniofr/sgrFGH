@@ -10,9 +10,8 @@ class PodController extends BaseController {
 	public function index(){
 
 		$dropdown = Auth::user()->dropdownMenu();
-		$test = array();
-	
-		return View::make('pod.index')->with(compact('test'))->nest('dropdown',$dropdown);	
+
+		return View::make('pod.index')->nest('dropdown',$dropdown);	
 	}
 
 	/**
@@ -27,9 +26,15 @@ class PodController extends BaseController {
     */
 	public function savePOD(){
 
-		//control de errores formulario
-		$file = Input::file('csvfile');
+		//return
+		$aSinAula = array();
+		$aSolapesCsv = array();
+		$aSolapesBD = array();
+		$aEventosValidos = array();
 		$dropdown = Auth::user()->dropdownMenu();
+
+		//@inputcontrol de errores formulario
+		$file = Input::file('csvfile');
 
 		if (empty($file)){
 			Session::flash('msg-error','No se ha seleccionado ningún archivo csv'); 
@@ -41,7 +46,7 @@ class PodController extends BaseController {
 		$isValid = $csv->isValidCsv();
 		if ($isValid['error'] == true){
 			Session::flash('msg-error','No se ha seleccionado ningún archivo csv'); 
-			return View::make('pod.index')->with(compact('test','aSinAula'))->nest('dropdown',$dropdown);	
+			return View::make('pod.index')->nest('dropdown',$dropdown);	
 		}
 
 		$f = $csv->open();
@@ -50,7 +55,7 @@ class PodController extends BaseController {
 		if ($csv->compruebaCabeceras() == false){
 			Session::flash('msg-error','Error al leer cabeceras archivos csv xxx');
 			$f = $csv->close();
-			return View::make('pod.index')->with(compact('test','aSinAula'))->nest('dropdown',$dropdown); 
+			return View::make('pod.index')->nest('dropdown',$dropdown); 
 		}
 		
 		$i = 0;
@@ -72,10 +77,7 @@ class PodController extends BaseController {
 		$csv->close();
 		
 
-		$aSinAula = array();
-		$aSolapesCsv = array();
-		$aSolapesBD = array();
-		$aEventosValidos = array();
+		
 		foreach ($eventos  as $evento) {
 			$exclude = false;
 			if (!$this->existeAula($evento)) {$aSinAula[] = $evento; $exclude = true;}
@@ -83,8 +85,8 @@ class PodController extends BaseController {
 		 	if ($this->solapaBD($evento)) {$aSolapesBD[] = $evento; $exclude = true;}   
 			if(!$exclude) $aEventosValidos[] = $evento;
 		}
-		
-		return View::make('pod.index')->with(compact('aSinAula','aSolapesCsv','aSolapesBD','aEventosValidos'))->nest('dropdown',$dropdown);
+		//$resultadoComprobacionCsv = View::make('pod.resultadoComprobacionCsv')->with(compact('aSinAula','aSolapesCsv','aSolapesBD','aEventosValidos'));
+		return View::make('pod.index')->nest('resultadoComprobacionCsv','pod.resultadoComprobacionCsv',compact('aSinAula','aSolapesCsv','aSolapesBD','aEventosValidos'))->nest('dropdown',$dropdown);
 	}
 
 	private function save($data,$numFila,$recurso,$evento_id){
@@ -193,6 +195,8 @@ class PodController extends BaseController {
 		$recurso = Recurso::where('nombre','=',$aula)->first();
 		if ( $recurso  == NULL ) return false; //No hay solape por que no hay recurso en BD.
 
+		$f_desde = Date::esFechaCsvToDB($f_desde,'/');
+		$f_hasta = Date::esFechaCsvToDB($f_hasta,'/');
 		$nRepeticiones = Date::numRepeticiones($f_desde,$f_hasta,$diaSemana);
 
 		for($j=0;$j < $nRepeticiones; $j++ ){ //foreach 

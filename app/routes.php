@@ -38,11 +38,12 @@ Route::get('newUser',array('as'=>'newUser',function(){
 }));
 
 Route::get('hola',array('as'=>'hola',function(){
-	$formato = 'd/m/Y';
+	$formato = '%e/%m/%Y';
 	$fecha ='2/3/2019';
-	$date = DateTime::createFromFormat($formato,$fecha);
+	setlocale(LC_ALL,'es_ES@euro','es_ES.UTF-8','esp');
+	$result = strftime($formato,strtotime($fecha));
 	echo "<pre>";
-	var_dump($date);
+	var_dump($result);
 	echo "</pre>";
 }));
 

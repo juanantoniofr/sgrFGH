@@ -54,7 +54,7 @@
             <table class="table table-hover table-striped">
                 
                <thead>
-                  <th style="width:5%" >Id. de Lugar</th>
+                  <th style="width:10%" >Id. de Lugar</th>
                   <!-- Order column by nombre de equipo--> 
                   <th style="" >
                      @if ($sortby == 'nombre' && $order == 'asc') {{

@@ -262,17 +262,15 @@ class Date{
 					$dWeek:		día de la semana en formato 0->domingo,1->lunes,.... 6->sábado
 			out -> $numRepeticiones: Entero con el número de veces que se repite $dWeek entre $fInicio y $fFin 
 	*/
-	public static function numRepeticiones($fInicio,$fFin,$dWeek){
+	public static function numRepeticiones($fInicio,$fFin,$dWeek,$delimiter = '-'){
 		
 		$numRepeticiones = 0;
 		$aDaysWeek = array('0' => 'Sunday', '1' => 'Monday','2' => 'Tuesday','3' => 'Wednesday','4' => 'Thursday','5' => 'Friday','6' => 'Saturday');
 		$self = new self();
 					
-		$startTime = strtotime($aDaysWeek[$dWeek],$self->getTimeStamp($fInicio,'-'));
-		$endTime = $self->getTimeStamp($fFin,'-');
+		$startTime = strtotime($aDaysWeek[$dWeek],$self->getTimeStamp($fInicio,$delimiter));
+		$endTime = $self->getTimeStamp($fFin,$delimiter);
 		$currentTime = $startTime;
-		//$nextTime = strtotime('Next ' . $aDaysWeek[$dWeek],$currentTime);
-		//if ($startTime == $self->getTimeStamp($fInicio,'-')) $numRepeticiones++;
 		if ($startTime <= $endTime){
 			do {
 				$numRepeticiones++;
@@ -280,16 +278,14 @@ class Date{
 				$currentTime = $nextTime;
 			} while($nextTime <= $endTime);	
 		}
-		//if ($endTime == $self->getTimeStamp($fFin,'-')) $numRepeticiones++;
-		//echo $numRepeticiones;
 		return $numRepeticiones;
 	}
 
 	//Return date with format (dia-mes-año) for frist day of week "dWeek" last of date "$f"
-	public static function timeStamp_fristDayNextToDate($f,$dWeek){
+	public static function timeStamp_fristDayNextToDate($f,$dWeek,$delimiter='-'){
 		$aDaysWeek = array('0' => 'Sunday','1' => 'Monday','2' => 'Tuesday','3' => 'Wednesday','4' => 'Thursday','5' => 'Friday','6' => 'Saturday');
 		$self = new self();
-		$startTime = strtotime($aDaysWeek[$dWeek],$self->getTimeStamp($f,'-'));
+		$startTime = strtotime($aDaysWeek[$dWeek],$self->getTimeStamp($f,$delimiter));
 		return date('j-n-Y',$startTime);
 	}
 	
@@ -361,10 +357,10 @@ class Date{
 		return $strDaysWeek;
 	}
 
-	public static function dateCSVtoDB($date){
+	public static function dateCSVtoDB($date,$delimiter='-'){
 		//Esperamos de entrada fecha en formato dd-mesAbr(3)-yyyy, ejemplo 01-ene-2015
 
-		$mifecha = explode('-',$date);
+		$mifecha = explode($delimiter,$date);
 		$dia = $mifecha[0];
 		$mes = strtolower($mifecha[1]);
 		$anno = $mifecha[2];
@@ -384,6 +380,20 @@ class Date{
 
 		$numMes = $translateMonth[$mes];
 		$timeStamp = mktime(0,0,0,$numMes,$dia,$anno);
+		$fechaDB = date('Y-m-d',$timeStamp);
+
+		return $fechaDB;
+	}
+
+	public static function esFechaCsvToDB($date,$delimiter='-'){
+		//Esperamos de entrada fecha en formato dd-mesAbr(3)-yyyy, ejemplo 01-ene-2015
+
+		$mifecha = explode($delimiter,$date);
+		$dia = $mifecha[0];
+		$mes = $mifecha[1];
+		$anno = $mifecha[2];
+
+		$timeStamp = mktime(0,0,0,$mes,$dia,$anno);
 		$fechaDB = date('Y-m-d',$timeStamp);
 
 		return $fechaDB;
