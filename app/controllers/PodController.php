@@ -24,7 +24,7 @@ class PodController extends BaseController {
         *
         *
     */
-	public function savePOD(){
+	public function compruebaCsv(){
 
 		//return
 		$aSinAula = array();
@@ -195,14 +195,12 @@ class PodController extends BaseController {
 		$recurso = Recurso::where('nombre','=',$aula)->first();
 		if ( $recurso  == NULL ) return false; //No hay solape por que no hay recurso en BD.
 
-		$f_desde = Date::esFechaCsvToDB($f_desde,'/');
-		$f_hasta = Date::esFechaCsvToDB($f_hasta,'/');
-		$nRepeticiones = Date::numRepeticiones($f_desde,$f_hasta,$diaSemana);
+		$nRepeticiones = Date::numRepeticiones($f_desde,$f_hasta,$diaSemana,'/');
 
 		for($j=0;$j < $nRepeticiones; $j++ ){ //foreach 
 			
 			//fecha Evento
-			$start = Date::timeStamp_fristDayNextToDate($f_desde,$diaSemana);
+			$start = Date::timeStamp_fristDayNextToDate($f_desde,$diaSemana,'/');
 			$currentfecha = Date::currentFecha($start,$j);
 			
 			if ( 0 < Calendar::getNumSolapamientos($recurso->id,$currentfecha,$h_inicio,$h_fin) ){

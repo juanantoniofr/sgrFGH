@@ -5,6 +5,8 @@
 @stop
  
 @section('content')
+<div id ="espera" style="display:none"></div>
+
 <div class="container">
 
   {{-- Cabecera página --}}
@@ -28,14 +30,14 @@
         
         <div class="col-lg-12">
           
-          {{Form::open( array( 'url' => route('uploadPOD'), 'files' => true ) )}}
+          {{Form::open( array( 'url' => route('compruebaCsv'), 'files' => true ) )}}
             
             <div class="form-group">
               {{Form::label('csvfile', 'Archivo csv:')}} 
               {{Form::file('csvfile', $attributes = array());}}
             </div>
             
-            <button type="submit" class="btn btn-primary">Comprobar csv</button>
+            <button type="submit" class="btn btn-primary"> <i class="fa fa-check fa-fw"></i> Comprobar csv</button>
           {{Form::close()}}
         </div><!-- /.col-lg-12 -->
       </div><!-- /.panel-body -->
@@ -61,5 +63,11 @@
 
  {{ $resultadoComprobacionCsv or ''}}
 
- </div><!-- ./container -->
+</div><!-- ./container -->
+@stop
+
+@section('js')
+
+    {{-- HTML::script('assets/js/pod.js') --}}
+
 @stop

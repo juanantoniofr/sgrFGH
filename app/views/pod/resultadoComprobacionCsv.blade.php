@@ -7,10 +7,12 @@
       <div class="panel-heading">
         <div class="row">
           <div class = "col-lg-6">
-            <i class="fa fa-check fa-fw"></i> Eventos válidos
+            <i class="fa fa-check fa-fw"></i> Eventos sin errores
           </div>
           <div class = "col-lg-6 text-right">
-            <a href="" class="btn btn-info" id="botonSalvaEventosCsv" title="Salvar eventos"><i class="fa fa-save fa-fw"></i> Salvar Eventos</a>
+            {{Form::open( array( 'url' => route('salvaCsv')) )}}
+              <button type="submit" class="btn btn-primary"><i class="fa fa-save fa-fw"></i> Salvar eventos</button>
+            {{Form::close()}}
           </div>
         </div>
       </div>
@@ -68,7 +70,7 @@
         
       <div class="panel-heading">
       
-        <i class="fa fa-ban fa-fw"></i> <b>Error: No existe Espacio o Aula. Los siguientes eventos definen reservas/eventos en espacios/aulas no definidas.</b>
+        <i class="fa fa-ban fa-fw"></i> <b>Error: No existe Espacio o Aula.</b>
       </div>
           
       <div class="panel-body">  
@@ -113,7 +115,7 @@
       </div>
       
       <div class="panel-body">
-        <p class="text-center">Comprobación correcta de espacios y/o aulas definidas en el csv</p>
+        <p class="text-center">Comprobación de espacios: válida.</p>
       </div>
     </div>
   @endif    
@@ -125,7 +127,7 @@
         
       <div class="panel-heading">
     
-        <i class="fa fa-ban fa-fw"></i> <b>Error: Solapamientos en archivo css. Los eventos siguientes solapan entre si.</b>.  
+        <i class="fa fa-ban fa-fw"></i> <b>Error: Solapamientos en archivo csv.</b>.  
       </div>
         
       <div class="panel-body">  
@@ -161,7 +163,7 @@
         </table>
       </div><!-- .//panel-body -->
     </div><!-- .//panel-danger -->
-    @else
+  @else
     <div class="panel panel-success">
       
       <div class="panel-heading">
@@ -170,7 +172,7 @@
       </div>
       
       <div class="panel-body">
-        <p class="text-center">El arvhivo csv no define ningún solapamiento</p>
+        <p class="text-center">Comprobación de solapamientos en archivo csv: Valida.</p>
       </div>
     </div>
   @endif
@@ -218,7 +220,7 @@
         </table>
       </div><!-- .//panel-body -->
     </div><!-- .//panel-danger -->
-    @else
+  @else
     <div class="panel panel-success">
       
       <div class="panel-heading">
@@ -227,7 +229,7 @@
       </div>
       
       <div class="panel-body">
-        <p class="text-center">El arvhivo csv no define solapamiento con eventos/reservas existentes</p>
+        <p class="text-center">Comprobación de solapamientos en Base de Datos: Valida.</p>
       </div>
     </div>
   @endif

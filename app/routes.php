@@ -38,13 +38,39 @@ Route::get('newUser',array('as'=>'newUser',function(){
 }));
 
 Route::get('hola',array('as'=>'hola',function(){
-	$formato = '%e/%m/%Y';
-	$fecha ='2/3/2019';
-	setlocale(LC_ALL,'es_ES@euro','es_ES.UTF-8','esp');
-	$result = strftime($formato,strtotime($fecha));
-	echo "<pre>";
-	var_dump($result);
-	echo "</pre>";
+	$aula = 'Aula XV';
+	$f_desde = '10/12/2019';// 	formato --> d/m/Y
+	$f_hasta = '16/1/2020';//	formato --> d/m/Y
+	$h_inicio = '19:00';
+	$h_fin = '21:00';
+	$diaSemana = 1;
+	//$numfila = $evento['numfila'];
+		
+	$recurso = Recurso::where('nombre','=',$aula)->first();
+	if ( $recurso  == NULL ) return 'No hay recurso'; //No hay solape por que no hay recurso en BD.
+
+	//$f_desde = Date::esFechaCsvToDB($f_desde,'/');
+	//$f_hasta = Date::esFechaCsvToDB($f_hasta,'/');
+	$nRepeticiones = Date::numRepeticiones($f_desde,$f_hasta,$diaSemana,'/');
+	echo $f_desde. "<br />";
+	echo $f_hasta. "<br />";
+	echo $nRepeticiones;
+	
+	for($j=0;$j < $nRepeticiones; $j++ ){ //foreach 
+			
+		//fecha Evento
+		$start = Date::timeStamp_fristDayNextToDate($f_desde,$diaSemana,'/');
+		echo 'start = '. $start ."<br />";
+		$currentfecha = Date::currentFecha($start,$j);
+		echo 'currentfecha = ' . $currentfecha . "<br />";
+		if ( 0 < Calendar::getNumSolapamientos($recurso->id,$currentfecha,$h_inicio,$h_fin) ){
+			//hay solape: fin -> return true
+			echo "hay solapamientos<br />";
+		}	
+	}//fin foreach repeticion periodica
+		
+
+	echo "No hay solapamientos";
 }));
 
 //*********
@@ -59,7 +85,8 @@ Route::get('/admin/disponibilidad.html',array('as' => 'disponibilidad.html','use
 //*********
 
 Route::get('admin/pod.html',array('as' => 'pod.html','uses' => 'PodController@index','before' => array('auth','capacidad:2-3-4-5-6,msg')));
-Route::post('admin/pod.html',array('as' => 'uploadPOD','uses' => 'PodController@savePOD','before' => array('auth','capacidad:2-3-4-5-6,msg')));
+Route::post('admin/pod.html',array('as' => 'compruebaCsv','uses' => 'PodController@compruebaCsv','before' => array('auth','capacidad:2-3-4-5-6,msg')));
+Route::post('admin/salvaCsv.html',array('as' => 'salvaCsv','uses' => 'PodController@salvaCsv','before' => array('auth','capacidad:2-3-4-5-6,msg')));
 
 
 //*********
