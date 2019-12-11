@@ -72,8 +72,20 @@ class PodController extends BaseController {
 		$numfila = 2;
 		while ( $csv->leeFila() != false ){
 			$eventos[$i]['numfila'] = $numfila;
+
+			$eventos[$i]['codigoTitulacion'] = $csv->getValue(Config::get('csvpod.evento')['codigoTitulacion']);
+
 			$eventos[$i]['asignatura'] = $csv->getValue(Config::get('csvpod.evento')['asignatura']);
+			$eventos[$i]['codigo'] = $csv->getValue(Config::get('csvpod.evento')['codigo']);
+			$eventos[$i]['cuatrimestre'] = $csv->getValue(Config::get('csvpod.evento')['cuatrimestre']);
+
+			$eventos[$i]['grupo'] = $csv->getValue(Config::get('csvpod.evento')['grupo']);
+			$eventos[$i]['capacidad'] = $csv->getValue(Config::get('csvpod.evento')['capacidad']);
+
 			$eventos[$i]['profesor'] = $csv->getValue(Config::get('csvpod.evento')['profesor']);
+			$eventos[$i]['dni'] = $csv->getValue(Config::get('csvpod.evento')['dni']);
+
+
 			$eventos[$i]['aula'] = $csv->getValue(Config::get('csvpod.evento')['aula']);
 			$eventos[$i]['f_desde'] = $csv->getValue(Config::get('csvpod.evento')['f_desde']);
 			$eventos[$i]['f_hasta'] = $csv->getValue(Config::get('csvpod.evento')['f_hasta']);
@@ -124,22 +136,47 @@ class PodController extends BaseController {
 		
 		$aEventos = json_decode($eventos);
 
-		$resultado = '';
+		$resultado = array();
 		foreach ($aEventos as $evento) {
 
-			$aula = $evento->aula;
-			$f_desde = $evento->f_desde; // 	formato --> d/m/Y
-			$f_hasta = $evento->f_hasta; //	formato --> d/m/Y
-			$h_inicio = $evento->h_inicio;
-			$h_fin = $evento->h_fin;
-			$diaSemana = $evento->codigoDia;
-			$numfila = $evento->numfila;
-			$asignatura = $evento->asignatura;
-			$profesor = $evento->profesor;
+			$e['aula'] = $evento->aula;
+			$e['f_desde'] = $evento->f_desde; // 	formato --> d/m/Y
+			$e['f_hasta'] = $evento->f_hasta; //	formato --> d/m/Y
+			$e['h_inicio'] = $evento->h_inicio;
+			$e['h_fin'] = $evento->h_fin;
+			$e['codigoDia'] = $evento->codigoDia;
+			$e['numfila'] = $evento->numfila;
+
+			$codigoTitulacion = $evento->codigoTitulacion;
+
+			$aAsignatura = array(
+                            'asignatura'	=> $evento->asignatura,
+                            'codigo' 		=> $evento->codigo,
+                            'cuatrimestre' 	=> $evento->cuatrimestre,
+                            );
 			
-			$recurso = Recurso::where('nombre','=',$aula)->first();
+			$aProfesor = array(
+                            'dni' 		=> $evento->dni,
+                            'profesor' 	=> $evento->profesor,
+                            );
+
+			$aGrupo = array (
+                        'grupo' 	=> $evento->grupo,
+                        'capacidad' => $evento->capacidad,
+                        );
+			
+			$recurso = Recurso::where('nombre','=',$e['aula'])->first();
 			if ( $recurso  == NULL ) return 'No se encontró Aula'; //No hay solape por que no hay recurso en BD.
-			$resultado = $resultado . '(Asig:  '. $asignatura .' )'; 
+
+			//Solape DB??
+			if ( $this->solapaBD($e) ) return 'Solapa en DB!!';
+			//Update Titulación -> asignatura -> grupo -> profesor, salaFila definida en BaseController
+			$resultado = $this->salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor);
+
+			//if ($resultado[['error']) return $resultado;
+			
+			//Salvar evento	
+			 
 		}
 
 		return $resultado;
@@ -200,7 +237,7 @@ class PodController extends BaseController {
 		*/
 	}
 
-
+	// para BORRAR
 	private function save($data,$numFila,$recurso,$evento_id){
 		
 		$result = true;

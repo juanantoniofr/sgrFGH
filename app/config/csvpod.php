@@ -12,8 +12,8 @@ return array (
 							'cuatrimestre' => 'DUR.',
 						),
 
-	'grupo' => array('grupo' => 'GRP.',
-					'capacidad' => 'CAP.'
+	'grupo' => array( 	'grupo' => 'GRP.',
+						'capacidad' => 'CAP.'
 				),
 
 	'profesor' => array('dni' => 'DNI',
@@ -22,15 +22,21 @@ return array (
 
 	'titulacion' => array('codigo' => 'ES',
 						),
-	'evento' => array(	'f_desde' => 'F_DESDE',
-						'f_hasta' => 'F_HASTA',
+	'evento' => array(	'f_desde'	=> 'F_DESDE',
+						'f_hasta'	=> 'F_HASTA',
 						'codigoDia' => 'C.DIA',
 						'stringDia' => 'DIA',
-						'h_inicio' => 'H_INICIO',
-						'h_fin' => 'H_FIN',
-						'aula' => 'AULA',
-						'asignatura' => 'ASIGNATURA',
-						'profesor' => 'PROFESOR',
+						'h_inicio'	=> 'H_INICIO',
+						'h_fin'		=> 'H_FIN',
+						'aula' 		=> 'AULA',
+						'asignatura'=> 'ASIGNATURA',
+						'codigo'	=> 'C.ASIG.',
+						'cuatrimestre' => 'DUR.',
+						'grupo' 	=> 'GRP.',
+						'capacidad'	=> 'CAP.',
+						'dni'		=> 'DNI',
+						'profesor'	=> 'PROFESOR',
+						'codigoTitulacion' => 'ES',
 					),
 	);
 ?>

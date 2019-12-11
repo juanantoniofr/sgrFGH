@@ -262,7 +262,7 @@ class TitulacionController extends BaseController {
         *
     */
 
-
+    /*
     public function salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor){
 
         $resultado = array('error' => false,
@@ -294,7 +294,7 @@ class TitulacionController extends BaseController {
       
         return $resultado;
     }
-
+    */
     
     /**
         * 

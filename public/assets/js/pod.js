@@ -12,7 +12,7 @@ $(function(e){
             url:  "salvaEventosCsv",
             data: {eventos:$(this).data('eventos')},
             success: function($respuesta){
-                
+                console.log($respuesta);
                 $(' #respuestaSalvaEventos ').html( $respuesta );
 
             },
