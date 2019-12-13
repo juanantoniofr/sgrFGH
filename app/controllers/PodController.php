@@ -136,7 +136,10 @@ class PodController extends BaseController {
 		
 		$aEventos = json_decode($eventos);
 
-		$resultado = array();
+		$resultado = array(	'resultAsignatura' 	=> array(),
+							'resultEvento'		=> '',
+						);
+
 		foreach ($aEventos as $evento) {
 
 			$e['aula'] = $evento->aula;
@@ -167,74 +170,35 @@ class PodController extends BaseController {
 			
 			$recurso = Recurso::where('nombre','=',$e['aula'])->first();
 			if ( $recurso  == NULL ) return 'No se encontró Aula'; //No hay solape por que no hay recurso en BD.
+			$e['recurso_id'] = $recurso->id;
 
 			//Solape DB??
 			if ( $this->solapaBD($e) ) return 'Solapa en DB!!';
 			//Update Titulación -> asignatura -> grupo -> profesor, salaFila definida en BaseController
-			$resultado = $this->salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor);
+			$resultado['resultAsignatura'] = $this->salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor);
 
-			//if ($resultado[['error']) return $resultado;
+			//identificador único para todos los eventos.
+			do {
+				$evento_id = md5(microtime());
+			} while (Evento::where('evento_id','=',$evento_id)->count() > 0);
 			
-			//Salvar evento	
-			 
+			$e['evento_id'] = $evento_id;
+
+			$e['titulo'] = $evento->asignatura . ' - ' . $evento->profesor;
+			$e['cod_asignatura'] = $evento->codigo;
+			$e['dni_profesor'] = $evento->dni; 
+			//método definido en BaseController.php
+			if ( $this->salvaEvento($e) != true) {
+				$resultado['resultEvento']  .= '<br />Error al salvar, fila evento en csv: ' . $evento->numfila;
+				return $resultado;
+			}
+			
+			$resultado['resultEvento'] .= '<br />Evento ' . $evento->numfila . ' salvado con éxito';			 
 		}
 
 		return $resultado;
 
-		/*
-		$result = true;
-		$fechaDesde = Date::dateCSVtoSpanish($data['F_DESDE_HORARIO1']);
-		$fechaHasta = Date::dateCSVtoSpanish($data['F_HASTA_HORARIO1']);
 		
-		$nRepeticiones = Date::numRepeticiones($fechaDesde,$fechaHasta,$data['COD_DIA_SEMANA']);
-
-		for($j=0;$j < $nRepeticiones; $j++ ){ //foreach 
-				$evento = new Evento();
-	
-				//evento periodico o puntual??			
-				if ($nRepeticiones == 1) $evento->repeticion = 0;
-				else $evento->repeticion = 1;
-				
-				$evento->evento_id = $evento_id;
-				//fechas de inicio y fin
-				$evento->fechaFin = Date::toDB(Date::dateCSVtoSpanish($data['F_HASTA_HORARIO1']),'-');//¿por que, no es $fechaDesde ya calculado??
-				$evento->fechaInicio = Date::toDB(Date::dateCSVtoSpanish($data['F_DESDE_HORARIO1']),'-');
-				
-				//fecha Evento
-				$startDate = Date::timeStamp_fristDayNextToDate(Date::dateCSVtoSpanish($data['F_DESDE_HORARIO1']),$data['COD_DIA_SEMANA']);
-				$currentfecha = Date::currentFecha($startDate,$j);
-				$evento->fechaEvento = Date::toDB($currentfecha,'-');
-
-				//horario
-				$evento->horaInicio = $data['INI'];
-				$evento->horaFin = $data['FIN'];
-
-				//obtner identificador de recurso (espacio o medio)
-				//$evento->recurso_id = $this->getRecursoByIdLugar($data['ID_LUGAR']);
-				$evento->recurso_id = $recurso->id;
-				
-				$evento->estado = 'aprobada';
-				//código día de la semana
-				$evento->diasRepeticion = json_encode($data['COD_DIA_SEMANA']);
-				$evento->dia = $data['COD_DIA_SEMANA'];
-			
-				$evento->titulo = $data['ASIGNATURA'] . ' - ' . $data['NOMCOM'];
-				$evento->asignatura = $data['ASIGNATURA'];
-				$evento->profesor = $data['NOMCOM'];
-				$evento->actividad = 'Docencia Reglada P.O.D';
-				
-				$evento->dia = $data['COD_DIA_SEMANA'];
-				//Asignamos a usuario que carga el pod
-				$userPOD = User::where('username','=','pod')->first(); 
-				//$evento->user_id = Auth::user()->id;
-				$evento->user_id      = $userPOD->id;
-				$evento->reservadoPor = $userPOD->id;
-				$evento->save();
-			
-		}//fin foreach
-		
-
-		*/
 	}
 
 	// para BORRAR

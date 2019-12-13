@@ -386,7 +386,7 @@ class Date{
 	}
 
 	public static function esFechaCsvToDB($date,$delimiter='-'){
-		//Esperamos de entrada fecha en formato dd-mesAbr(3)-yyyy, ejemplo 01-ene-2015
+		//Esperamos de entrada fecha en formato dd-mm-yyyy, ejemplo 01-03-2015 o 04/7/2017
 
 		$mifecha = explode($delimiter,$date);
 		$dia = $mifecha[0];

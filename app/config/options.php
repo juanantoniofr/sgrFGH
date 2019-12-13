@@ -63,6 +63,10 @@ return array (
 	'ssologin' => false,
 	'nombreSitio' => 'Facultad de Geografía e Historia',
 	'nombreUnidad' => 'Unidad Tic. FGH',
+	'POD' =>  array(	'codigo' => 'POD',
+						'actividad' => 'Docencia Reglada POD',
+						'roles'	=> '1,2,3,4,5,6',
+		),
 	'tipoActividad' => array(	
 								array(	'codigo'	=> 'ACT-INV',
 										'actividad' => 'Actividades de Investigación',

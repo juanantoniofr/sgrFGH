@@ -61,4 +61,63 @@ class BaseController extends Controller {
         return $resultado;
     }
 
+
+    public function salvaEvento(Array $aDataEvento){
+
+    	$f_desde = $aDataEvento['f_desde'];
+    	$f_hasta = $aDataEvento['f_hasta'];
+    	$cod_dia = $aDataEvento['codigoDia'];
+
+		$nRepeticiones = Date::numRepeticiones($f_desde,$f_hasta,$cod_dia,'/');
+
+		for($j=0;$j < $nRepeticiones; $j++ ){ //foreach 
+				
+				$evento = new Evento();
+	
+				//evento periodico o puntual??			
+				if ($nRepeticiones == 1) $evento->repeticion = 0;
+				else $evento->repeticion = 1;
+				
+
+				$evento->evento_id = $aDataEvento['evento_id'];
+				//fechas de inicio y fin
+				$evento->fechaFin = Date::toDB($f_hasta,'/');
+				$evento->fechaInicio = Date::toDB($f_desde,'/');
+				
+				//fecha Evento
+				//timeStamp_fristDayNextToDate --> Return date with format (dia-mes-año)	
+				$startDate = Date::timeStamp_fristDayNextToDate($f_desde,$cod_dia,'/');
+				$currentfecha = Date::currentFecha($startDate,$j);
+				$evento->fechaEvento = Date::toDB($currentfecha,'-');
+
+				//horario
+				$evento->horaInicio = $aDataEvento['h_inicio'];
+				$evento->horaFin = $aDataEvento['h_fin'];
+
+				
+				$evento->recurso_id = $aDataEvento['recurso_id'];//recurso->id;
+				
+				$evento->estado = 'aprobada';
+				//código día de la semana
+				$evento->diasRepeticion = json_encode($cod_dia);
+				$evento->dia = $cod_dia;
+			
+				$evento->titulo = $aDataEvento['titulo'];
+				$evento->asignatura = $aDataEvento['cod_asignatura'];
+				$evento->profesor = $aDataEvento['dni_profesor'];
+				$aPod = Config::get('options.pod');
+				$evento->actividad = $aPod['codigo'];
+				
+				$evento->dia = $cod_dia;
+				//Asignamos a usuario que carga el pod
+				$userAdmin = User::where('username','=','admin')->first(); 
+				//$evento->user_id = Auth::user()->id;
+				$evento->user_id      = $userAdmin->id;
+				$evento->reservadoPor = $userAdmin->id;
+				if ( $evento->save() != true ) return false;
+		}//fin foreach
+		
+		return true;
+    }
+
 }
