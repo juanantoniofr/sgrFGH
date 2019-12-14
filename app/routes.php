@@ -39,22 +39,12 @@ Route::get('newUser',array('as'=>'newUser',function(){
 
 Route::get('hola',array('as'=>'hola',function(){
 	
-	$profesores = Profesor::all();
-
-	foreach ($profesores as $profesor) {
-		echo $profesor->profesor .' (Profe-id = '. $profesor->id .')';
-		echo ", grupos: ";
-		foreach ($profesor->gruposAsignatura as $grupo){
-			echo $grupo->grupo .' (Grp-id = '. $grupo->id .')';
-			echo ", ";
-			//var_dump($grupo->asignatura->asignatura);
-			foreach ($grupo->eventos as $evento) {
-				echo $evento->titulo . '(even-id = '. $evento->id .')';
-			}
-			echo "<br />";
-		}
-		echo "<br />";
-	}
+	$asignatura = Asignatura::where('codigo','=','51210019')->first();
+	var_dump($asignatura->asignatura);
+	$grupo = $asignatura->gruposAsignatura()->where('grupo','=','1')->first();
+	var_dump($grupo->grupo);
+	//$grupo = $asignatura->gruposAsignatura->where('grupo','=',$aDataEvento['grupo'])->first()
+	//$grupo->eventos()->attach($evento->id);
 
 }));
 

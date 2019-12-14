@@ -11,9 +11,7 @@ class TitulacionController extends BaseController {
          * 
          * 
     */
-
-
-	public function listar(){
+    public function listar(){
       
    	
     	$titulaciones=Titulacion::orderBy('titulacion','ASC')->get();
@@ -34,7 +32,6 @@ class TitulacionController extends BaseController {
         *
         * @return $respuesta :array, errores de validación de formulario o mensaje de éxito
     */
-
     public function nuevaTitulacion(){
 
         //@params
@@ -92,7 +89,6 @@ class TitulacionController extends BaseController {
         *
         *
     */
-
     public function getTitulacion(){
 
 
@@ -142,7 +138,6 @@ class TitulacionController extends BaseController {
         *
         *
     */
-
     public function saveCSV(){
 
         
@@ -218,8 +213,6 @@ class TitulacionController extends BaseController {
         *
         *
     */
-
-
     public function isValidCsv($file){
         
         $resultado = array( 'error' => false,
@@ -248,54 +241,6 @@ class TitulacionController extends BaseController {
         return $resultado;
     }
 
-
-    /**
-        * 
-        * Salva a DB los valores de Asignaturas, gruposAsisgnatura y profesor
-        * 
-        * @param $aAsignatura :array
-        * @param $grupoAsignatura :string
-        * @param $profesor :string
-        * 
-        * @return $resultado :array   
-        *
-        *
-    */
-
-    /*
-    public function salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor){
-
-        $resultado = array('error' => false,
-                            'exito' => array(),
-                    );
-
-        $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
-        if (!empty($titulacion)){
-            // Obtiene $asignatura o la instancia si no existe en DB
-            $asignatura = Asignatura::firstOrNew($aAsignatura);
-            $asignatura = $titulacion->asignaturas()->save($asignatura); 
-            
-            $grupo = GrupoAsignatura::firstOrNew( [ 'asignatura_id' => $asignatura->id ]);//$aGrupo);
-            $grupo->capacidad = $aGrupo['capacidad'];
-            $grupo->grupo = $aGrupo['grupo'];
-            $grupo = $asignatura->gruposAsignatura()->save($grupo);
-            
-            $profesor = Profesor::firstOrNew($aProfesor);
-            $profesor->save();
-
-            if ( empty(($grupo->profesores()->where('profesor_id','=',$profesor->id)->first())) )
-                $grupo = $grupo->profesores()->attach($profesor->id);
-            
-            $resultado['exito'][] = 'Asignatura ' . $asignatura->asignatura . 'salvada con exito.';
-        }
-        else {
-            $resultado['error'] = 'No existe la titulación con ID = ' . $codigoTitulacion;
-        }
-      
-        return $resultado;
-    }
-    */
-    
     /**
         * 
         * Devuelve el valor de la Key=$columna del array $fila
@@ -307,7 +252,6 @@ class TitulacionController extends BaseController {
         *
         *
     */   
-
     public function getValue($fila,$columna){
 
         return $fila[$columna];
@@ -370,7 +314,6 @@ class TitulacionController extends BaseController {
         
         Session::flash('msg-exito', 'Titulación eliminada con éxito.');
         return Redirect::back();
-    
-  }
+    }
 
 } //fin del controlador

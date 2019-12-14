@@ -15,7 +15,7 @@ class BaseController extends Controller {
 		}
 	}
 
-	    /**
+    /**
         * 
         * Salva a DB los valores de Asignaturas, gruposAsisgnatura y profesor
         * 
@@ -27,8 +27,7 @@ class BaseController extends Controller {
         *
         *
     */
-
-	//Used by TitulacionController & CsvController    
+	//Used by TitulacionController & PodController    
     public function salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor){
 
         $resultado = array('error' => false,
@@ -61,7 +60,17 @@ class BaseController extends Controller {
         return $resultado;
     }
 
-
+ 	/**
+        * 
+        * Salva a DB los valores de un evento leido de un archivo csv
+        * 
+        * @param $aAsignatura :array
+        * 
+        * @return $resultado :array   
+        *
+        *
+    */
+    //Used by TitulacionController & PodController    
     public function salvaEvento(Array $aDataEvento){
 
     	$f_desde = $aDataEvento['f_desde'];
@@ -117,6 +126,9 @@ class BaseController extends Controller {
 				$evento->user_id      = $userAdmin->id;
 				$evento->reservadoPor = $userAdmin->id;
 				if ( $evento->save() != true ) return false;
+				
+				$grupo = Asignatura::where('codigo','=',$aDataEvento['codigoAsignatura'])->first()->gruposAsignatura()->where('grupo','=',$aDataEvento['grupo'])->first();
+				$grupo->eventos()->attach($evento->id);
 		}//fin foreach
 		
 		return true;
