@@ -38,39 +38,24 @@ Route::get('newUser',array('as'=>'newUser',function(){
 }));
 
 Route::get('hola',array('as'=>'hola',function(){
-	$aula = 'Aula XV';
-	$f_desde = '10/12/2019';// 	formato --> d/m/Y
-	$f_hasta = '16/1/2020';//	formato --> d/m/Y
-	$h_inicio = '19:00';
-	$h_fin = '21:00';
-	$diaSemana = 1;
-	//$numfila = $evento['numfila'];
-		
-	$recurso = Recurso::where('nombre','=',$aula)->first();
-	if ( $recurso  == NULL ) return 'No hay recurso'; //No hay solape por que no hay recurso en BD.
-
-	//$f_desde = Date::esFechaCsvToDB($f_desde,'/');
-	//$f_hasta = Date::esFechaCsvToDB($f_hasta,'/');
-	$nRepeticiones = Date::numRepeticiones($f_desde,$f_hasta,$diaSemana,'/');
-	echo $f_desde. "<br />";
-	echo $f_hasta. "<br />";
-	echo $nRepeticiones;
 	
-	for($j=0;$j < $nRepeticiones; $j++ ){ //foreach 
-			
-		//fecha Evento
-		$start = Date::timeStamp_fristDayNextToDate($f_desde,$diaSemana,'/');
-		echo 'start = '. $start ."<br />";
-		$currentfecha = Date::currentFecha($start,$j);
-		echo 'currentfecha = ' . $currentfecha . "<br />";
-		if ( 0 < Calendar::getNumSolapamientos($recurso->id,$currentfecha,$h_inicio,$h_fin) ){
-			//hay solape: fin -> return true
-			echo "hay solapamientos<br />";
-		}	
-	}//fin foreach repeticion periodica
-		
+	$profesores = Profesor::all();
 
-	echo "No hay solapamientos";
+	foreach ($profesores as $profesor) {
+		echo $profesor->profesor .' (Profe-id = '. $profesor->id .')';
+		echo ", grupos: ";
+		foreach ($profesor->gruposAsignatura as $grupo){
+			echo $grupo->grupo .' (Grp-id = '. $grupo->id .')';
+			echo ", ";
+			//var_dump($grupo->asignatura->asignatura);
+			foreach ($grupo->eventos as $evento) {
+				echo $evento->titulo . '(even-id = '. $evento->id .')';
+			}
+			echo "<br />";
+		}
+		echo "<br />";
+	}
+
 }));
 
 //*********

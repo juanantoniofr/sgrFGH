@@ -21,6 +21,17 @@ class Evento extends Eloquent{
  		return $this->belongsTo('AtencionEvento','id','evento_id');
  	}
 
+ 	 /**
+ 	 	*
+     	* Relación: Muchas eventos (identificados por evento_id) pertenece a un grupo de una asignatura
+     	* 
+     */
+    
+    public function gruposAsignatura(){
+        return $this->belongsToMany('GrupoAsignatura');
+    }
+
+
  	public function total(){
  		$total = '';
  		if ($this->recursoOwn->tipo != 'espacio') $total = Evento::where('evento_id','=',$this->evento_id)->where('horaInicio','=',$this->horaInicio)->where('fechaEvento','=',$this->fechaEvento)->count();
