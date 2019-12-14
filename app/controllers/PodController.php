@@ -185,8 +185,9 @@ class PodController extends BaseController {
 			$e['evento_id'] = $evento_id;
 
 			$e['titulo'] = $evento->asignatura . ' - ' . $evento->profesor;
-			$e['cod_asignatura'] = $evento->codigo;
-			$e['dni_profesor'] = $evento->dni; 
+			$e['asignatura'] = $evento->asignatura;
+			$e['profesor'] = $evento->profesor; 
+			$e['codigoTitulacion'] = $evento->codigoTitulacion;
 			//método definido en BaseController.php
 			if ( $this->salvaEvento($e) != true) {
 				$resultado['resultEvento']  .= '<br />Error al salvar, fila evento en csv: ' . $evento->numfila;

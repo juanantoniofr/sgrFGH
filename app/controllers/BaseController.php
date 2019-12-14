@@ -103,10 +103,12 @@ class BaseController extends Controller {
 				$evento->dia = $cod_dia;
 			
 				$evento->titulo = $aDataEvento['titulo'];
-				$evento->asignatura = $aDataEvento['cod_asignatura'];
-				$evento->profesor = $aDataEvento['dni_profesor'];
-				$aPod = Config::get('options.pod');
-				$evento->actividad = $aPod['codigo'];
+				$evento->asignatura = $aDataEvento['asignatura'];
+				$evento->profesor = $aDataEvento['profesor'];
+				$titulacion = Titulacion::where('codigo','=',$aDataEvento['codigoTitulacion'])->first();
+				$aPod = Config::get('options.tipoTitulacion');
+				if ($titulacion->tipo == "Grado") $evento->actividad = $aPod['Grado'];
+				if ($titulacion->tipo == "Máster") $evento->actividad = $aPod['Master'];
 				
 				$evento->dia = $cod_dia;
 				//Asignamos a usuario que carga el pod
