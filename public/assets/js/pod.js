@@ -13,7 +13,24 @@ $(function(e){
             data: {eventos:$(this).data('eventos')},
             success: function($respuesta){
                 console.log($respuesta);
-                $(' #respuestaSalvaEventos ').html( $respuesta );
+                console.log($respuesta.resultAsignatura.error);
+                if ($respuesta.resultAsignatura.error == false){
+                    var $htmlRespuesta = '';
+                    $respuesta.resultAsignatura.exito.forEach( function(item, index){
+                            $htmlRespuesta += item + "<br>";
+                            console.log(item);
+                        }
+                    );
+                    console.log($respuesta.resultEvento);
+                    $htmlRespuesta.innerHTML += "<hr>";
+                    //$htmlRespuesta += ' ( ' + $respuesta.resultEvento + ' )<br>';
+                    $respuesta.resultEvento.exito.forEach( function(item, index) {
+                            $htmlRespuesta += item + "<br>";
+                        }
+                    ); 
+                }
+                     
+                $(' #respuestaSalvaEventos ').html($htmlRespuesta).fadeIn(1000);
 
             },
             error: function(xhr, ajaxOptions, thrownError){

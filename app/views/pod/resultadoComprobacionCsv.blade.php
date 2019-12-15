@@ -1,28 +1,31 @@
-  {{-- Resultado de la importación csv: Eventos salvados con éxito --}}
+  {{-- Resultado de la importación csv: Eventos candidatos a salvar a BD --}}
   @if (!empty($aEventosValidos))
   
     {{-- Eventos a salvar con éxito--}}
     <div class="panel panel-success">
       
       <div class="panel-heading">
+        
         <div class="row">
+        
           <div class = "col-lg-6">
             <p><b><i class="fa fa-check fa-fw"></i> Eventos sin errores</b></p>
           </div>
+        
           <div class = "col-lg-6 text-right">
             <p> 
               <a href="" class="btn btn-primary" id="botonSalvaEventos" title="Salvar eventos a BD" data-eventos=' {{ json_encode($aEventosValidos,JSON_FORCE_OBJECT)  }}'><i class="fa fa-save fa-fw"></i> Salva eventos a DB</a>
             </p>
           </div>
         </div>
-        <div class = 'row'>
-          <div id = 'respuestaSalvaEventos'>
-            
-          </div>
-        </div>
-      </div>
+        
+        
+      </div><!-- /.panel-heading -->
       
       <div class="panel-body">
+
+        <div class="row text-center"> <div id = 'respuestaSalvaEventos' class="col-lg-10 bg-success"></div></div>
+
         <table class="table table-striped">
           
            <tr>
@@ -36,7 +39,7 @@
             <th>H. Fin</th>
             <th>Aula</th>
           </tr>
-
+        
           @foreach($aEventosValidos as $evento)
             <tr>
               <td>{{ $evento['numfila'] }}</td>  

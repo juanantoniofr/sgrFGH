@@ -137,8 +137,10 @@ class PodController extends BaseController {
 		$aEventos = json_decode($eventos);
 
 		$resultado = array(	'resultAsignatura' 	=> array(),
-							'resultEvento'		=> '',
-						);
+							'resultEvento'		=> array( 	'error' => array(), 
+															'exito' => array()
+														),
+						);	
 
 		foreach ($aEventos as $evento) {
 
@@ -169,11 +171,20 @@ class PodController extends BaseController {
                         );
 			
 			$recurso = Recurso::where('nombre','=',$e['aula'])->first();
-			if ( $recurso  == NULL ) return 'No se encontró Aula'; //No hay solape por que no hay recurso en BD.
+			if ( $recurso  == NULL ) {
+				$resultado['resultEvento']['error'][]  = 'Error al salvar evento con número de fila: ' . $evento->numfila . 'No se encontró Aula'; //No hay solape por que no hay recurso en BD.
+				return $resultado;
+			}
+			
 			$e['recurso_id'] = $recurso->id;
 
 			//Solape DB??
-			if ( $this->solapaBD($e) ) return 'Solapa en DB!!';
+			if ( $this->solapaBD($e) ) {
+				$resultado['resultEvento']['error'][]  = 'Error al salvar evento con número de fila: ' . $evento->numfila . ' --> Solapa en DB!!';
+				return $resultado;
+			}
+			
+
 			//Update Titulación -> asignatura -> grupo -> profesor, salaFila definida en BaseController
 			$resultado['resultAsignatura'] = $this->salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor);
 
@@ -193,16 +204,14 @@ class PodController extends BaseController {
 			
 			//método definido en BaseController.php
 			if ( $this->salvaEvento($e) != true) {
-				$resultado['resultEvento']  .= '<br />Error al salvar, fila evento en csv: ' . $evento->numfila;
+				$resultado['resultEvento']['error'][]  = 'Error al salvar evento con número de fila: ' . $evento->numfila;
 				return $resultado;
 			}
 			
-			$resultado['resultEvento'] .= '<br />Evento ' . $evento->numfila . ' salvado con éxito';			 
+			$resultado['resultEvento']['exito'][] = 'Evento con número de fila = ' . $evento->numfila . ', salvado con éxito';			 
 		}
 
 		return $resultado;
-
-		
 	}
 
 	/**

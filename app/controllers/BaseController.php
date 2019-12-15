@@ -31,7 +31,7 @@ class BaseController extends Controller {
     public function salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor){
 
         $resultado = array('error' => false,
-                            'exito' => array(),
+                           'exito' => array(),
                     );
 
         $titulacion = Titulacion::where('codigo','=',$codigoTitulacion)->first();
@@ -66,12 +66,14 @@ class BaseController extends Controller {
         * 
         * @param $aAsignatura :array
         * 
-        * @return $resultado :array   
+        * @return $resultado :booleano
         *
         *
     */
     //Used by TitulacionController & PodController    
     public function salvaEvento(Array $aDataEvento){
+
+ 
 
     	$f_desde = $aDataEvento['f_desde'];
     	$f_hasta = $aDataEvento['f_hasta'];
