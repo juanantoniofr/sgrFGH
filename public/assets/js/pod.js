@@ -13,7 +13,7 @@ $(function(e){
             data: {eventos:$(this).data('eventos')},
             success: function($respuesta){
                 console.log($respuesta);
-                console.log($respuesta.resultAsignatura.error);
+                //console.log($respuesta.resultAsignatura.error);
                 if ( $respuesta.errorMsgInputValidate != '' ) alert($respuesta.errorMsgInputValidate);
                 
                 console.log($respuesta.resultEventoExito);
@@ -23,31 +23,13 @@ $(function(e){
                         $(' #exitoSalvaEvento-' + item).fadeIn(1000);
                     }
                 );
-
-                if ($respuesta.resultAsignatura.error != false ){
-                   //errores alert
-                    /*
-                    var $htmlRespuesta = '';
-                    $respuesta.resultAsignatura.exito.forEach( function(item, index){
-                            $htmlRespuesta += item + "<br>";
-                            //console.log(item);
-                        }
-                    );
-                    if ($htmlRespuesta != '') alert($htmlRespuesta);
-                    */
-                     
-                }
-                     
-                
-
+                hideGifEspera();
             },
             error: function(xhr, ajaxOptions, thrownError){
                 hideGifEspera();
                 alert(xhr.responseText + ' (codeError: ' + xhr.status +')');
             }
         });
-        hideGifEspera();
-
     });
     
     function showGifEspera(){

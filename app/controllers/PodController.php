@@ -147,8 +147,6 @@ class PodController extends BaseController {
 
 		$aEventos = json_decode($eventos);
 
-			
-
 		foreach ($aEventos as $evento) {
 
 			$e['aula'] = $evento->aula;
@@ -186,7 +184,7 @@ class PodController extends BaseController {
 			$e['recurso_id'] = $recurso->id;
 
 			//fechas y horas bien definidas??
-			if ( Date::esFechaValida($e['f_desde'],'es_ES','/') != true ) {
+			if ( !Date::esFechaValida($e['f_desde'],'es_ES','/') ) {
 				$resultado['errorMsgInputValidate']  = 'Error al salvar evento con número de fila: <b>' . $evento->numfila . ' --> Valor de f_desde incorrecto</b> ';
 				return $resultado;
 			}
@@ -211,7 +209,7 @@ class PodController extends BaseController {
 				return $resultado;
 			}
 
-			$resultado['resultAsignatura'][] = $resultadoSalvaAsignatura;
+			//$resultado['resultAsignatura'][] = $resultadoSalvaAsignatura['exito'];
 			//identificador único para todos los eventos.
 			do {
 				$evento_id = md5(microtime());

@@ -252,7 +252,6 @@ class CalendarControllerFGH extends BaseController {
 	}
 
 	//Ajax functions
-
 	public function enableInputRepeticion(){
 		
 		$input = Input::all();	
@@ -389,7 +388,6 @@ class CalendarControllerFGH extends BaseController {
 		
 		
 		return $result;
-		
 	}
 
 	//Save
@@ -573,7 +571,6 @@ class CalendarControllerFGH extends BaseController {
 		return $result;
 	}
 
-
 	//Edit
 	public function editEventbyajax(){
 
@@ -693,8 +690,6 @@ class CalendarControllerFGH extends BaseController {
 		return $supera;
 	}
 
-
-
 	private function uniqueId(){
 		
 		$idSerie = $this->getIdUnique();
@@ -708,7 +703,6 @@ class CalendarControllerFGH extends BaseController {
 		
 		return $evento_id;
 	}
-
 
 	private function updateDias($oldIdSerie = '',$newIdSerie = ''){
 		
@@ -776,7 +770,6 @@ class CalendarControllerFGH extends BaseController {
 				Evento::where('evento_id','=',$newIdSerie)->update(array('fechaFin' => $fechaUltimoEvento));
 			}
 		}
-
 	}
 	private function setEstado($idRecurso,$currentfecha,$hi,$hf){
 		$estado = 'denegada';
@@ -824,7 +817,6 @@ class CalendarControllerFGH extends BaseController {
 		}
 
 		return $estado;
-
 	}
 	
 }//fin del controlador

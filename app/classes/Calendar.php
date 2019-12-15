@@ -3,7 +3,8 @@
 
 class Calendar {
   
-    private $aHour = array('8:30','9:30','10:30','11:30','12:30','13:30','14:30','15:30','16:30','17:30','18:30','19:30','20:30','21:30');
+    //private $aHour = array('8:30','9:30','10:30','11:30','12:30','13:30','14:30','15:30','16:30','17:30','18:30','19:30','20:30','21:30');
+    private $aHour = array('8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30','21:00','21:30');
     private $aDaysWeek = array('lunes','martes','miércoles','jueves','viernes','sabado','domingo');
 	
 	private $aAbrNameDaysWeek = array('1'=>'Lun','2'=>'Mar','3'=>'Mie','4'=>'Jue','5'=>'Vie','6'=>'Sab','7'=>'Dom');
@@ -340,6 +341,7 @@ class Calendar {
 
 		return $events;
 	}
+	
 	private function setinfo($data,$event){
 		
 		$showInfo = 'No se ha seleccionado información a mostrar';
@@ -368,11 +370,12 @@ class Calendar {
 			$hour = // $itemsHours[0];
 			
       		$html .= '<tr>';
-      		$html .= '<td style="width:10px;text-align:center;font-weight: bold;" class="week">'.$self->aHour[$j].'-'.$self->aHour[$j+1];
+      		$html .= '<td style="font-weight: bold;" class="week text-right">
+      					<div style="padding-bottom: 58px;padding-right: 4px;position: relative;top: -10px;">'.$self->aHour[$j].'</div>';
       		$html .= '</td>';
       		$currentTime = $timefirstMonday;
       		for($i=0;$i<7;$i++){
-      			$html .= '<td class="celda">';
+      			$html .= '<td class="celda celda-week" >';
       			//$currentTime = mktime(0,0,0,$month,($firstMonday + $i),$year);
       			
       			//$currentDay = $firstMonday + $i;
@@ -490,13 +493,14 @@ class Calendar {
 				$numOfMonday = date('j',$timefirstMonday); //Número del mes 1-31
 				//$month = date('n',$timefirstMonday);
 				//$year = date('Y',$timefirstMonday);
-				$html .='<tr><th></th>';
+				$html .='<tr><th style="width:4%"></th>';
 				for($i=0;$i<7;$i++){
 					//$time = Date::timeStamp(($numOfMonday + $i),$month,$year);
 					$time = strtotime('+'.$i.' day',$timefirstMonday);	
 					//strftime('%a, %d/%b',$time)
 					$text = $self->aAbrNameDaysWeek[date('N',$time)] . ', '.strftime('%d/%b',$time);
-					$html .= '<th style = "white-space:nowrap;font-size-adjust:none">'.$text.'</th>';
+					if ($i == '6'|| $i == '5') $html .= '<th style = "width:7%;white-space:nowrap;font-size-adjust:none;text-align:center">'.$text.'</th>';
+					else $html .= '<th style = "white-space:nowrap;font-size-adjust:none;text-align:center">'.$text.'</th>';
 				}
 				$html .='</tr>';
 			    break;
@@ -921,7 +925,6 @@ class Calendar {
 		return $otherMonth;
 	}
 
-	
 	private function isDayAviable($day,$mon,$year,$id_recurso = '', $view = 'month'){
 		$isAviable = false;
 

@@ -62,12 +62,7 @@ td {padding:0px;}
        height: 70px;   
        white-space:nowrap;
 	     font-size-adjust:none;
-       
        font-size: 12px;
-
-      /*overflow:hidden;
-       text-overflow: ellipsis;
-       white-space: nowrap;*/
 }
 
 .divEvents{
@@ -75,10 +70,16 @@ td {padding:0px;}
     width: 100%;
     overflow:hidden;
     padding-bottom: 5px;
-    /*text-overflow: ellipsis;
-    white-space: nowrap;*/
-    
+}
 
+td.celda-week .divEvents{
+    height: 100%;
+    padding-bottom: 0px;
+  }
+td.celda-week .divEvent {
+  height: 100%;
+  width: 95%;
+  background-color:#6f96f052;
 }
 
 .week {
