@@ -14,23 +14,28 @@ $(function(e){
             success: function($respuesta){
                 console.log($respuesta);
                 console.log($respuesta.resultAsignatura.error);
-                if ($respuesta.resultAsignatura.error == false){
+                
+                if ($respuesta.resultAsignatura.error == false ){
+                    //errores alert
+                    /*
                     var $htmlRespuesta = '';
                     $respuesta.resultAsignatura.exito.forEach( function(item, index){
                             $htmlRespuesta += item + "<br>";
-                            console.log(item);
+                            //console.log(item);
                         }
                     );
+                    if ($htmlRespuesta != '') alert($htmlRespuesta);
+                    */
                     console.log($respuesta.resultEvento);
-                    $htmlRespuesta.innerHTML += "<hr>";
+                    //Exito, fadeIn fila tabla
                     //$htmlRespuesta += ' ( ' + $respuesta.resultEvento + ' )<br>';
                     $respuesta.resultEvento.exito.forEach( function(item, index) {
-                            $htmlRespuesta += item + "<br>";
+                            $(' #exitoSalvaEvento-' + item).fadeIn(1000);
                         }
                     ); 
                 }
                      
-                $(' #respuestaSalvaEventos ').html($htmlRespuesta).fadeIn(1000);
+                
 
             },
             error: function(xhr, ajaxOptions, thrownError){

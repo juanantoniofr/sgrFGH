@@ -24,7 +24,7 @@
       
       <div class="panel-body">
 
-        <div class="row text-center"> <div id = 'respuestaSalvaEventos' class="col-lg-10 bg-success"></div></div>
+        <div class="row text-center"> </div>
 
         <table class="table table-striped">
           
@@ -42,7 +42,10 @@
         
           @foreach($aEventosValidos as $evento)
             <tr>
-              <td>{{ $evento['numfila'] }}</td>  
+              <td>
+                {{ $evento['numfila'] }}
+                <p id = "exitoSalvaEvento-{{ $evento['numfila'] }}" class="text-success" style="display: none;"> <i class="fa fa-check fa-fw"></i> Evento salvado con éxito </p>
+              </td>  
               <td> {{ $evento['asignatura'] }} </td>
               <td> {{ $evento['profesor'] }} </td>
               <td> {{ $evento['f_desde'] }} </td>

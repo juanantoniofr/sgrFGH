@@ -208,7 +208,7 @@ class PodController extends BaseController {
 				return $resultado;
 			}
 			
-			$resultado['resultEvento']['exito'][] = 'Evento con número de fila = ' . $evento->numfila . ', salvado con éxito';			 
+			$resultado['resultEvento']['exito'][] = $evento->numfila;			 
 		}
 
 		return $resultado;
