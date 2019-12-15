@@ -131,6 +131,63 @@
     </div>
   @endif    
   
+{{-- Tiene fechas válidas en el archivo csv --}}  
+  @if (!empty($aSinFechaValida))
+    
+    <div class="panel panel-danger" >
+        
+      <div class="panel-heading">
+    
+        <p><i class="fa fa-ban fa-fw"></i> <b>Error: Definición de fechas no válidas. Se esperaba formato de fecha = dd/mm/YYYY</b></p>  
+      </div>
+        
+      <div class="panel-body">  
+    
+        <table class="table table-striped">
+          
+          <tr>
+            <th>Fila</th>
+            <th>Asignatura</th>
+            <th>Profesor</th>
+            <th>F. Desde</th>
+            <th>F. Hasta</th>
+            <th>Día</th>
+            <th>H. Inicio</th>
+            <th>H. Fin</th>
+            <th>Aula</th>
+          </tr>
+
+          @foreach($aSinFechaValida as $evento)
+            <tr>
+              <td>{{ $evento['numfila'] }}</td>  
+              <td> {{ $evento['asignatura'] }} </td>
+              <td> {{ $evento['profesor'] }} </td>
+              <td> {{ $evento['f_desde'] }} </td>
+              <td> {{ $evento['f_hasta'] }} </td>
+              <td> {{ $evento['diaSemana'] }} </td>
+              <td> {{ $evento['h_inicio'] }} </td>
+              <td> {{ $evento['h_fin'] }} </td>
+              <td> {{ $evento['aula'] }} </td>
+            </tr>
+          @endforeach
+       
+        </table>
+      </div><!-- .//panel-body -->
+    </div><!-- .//panel-danger -->
+  @else
+    <div class="panel panel-success">
+      
+      <div class="panel-heading">
+
+        <p><i class="fa fa-check fa-fw"></i> Aviso </p> 
+      </div>
+      
+      <div class="panel-body">
+        <p class="text-center">Resultado de la comprobación de fechas y horas de los eventos definidos en el archivo csv: <b class="text-success"><i class="fa fa-check fa-fw"></i> Correcta</b></p>
+      </div>
+    </div>
+  @endif
+
   {{-- Solapamientos en el archivo csv --}}  
   @if (!empty($aSolapesCsv))
     

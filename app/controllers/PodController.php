@@ -38,6 +38,7 @@ class PodController extends BaseController {
 
 		//return
 		$aSinAula = array();
+		$aSinFechaValida = array();
 		$aSolapesCsv = array();
 		$aSolapesBD = array();
 		$aEventosValidos = array();
@@ -100,12 +101,15 @@ class PodController extends BaseController {
 		foreach ($eventos  as $evento) {
 			$exclude = false;
 			if (!$this->existeAula($evento)) {$aSinAula[] = $evento; $exclude = true;}
-		 	if ($this->solapaCsv($eventos,$evento)) {$aSolapesCsv[] = $evento; $exclude = true;}
-		 	if ($this->solapaBD($evento)) {$aSolapesBD[] = $evento; $exclude = true;}   
+		 	if (!$this->tieneFechasValidas($evento)) {$aSinFechaValida[] = $evento; $exclude = true; }
+		 	else{
+		 		if ($this->solapaCsv($eventos,$evento)) {$aSolapesCsv[] = $evento; $exclude = true;}
+		 		if ($this->solapaBD($evento)) {$aSolapesBD[] = $evento; $exclude = true;}
+		 	}   
 			if(!$exclude) $aEventosValidos[] = $evento;
 		}
 		
-		return View::make('pod.index')->nest('resultadoComprobacionCsv','pod.resultadoComprobacionCsv',compact('aSinAula','aSolapesCsv','aSolapesBD','aEventosValidos'))->nest('dropdown',$dropdown);
+		return View::make('pod.index')->nest('resultadoComprobacionCsv','pod.resultadoComprobacionCsv',compact('aSinAula','aSinFechaValida','aSolapesCsv','aSolapesBD','aEventosValidos'))->nest('dropdown',$dropdown);
 	}
 
 
@@ -186,7 +190,7 @@ class PodController extends BaseController {
 				$resultado['errorMsgInputValidate']  = 'Error al salvar evento con número de fila: <b>' . $evento->numfila . ' --> Valor de f_desde incorrecto</b> ';
 				return $resultado;
 			}
-			
+
 			if ( !Date::esFechaValida($e['f_hasta'],'es_ES','/') ) {
 				$resultado['errorMsgInputValidate']  = 'Error al salvar evento con número de fila: <b>' . $evento->numfila . ' --> Valor de f_hasta incorrecto</b> ';
 				return $resultado;
@@ -234,6 +238,27 @@ class PodController extends BaseController {
 		return $resultado;
 	}
 
+	/**
+        * 
+        * True si exite Aula en el evento leido del csv, false en caso contrario
+        * 
+        * @param $evento :array
+        *
+        * @return $resultado :booleano   
+        *
+        *
+    */
+	private function tieneFechasValidas($evento){
+
+		if  ( 	Date::esFechaValida($evento['f_desde'],'es_ES','/') 
+				&& 
+				Date::esFechaValida($evento['f_hasta'],'es_ES','/') 
+			) 
+			{ return true; }
+
+		return false;
+
+	}
 
 	/**
         * 
