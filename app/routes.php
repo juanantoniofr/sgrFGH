@@ -39,13 +39,12 @@ Route::get('newUser',array('as'=>'newUser',function(){
 
 Route::get('hola',array('as'=>'hola',function(){
 	
-	$asignatura = Asignatura::where('codigo','=','51210019')->first();
-	var_dump($asignatura->asignatura);
-	$grupo = $asignatura->gruposAsignatura()->where('grupo','=','1')->first();
-	var_dump($grupo->grupo);
-	//$grupo = $asignatura->gruposAsignatura->where('grupo','=',$aDataEvento['grupo'])->first()
-	//$grupo->eventos()->attach($evento->id);
-
+	$e['f_desde'] = '';
+			if ( Date::esFechaValida($e['f_desde'],'es_ES','/') == false) {
+				$resultado['errorMsgInputValidate']  = 'Error al salvar evento con número de fila: <b> --> Valor de f_desde incorrecto</b> ';
+				return $resultado;
+			}
+	
 }));
 
 //*********

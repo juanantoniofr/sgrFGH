@@ -14,9 +14,18 @@ $(function(e){
             success: function($respuesta){
                 console.log($respuesta);
                 console.log($respuesta.resultAsignatura.error);
+                if ( $respuesta.errorMsgInputValidate != '' ) alert($respuesta.errorMsgInputValidate);
                 
-                if ($respuesta.resultAsignatura.error == false ){
-                    //errores alert
+                console.log($respuesta.resultEventoExito);
+                //Exito, fadeIn fila tabla
+                //$htmlRespuesta += ' ( ' + $respuesta.resultEvento + ' )<br>';
+                $respuesta.resultEventoExito.forEach( function(item, index) {
+                        $(' #exitoSalvaEvento-' + item).fadeIn(1000);
+                    }
+                );
+
+                if ($respuesta.resultAsignatura.error != false ){
+                   //errores alert
                     /*
                     var $htmlRespuesta = '';
                     $respuesta.resultAsignatura.exito.forEach( function(item, index){
@@ -26,13 +35,7 @@ $(function(e){
                     );
                     if ($htmlRespuesta != '') alert($htmlRespuesta);
                     */
-                    console.log($respuesta.resultEvento);
-                    //Exito, fadeIn fila tabla
-                    //$htmlRespuesta += ' ( ' + $respuesta.resultEvento + ' )<br>';
-                    $respuesta.resultEvento.exito.forEach( function(item, index) {
-                            $(' #exitoSalvaEvento-' + item).fadeIn(1000);
-                        }
-                    ); 
+                     
                 }
                      
                 

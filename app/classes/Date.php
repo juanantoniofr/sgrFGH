@@ -465,5 +465,44 @@ class Date{
 	public static function currentYear(){
 		return date('Y');
 	}
+
+	/**
+        * 
+        * True si $fecha correcta
+        * 
+        * @param $fecha :string (dd/mm/YYYY)
+        * @param $locale :string (es_ES | en_EN)
+        * @param $delimiter :string ( - | / | : ....)
+        *
+        * @return  :booleano   
+        *
+        *
+    */
+	public static function esFechaValida($fecha,$locale,$delimiter='-'){
+
+		$dia = 0;
+		$mes = 0;
+		$year = 0;
+		
+		$f = explode($delimiter,$fecha);
+		
+		if ( $locale == 'es_ES'){
+			if (isset($f[0])) $dia = $f[0];
+			if (isset($f[1])) $mes = $f[1];
+			if (isset($f[2])) $year = $f[2];
+			//$fecha = 'dd/mm/YYYY';
+			
+		}
+		if ( $locale == 'en_EN'){
+			if (isset($f[0])) $dia = $f[2];
+			if (isset($f[1])) $mes = $f[1];
+			if (isset($f[2])) $year = $f[0];
+			//$fecha = 'YYYY/mm/dd';
+		}
+			
+			
+
+		return checkdate( (int) $mes, (int) $dia, (int) $year);
+	}
 }
 ?>

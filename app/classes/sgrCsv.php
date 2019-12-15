@@ -46,7 +46,7 @@ class sgrCsv {
 
 	/**
         * 
-        * Comprueba que el fichero CSV contiene al menos las columnas a leer
+        * Comprueba que el fichero CSV no es vacío, y al mneos, contiene las columnas a leer
         * 
         * @param $file :file
         *

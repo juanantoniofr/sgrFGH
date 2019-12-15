@@ -46,13 +46,9 @@ class PodController extends BaseController {
 		//@inputcontrol de errores formulario
 		$file = Input::file('csvfile');
 
-		if (empty($file)){
-			Session::flash('msg-error','No se ha seleccionado ningún archivo csv'); 
-			return View::make('pod.index')->nest('dropdown',$dropdown);	
-		}
-
 		$csv = new sgrCsv(Config::get('csvpod.columnas'),Config::get('csvpod.evento'),$file);
 
+		//Comprobamos que el archivo CSV no es vacío, y tiene las columnas a leer
 		$isValid = $csv->isValidCsv();
 		if ($isValid['error'] == true){
 			Session::flash('msg-error','No se ha seleccionado ningún archivo csv'); 
@@ -62,6 +58,7 @@ class PodController extends BaseController {
 		$f = $csv->open();
 		$csv->leeFila();
 
+		//Comprobamos que la primera fila tiene todas las cabceras a leer.
 		if ($csv->compruebaCabeceras() == false){
 			Session::flash('msg-error','Error al leer cabeceras archivos csv xxx');
 			$f = $csv->close();
@@ -132,15 +129,21 @@ class PodController extends BaseController {
 		
 		$eventos = Input::get('eventos', '');
 		
-		if (empty($eventos)) return 'No hay eventos que salvar';
+		$resultadoSalvaAsignatura = array();
+
+		$resultado = array(	'errorMsgInputValidate' => '',
+							'resultAsignatura' 	=> array(),
+							'resultEventoExito'	=> array(),
+						);
 		
+		if (empty($eventos)) {
+			$resultado['errorMsgInputValidate'] = 'No hay eventos que salvar';
+			return $resultado;
+		}
+
 		$aEventos = json_decode($eventos);
 
-		$resultado = array(	'resultAsignatura' 	=> array(),
-							'resultEvento'		=> array( 	'error' => array(), 
-															'exito' => array()
-														),
-						);	
+			
 
 		foreach ($aEventos as $evento) {
 
@@ -172,22 +175,39 @@ class PodController extends BaseController {
 			
 			$recurso = Recurso::where('nombre','=',$e['aula'])->first();
 			if ( $recurso  == NULL ) {
-				$resultado['resultEvento']['error'][]  = 'Error al salvar evento con número de fila: ' . $evento->numfila . 'No se encontró Aula'; //No hay solape por que no hay recurso en BD.
+				$resultado['errorMsgInputValidate']  = 'No se encontró Aula ' . $evento->aula ;
 				return $resultado;
 			}
 			
 			$e['recurso_id'] = $recurso->id;
 
+			//fechas y horas bien definidas??
+			if ( Date::esFechaValida($e['f_desde'],'es_ES','/') != true ) {
+				$resultado['errorMsgInputValidate']  = 'Error al salvar evento con número de fila: <b>' . $evento->numfila . ' --> Valor de f_desde incorrecto</b> ';
+				return $resultado;
+			}
+			
+			if ( !Date::esFechaValida($e['f_hasta'],'es_ES','/') ) {
+				$resultado['errorMsgInputValidate']  = 'Error al salvar evento con número de fila: <b>' . $evento->numfila . ' --> Valor de f_hasta incorrecto</b> ';
+				return $resultado;
+			} 
+			
 			//Solape DB??
 			if ( $this->solapaBD($e) ) {
-				$resultado['resultEvento']['error'][]  = 'Error al salvar evento con número de fila: ' . $evento->numfila . ' --> Solapa en DB!!';
+				$resultado['errorMsgInputValidate']  = 'Error al salvar evento con número de fila: ' . $evento->numfila . ' --> Solapa en DB!!';
 				return $resultado;
 			}
 			
 
 			//Update Titulación -> asignatura -> grupo -> profesor, salaFila definida en BaseController
-			$resultado['resultAsignatura'] = $this->salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor);
+			$resultadoSalvaAsignatura = $this->salvaFila($codigoTitulacion,$aAsignatura,$aGrupo,$aProfesor);
 
+			if ($resultadoSalvaAsignatura['error'] == true){
+				$resultado['errorMsgInputValidate']  = 'Error al salvar Titulación (asignatura // grupo // profesor ) en el evento con número de fila: ' . $evento->numfila ;
+				return $resultado;
+			}
+
+			$resultado['resultAsignatura'][] = $resultadoSalvaAsignatura;
 			//identificador único para todos los eventos.
 			do {
 				$evento_id = md5(microtime());
@@ -204,15 +224,16 @@ class PodController extends BaseController {
 			
 			//método definido en BaseController.php
 			if ( $this->salvaEvento($e) != true) {
-				$resultado['resultEvento']['error'][]  = 'Error al salvar evento con número de fila: ' . $evento->numfila;
+				$resultado['errorMsgInputValidate']   = 'Error al salvar evento con número de fila: ' . $evento->numfila;
 				return $resultado;
 			}
 			
-			$resultado['resultEvento']['exito'][] = $evento->numfila;			 
+			$resultado['resultEventoExito'][] = $evento->numfila;			 
 		}
 
 		return $resultado;
 	}
+
 
 	/**
         * 

@@ -43,8 +43,8 @@
           @foreach($aEventosValidos as $evento)
             <tr>
               <td>
-                {{ $evento['numfila'] }}
                 <p id = "exitoSalvaEvento-{{ $evento['numfila'] }}" class="text-success" style="display: none;"> <i class="fa fa-check fa-fw"></i> Evento salvado con éxito </p>
+                {{ $evento['numfila'] }}
               </td>  
               <td> {{ $evento['asignatura'] }} </td>
               <td> {{ $evento['profesor'] }} </td>
@@ -126,7 +126,7 @@
       </div>
       
       <div class="panel-body">
-        <p class="text-center">Comprobación de espacios: válida.</p>
+        <p class="text-center">Resultado de la comprobación de espacios definidos en CSV: <b class="text-success"><i class="fa fa-check fa-fw"></i> Correcta</b>.</p>
       </div>
     </div>
   @endif    
@@ -183,7 +183,7 @@
       </div>
       
       <div class="panel-body">
-        <p class="text-center">Comprobación de solapamientos en archivo csv: Valida.</p>
+        <p class="text-center">Resultado de la comprobación de solapamientos de los eventos definidos en el archivo csv: <b class="text-success"><i class="fa fa-check fa-fw"></i> Correcto</b></p>
       </div>
     </div>
   @endif
@@ -240,7 +240,7 @@
       </div>
       
       <div class="panel-body">
-        <p class="text-center">Comprobación de solapamientos en Base de Datos: Valida.</p>
+        <p class="text-center">Resultado de la comprobación de solapamientos entre eventos definidos en el CSV y eventos en Base de Datos: <b class="text-success"><i class="fa fa-check fa-fw"></i> Correcto.</b></p>
       </div>
     </div>
   @endif
