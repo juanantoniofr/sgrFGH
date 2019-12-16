@@ -92,7 +92,7 @@ Route::get('admin/home.html',array('as' => 'adminHome.html','uses' => 'UsersCont
 //*********
 // Calendarios (Todas las capacidades)
 //*********
-Route::get('calendariosFCOM.html',array('as' => 'calendariosFCOM.html','uses' => 'CalendarController@showCalendarViewMonth','before' => array('auth','inicioCurso','capacidad:1-2-3-4-5-6,msg')));
+//Route::get('calendariosFCOM.html',array('as' => 'calendariosFCOM.html','uses' => 'CalendarController@showCalendarViewMonth','before' => array('auth','inicioCurso','capacidad:1-2-3-4-5-6,msg')));
 
 Route::get('calendarios.html',array('as' => 'calendarios.html','uses' => 'CalendarControllerFGH@showCalendarViewMonth','before' => array('auth','inicioCurso','capacidad:1-2-3-4-5-6,msg')));
 Route::get('ajaxGetRecursoByGroup',array('as' => 'getRecursoByAjax','uses' => 'CalendarController@getRecursosByAjax','before' => array('auth','ajax_check')));

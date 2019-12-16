@@ -53,6 +53,11 @@
         </div>
         
         <div class = "btn-group"  >
+          
+          <a type="button" data-view="{{$viewActive}}" data-day="{{$day}}" data-month="{{$numMonth}}" data-year="{{$year}}"  id="botonFiltrarEventos"  class="btn btn-info {{-- disabled --}}">
+            <i class="fa fa-print fa-fw" ></i> Filtar
+          </a>
+          
           <a type="button" data-view="{{$viewActive}}" data-day="{{$day}}" data-month="{{$numMonth}}" data-year="{{$year}}"  id="btnprint"  class="btn btn-primary disabled">
             <i class="fa fa-print fa-fw" ></i> Imprimir
           </a>
@@ -388,12 +393,14 @@
     </div><!-- ./modal-dialog -->
 </div>
 
-{{$modaldescripcion or ''}}
-{{$modalMsg         or ''}}
+{{ $modaldescripcion or '' }}
+{{ $modalMsg         or '' }}
+{{ $modalFormFiltraCalendario or '' }}
 
 @stop
 
 @section('js')
-  {{HTML::script('assets/js/calendar.js')}}
-  {{HTML::script('assets/js/imprimir.js')}}
+  {{ HTML::script('assets/js/calendar.js') }}
+  {{ HTML::script('assets/js/imprimir.js') }}
+  {{ HTML::script('assets/js/filtraEventos.js') }}
 @stop

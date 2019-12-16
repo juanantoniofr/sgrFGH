@@ -77,7 +77,13 @@ $(function(e){
 		$('#infoButton').on('click',function(e){
 				e.preventDefault();
 				$('#modalDescripcion').modal('show');				
-			});	
+			});
+
+		//1.7 click filtrar eventos
+		$('#botonFiltrarEventos').on('click',function(e){
+			e.preventDefault();
+			$('#modalFormFiltarEventos').modal('show');
+		});	
 		
 		//2. -> Configure datapickers
 		//***************************
@@ -165,9 +171,7 @@ $(function(e){
 			$('#textMsg').html($messages.msg);
 			$('#modalMsg').modal('show');
 		}
-		
 	}
-
 
 	function whenClickButtonNav(){
 		
@@ -498,7 +502,6 @@ $(function(e){
 			}	
 		});
 	}
-
 	
 	function setInitValueForModalAdd( $horaInicio,$fechaInicio,$enableInputRepeticion){
 			
@@ -571,7 +574,6 @@ $(function(e){
 		//return $enableInputRepeticion;
 	}
 
-	
 	function resetMsgErrors(){
 		
 		var $labels = new Array('titulo','fInicio','hFin','fFin','dias','fEvento');
@@ -586,7 +588,6 @@ $(function(e){
 		********************************************************************************
 		********************************************************************************
 	*/
-
 	
 	function printCalendar(){
 		//showGifEspera();
@@ -651,7 +652,6 @@ $(function(e){
 		}
 	}
 	
-
 	/*Action: 1. save new event
 		********************************************************************************
 		********************************************************************************
@@ -698,8 +698,6 @@ $(function(e){
 	}
 	
 
-	
-
 	/*Action: 2. delete event
 		********************************************************************************
 		********************************************************************************
@@ -737,7 +735,6 @@ $(function(e){
       		});
 	}
 	
-
 	
 	/*Action: 3. Edit event
 		********************************************************************************
@@ -749,25 +746,6 @@ $(function(e){
 		
 		
 		$('#message').fadeOut("slow");
-
-		//si el usuario ha cambiado algún dato -> se guarda en el servidor.
-		//en caso contrario -> cerramos la ventana.
-		/*$.ajax({
-    	   	type: "POST",
-			url: "getajaxeventbyId",
-			//data: $('form#addEvent').serialize(),
-			data: {'id':$idEvento},
-        	success: function(respuesta){
-        		$respuesta = respuesta[0];
-        		//console.log($respuesta);
-        	},
-        	error: function(xhr, ajaxOptions, thrownError){
-					hideGifEspera();
-					alert(xhr.responseText + ' (codeError: ' + xhr.status +')');
-				}
-        	});
-		*/
-		//if (hasnewdata($respuesta)){
 		console.log('datos enviados');
 		console.log('grupo_id=' + $('select#selectGroupRecurse option:selected').val() + '&' +'option='+$option+'&'+'idEvento='+$idEvento+'&'+'idSerie='+$idSerie+'&'+$('form#addEvent').serialize());
 			$.ajax({
@@ -801,9 +779,6 @@ $(function(e){
 						alert(xhr.responseText + ' (codeError: ' + xhr.status +')');
 				}
 	      	});
-		//}
-		//else 
-			//$("#myModal").modal('hide');
 	}
 
 	/*
@@ -1189,8 +1164,7 @@ $(function(e){
 						$(this).css({'background-color':$oldColor,'border':'1px solid transparent','position':'inherit','z-index':'0'});
 				});
 			}
-			);		
-			
+		);		
 	}
 
 	function newLinkSetOnHover($idSerie){
