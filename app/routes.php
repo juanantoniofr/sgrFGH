@@ -37,15 +37,7 @@ Route::get('newUser',array('as'=>'newUser',function(){
         //return Redirect::to($url);
 }));
 
-Route::get('hola',array('as'=>'hola',function(){
-	
-	$e['f_desde'] = '';
-			if ( Date::esFechaValida($e['f_desde'],'es_ES','/') == false) {
-				$resultado['errorMsgInputValidate']  = 'Error al salvar evento con número de fila: <b> --> Valor de f_desde incorrecto</b> ';
-				return $resultado;
-			}
-	
-}));
+Route::get('hola',array('as'=>'hola','uses' => 'TitulacionController@getAsignaturas'));
 
 //*********
 // Busquedas
@@ -74,6 +66,8 @@ Route::get('admin/titulaciones.html',array('as' => 'titulaciones.html','uses' =>
 Route::post('admin/salvaNuevaTitulacion',array('as' => 'salvaNuevaTitulacion','uses' => 'TitulacionController@nuevaTitulacion','before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg')) );//Nueva Titulacion 
 Route::get('admin/getTitulacion',array('as' => 'getTitulacion','uses' => 'TitulacionController@getTitulacion','before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg')) );//Nueva Titulacion 
 Route::get('admin/elimina-titulacion.html',array('uses'=>'TitulacionController@elimina','before' => array('auth','capacidad:2-3-4-5-6,msg')));
+//ajax filtraEventos.js
+Route::get('getAsignaturas',array('uses' => 'TitulacionController@getAsignaturas', 'before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg' ) ));
 
 
 //*********

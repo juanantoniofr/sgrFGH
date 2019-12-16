@@ -16,18 +16,27 @@
           </div>  
           
           <div class="row">
-              
-            <div class="col-lg-8 col-lg-offset-2">
+            
+            {{-- Select titulaciones --}}  
+            <div class="col-lg-10 col-lg-offset-1 form-group">
               <label class="control-label">Titulación:</label>
                 <select class="form-control"  name="titulacion" id="titulacion" multiple>
                   @foreach ($titulaciones as $titulacion)
-                    <option value=" {{ $titulacion['codigo'] }} ">{{ $titulacion['titulacion'] }}
+                    <option value="{{ $titulacion['codigo'] }}">{{ $titulacion['titulacion'] }}
                     </option>
                   @endforeach
                 </select>       
             </div>
           
-              <div class="col-md-6 col-md-offset-4">     
+            {{-- Select asignaturas --}}
+            <div class="col-lg-10 col-lg-offset-1 form-group">
+              <label class="control-label">Asignatura:</label>
+                <select class="form-control"  name="asignatura" id="asignatura" multiple>
+                  {{-- Options desde ajax function --}}
+                </select>       
+            </div>
+
+              <div class="col-lg-8 col-lg-offset-4">     
                   <div class="checkbox">
                     <label><input type="checkbox"  id = "checknombre" value = "nombre" name="info[]" /> Nombre y apellidos</label>
                   </div>

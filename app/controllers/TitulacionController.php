@@ -316,4 +316,37 @@ class TitulacionController extends BaseController {
         return Redirect::back();
     }
 
+    /**
+        * 
+        * Devuelve todas las asignaturas de cada una de las títulaciones con código en $aCodigos
+        * 
+        * @param Input::get('aCodigos') :array 
+        * 
+        * @return $respuesta :array    
+        *
+        *
+    */
+    //llamada ajax desde filtraEventos.js
+    public function getAsignaturas( Array $aCodigos = [] ){
+
+        //@return
+        $respuesta = array();
+        
+        //@param
+        $aCodigos = Input::get('aCodigos',array());
+
+        //Validación Input
+        if (empty($aCodigos)) return $respuesta;
+        
+        foreach($aCodigos as $codigo) {
+            $respuesta[] = [    'titulacion' => [ 'codigo' => $codigo ], 
+                                'asignatura' => Titulacion::where('codigo','=',$codigo)->first()->asignaturas->toArray() 
+                            ];
+        }
+        
+        //formato Key = codigo Asignautra, Value Asignatura
+        return $respuesta;
+    }
+
+
 } //fin del controlador

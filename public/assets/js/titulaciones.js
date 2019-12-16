@@ -84,9 +84,9 @@ $(function(e){
             error: function(xhr, ajaxOptions, thrownError){
                     hideGifEspera();
                     alert(xhr.responseText + ' (codeError: ' + xhr.status) +')';
-                }
-            });
-    }); // --end Ajax function
+            }
+        });// --end Ajax function
+    }); 
 
     //Ajax function para salvar nuevo recurso
     $('#botonEditaTitulacion').on('click',function(e){
