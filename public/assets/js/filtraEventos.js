@@ -22,7 +22,7 @@ $(function(e){
         };
 
     //Muestra ventana modal nueva titulación
-    $("div#modalFormFiltarEventos select#titulacion").on('click',function(e){
+    $("div#modalFormFiltarEventos select#titulacion-de-momento-no").on('click',function(e){
         
         e.preventDefault();
         
@@ -56,10 +56,6 @@ $(function(e){
         });// --end Ajax function
     }); // --end onclik function 
         
-
-    function addOption($idSelect){
-
-    }
     
     function showGifEspera(){
         $('#espera').css('display','inline').css('z-index','100');
