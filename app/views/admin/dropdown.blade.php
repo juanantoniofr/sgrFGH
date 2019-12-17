@@ -10,6 +10,8 @@
     <li><a href="{{route('pod.html')}}"><i class="fa fa-upload fa-fw"></i>P.O.D</a></li>
     
     <li><a  href="{{route('recursos')}}"><i class="fa fa-institution fa-fw"></i> Espacios y equipos<span class="fa arrow"></span></a></li>
+
+    <li><a href="{{route('informes-de-ocupacion.html')}}"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Informes de ocupación</a></li>  
     
     <li><a href="{{route('disponibilidad.html')}}"><i class="fa fa-search fa-fw"></i> Disponibilidad</a></li>  
 

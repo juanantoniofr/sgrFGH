@@ -6,8 +6,8 @@
 
 
 @section('content')
-    
-        <div class="row col-sm-9 col-md-9 col-lg-9">
+    <div id="page-wrapper"> 
+        
             <div id = "espera" style="display:none"></div>
 
             <div style="margin:20px auto">

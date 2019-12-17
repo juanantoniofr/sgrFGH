@@ -1,3 +1,4 @@
+
 <div>
 	Suponemos que queremos reservar un espacio los lunes y martes, de 12:30 A 14:30, todo el mes de enero, con aforo para 40 personas, PC, micrófono y videoconferencia IP</p>
 	<p>Tendrías dos bloques. (Me invento las respuesta). </p>

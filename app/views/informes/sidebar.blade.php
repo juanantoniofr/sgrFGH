@@ -1,7 +1,7 @@
 <div class="col-sm-6 col-md-3 sidebar ">
   {{Form::open(array('method' => 'POST',/*'route' => '',*/'role' => 'form','id'=>'fBuscaDisponible'))}}
     
-    <h3>Opciones de busqueda</h3>
+    <h3>Opciones de Filtrado</h3>
     <div class="titulo-acordeon" >
 
         <h4><a href="">Evento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h4>
