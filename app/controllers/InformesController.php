@@ -257,7 +257,7 @@ class InformesController extends BaseController {
 
 		$aMediosDisponibles = Config::get('mediosdisponibles.medios');
 		
-		return View::make('informes.index')->with('tipoActividades',$tipoActividades)->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tCaption',$tCaption)->with('tHead',$tHead)->with('tBody',$tBody)->with('nh',$nh)->with('viewActive',$viewActive)->with('uvusUser',$uvus)->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg')->nest('modalFormFiltraCalendario','modalFormFiltraCalendario',compact('titulaciones','asignaturas','profesores'))->nest('sidebar','informes.sidebar',compact('aMediosDisponibles'));
+		return View::make('informes.index')->with('tipoActividades',$tipoActividades)->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tCaption',$tCaption)->with('tHead',$tHead)->with('tBody',$tBody)->with('nh',$nh)->with('viewActive',$viewActive)->with('uvusUser',$uvus)->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg')->nest('modalFormFiltraCalendario','modalFormFiltraCalendario',compact('titulaciones','asignaturas','profesores'))->nest('sidebar','informes.sidebar',compact('aMediosDisponibles','titulaciones','asignaturas','profesores'));
 	
 		//Quitamos sidebar: ->nest('sidebar','sidebar',array('msg' => $msg,'grupos' => $groupWithAccess))
 	}

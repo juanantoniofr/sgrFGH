@@ -22,12 +22,12 @@ $(function(e){
         };
 
     //Muestra ventana modal nueva titulación
-    $("div#modalFormFiltarEventos select#titulacion-de-momento-no").on('click',function(e){
+    $("div#opciones-filtrado select#titulacion").on('click',function(e){
         
         e.preventDefault();
         
         //Set titulacion/es seleccionada/s
-        $data.setTitulacion( $('div#modalFormFiltarEventos select#titulacion').val() );
+        $data.setTitulacion( $('div#opciones-filtrado select#titulacion').val() );
 
         //Obtener asignaturas
         //showGifEspera();
@@ -39,13 +39,13 @@ $(function(e){
             success: function($respuesta){
                 
                 console.log($respuesta);
-                $('div#modalFormFiltarEventos select#asignatura ').empty();
-                $respuesta.forEach(function(item,index){
+                $('div#opciones-filtrado select#asignatura ').empty();
+                $respuesta.forEach(function(titulo,index){
                 
-                    console.log(item);
-                    item.asignatura.forEach(function(item,index){
+                    console.log(titulo);
+                    titulo.asignatura.forEach(function(item,index){
                         console.log(item);
-                        $('div#modalFormFiltarEventos select#asignatura ').append('<option value = "'+item.codigo+'"> ' + item.asignatura + '</option>'); 
+                        $('div#opciones-filtrado select#asignatura ').append('<option value = "'+ item.codigo+'"> ' + titulo.titulacion.codigo + '-' +item.asignatura + '</option>'); 
                     });
                 });
             },
@@ -56,7 +56,12 @@ $(function(e){
         });// --end Ajax function
     }); // --end onclik function 
         
-    
+    //1.7 click filtrar eventos
+    //$('#botonFiltrarEventos').on('click',function(e){
+    //    e.preventDefault();
+    //    $('#modalFormFiltarEventos').modal('show');
+    //}); 
+
     function showGifEspera(){
         $('#espera').css('display','inline').css('z-index','100');
     }

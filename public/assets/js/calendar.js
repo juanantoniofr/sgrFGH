@@ -78,12 +78,6 @@ $(function(e){
 				e.preventDefault();
 				$('#modalDescripcion').modal('show');				
 			});
-
-		//1.7 click filtrar eventos
-		$('#botonFiltrarEventos').on('click',function(e){
-			e.preventDefault();
-			$('#modalFormFiltarEventos').modal('show');
-		});	
 		
 		//2. -> Configure datapickers
 		//***************************

@@ -1,12 +1,55 @@
-<div class="col-sm-6 col-md-3 sidebar ">
-  {{Form::open(array('method' => 'POST',/*'route' => '',*/'role' => 'form','id'=>'fBuscaDisponible'))}}
+<div class="col-lg-10 sidebar" id="opciones-filtrado">
+{{Form::open(array('method' => 'POST',/*'route' => '',*/'role' => 'form','id'=>'fBuscaDisponible'))}}
     
     <h3>Opciones de Filtrado</h3>
-    <div class="titulo-acordeon" >
+    
+    <div class="titulo-acordeon">
+
+        <h4><a href="">Plan docente <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h4>
+    </div> 
+    <div class="fila-acordeon">
+        {{-- Select titulaciones --}}  
+        <div class="form-group ">
+                        
+            <label class="control-label">Seleccione una o varias titulaciones:</label>
+            <select class="form-control"  name="titulacion" id="titulacion" multiple size="{{count($titulaciones)}}">
+                @foreach ($titulaciones as $titulacion)
+                <option value="{{ $titulacion['codigo'] }}">{{ $titulacion['titulacion'] }}</option>
+                @endforeach
+            </select>       
+        </div>
+                  
+        {{-- Select asignaturas --}}
+        <div class="form-group">
+            
+            <label class="control-label">Por asignatura:</label>
+            <select class="form-control"  name="asignatura" id="asignatura" multiple size="{{count($asignaturas)}}">
+                {{-- Options desde ajax function en filtraEventos.js --}}
+                @foreach ($asignaturas as $asignatura)
+                    <option value="{{ $asignatura['codigo'] }}">{{ $asignatura['asignatura'] }}</option>
+                @endforeach
+            </select>       
+        </div>
+
+        {{-- Select profesores --}}
+        <div class="form-group">
+        
+            <label class="control-label">Por profesor:</label>
+            <select class="form-control"  name="profesor" id="profesor" multiple>
+                @foreach ($profesores as $profesor)
+                    <option value="{{ $profesor['dni'] }}">{{ $profesor['profesor'] }}</option>
+                @endforeach
+            </select>       
+        </div>                       
+    </div>
+
+    {{-- Filtrar por fechas/día y horario de los eventos--}}
+    <div class="titulo-acordeon"  >
 
         <h4><a href="">Evento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h4>
     </div>    
-    <div class="fila-acordeon" >
+    
+    <div class="fila-acordeon" style="display:none" >
         
         <div class="form-group col-lg-10">
             <p>{{Form::label('fi', 'Fecha inicio')}}: <input class="form-control" type="text" id="datepickerIni"></p>
@@ -90,7 +133,7 @@
         </div>
     </div><!--/.fila-acordeon -->
     
-
+    {{-- Filtrar por equipamiento --}}
     <div class="titulo-acordeon" >
         
         <h4><a href="#" >Equipamiento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h4>
@@ -126,7 +169,8 @@
             @endforeach
         </div>
     </div>
+
      
-    {{Form::close()}}
+{{Form::close()}}
 </div>
 
