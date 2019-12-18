@@ -3,6 +3,12 @@
     
     <h3>Opciones de Filtrado</h3>
     
+    <div class = "align-right">
+          <a type="button" data-view="$viewActive" data-day="{{-- $day --}}" data-month="{{-- $numMonth --}}" data-year="{{-- $year --}}"  id="botonFiltrarEventos"  class="btn btn-info {{-- disabled --}}">
+            <i class="fa fa-print fa-fw" ></i> Filtar
+          </a>
+    </div>
+
     <div class="titulo-acordeon">
 
         <h4><a href="">Plan docente <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h4>
@@ -20,21 +26,18 @@
         </div>
                   
         {{-- Select asignaturas --}}
-        <div class="form-group">
+        <div class="form-group" id="select-asignaturas" style="display: none">
             
-            <label class="control-label">Por asignatura:</label>
-            <select class="form-control"  name="asignatura" id="asignatura" multiple size="{{count($asignaturas)}}">
+            <label class="control-label">Seleccione una o varias asignaturas:</label>
+            <select class="form-control"  name="asignatura" id="asignatura" multiple>
                 {{-- Options desde ajax function en filtraEventos.js --}}
-                @foreach ($asignaturas as $asignatura)
-                    <option value="{{ $asignatura['codigo'] }}">{{ $asignatura['asignatura'] }}</option>
-                @endforeach
             </select>       
         </div>
 
         {{-- Select profesores --}}
-        <div class="form-group">
+        <div class="form-group" id="select-profesores">
         
-            <label class="control-label">Por profesor:</label>
+            <label class="control-label">Seleccione una o varias profesores:</label>
             <select class="form-control"  name="profesor" id="profesor" multiple>
                 @foreach ($profesores as $profesor)
                     <option value="{{ $profesor['dni'] }}">{{ $profesor['profesor'] }}</option>

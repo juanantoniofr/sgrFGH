@@ -3,6 +3,67 @@
 class InformesController extends BaseController {
 	
 
+	//Se carga vista incial con calendario vacio
+	public function showCalendarViewMonth(){
+		
+		$input = Input::all();
+		$day = Input::get('day',date('d'));
+		$numMonth = Input::get('numMonth',date('m'));
+		$year = Input::get('year',date('Y'));
+			
+		if(empty($input)){
+			$datefirstmonday = getdate(ACL::fristMonday());
+			$numMonth = $datefirstmonday['mon'];//Representación númerica del mes del 1 al 12
+			$year = $datefirstmonday['year']; //Representación numérica del año cuatro dígitos
+			$nameMonth = Date::getNameMonth($numMonth,$year); //representación textual del mes (enero,febrero.... etc)
+			$day = $datefirstmonday['mday']; //Representación númerica del dia del mes: 1 - 31	
+		} 
+		
+		$viewActive = 'month'; //vista por defecto
+		$tCaption = Calendar::getCaption($day,$numMonth,$year);
+		$tHead = Calendar::gettHead($viewActive,$day,$numMonth,$year);
+		$tBody = Calendar::getBodytableMonth($numMonth,$year);
+		
+		//Se obtinen todos los grupos de recursos
+		$grupos = DB::table('recursos')->select('id', 'acl', 'grupo','grupo_id')->groupby('grupo')->get();
+		//$grupos = Recurso::all()->unique('grupo_id');
+		//$grupos = $grupos->unique('grupo');//DB::table('recursos')->select('id', 'acl', 'grupo','grupo_id')->getunique('grupo'); 
+		
+		
+		//se filtran para obtener sólo aquellos con acceso para el usuario logeado
+		$groupWithAccess = array();
+		foreach ($grupos as $grupo) {
+			if (ACL::canReservation($grupo->id,$grupo->acl))
+				$groupWithAccess[] = $grupo;
+		}
+		
+		//Menú de opción 
+		$dropdown = Auth::user()->dropdownMenu();
+		
+		//variables para formulario modal para filtar eventos.
+		$titulaciones = Titulacion::all();
+		$profesores = Profesor::all();
+
+		//se devuelve la vista calendario.
+		$aMediosDisponibles = Config::get('mediosdisponibles.medios');
+		
+		return View::make('informes.index')->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tCaption',$tCaption)->with('tHead',$tHead)->with('tBody',$tBody)->with('viewActive',$viewActive)->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg')->nest('sidebar','informes.sidebar',compact('aMediosDisponibles','titulaciones','asignaturas','profesores'));
+	
+		//Quitamos sidebar: ->nest('sidebar','sidebar',array('msg' => $msg,'grupos' => $groupWithAccess))
+	}
+
+	 /**
+        * llamada ajax, devuelve el calendario de eventos con los filtros de entrada
+        * 
+        * @param 
+        *
+        * @return $respuesta :View::make 
+    */
+	public function getEventosByFiltros(){
+
+		return view::make('informes.caption');
+	}
+
 	public function imprime(){
 		
 		$currentDay = Date::currentDay();
@@ -195,72 +256,7 @@ class InformesController extends BaseController {
 		return $respuesta;
 	}	
 
-	//Se carga la vista por defecto: Mensual
-	public function showCalendarViewMonth(){
-		
-		$input = Input::all();
-		$day = Input::get('day',date('d'));
-		$numMonth = Input::get('numMonth',date('m'));
-		$year = Input::get('year',date('Y'));
-		$uvus = INput::get('uvus','');
-
-		//Los usuarios del rol "alumnos" sólo pueden reservar 12 horas a la semana como máximo
-		$nh = ACL::numHorasReservadas();
-		$msg = '';
-		
-		if (ACL::isUser() && $nh >=12 ){
-			$msg = 'Has completado el número máximo de horas que puede reservar (' . Config::get('options.max_horas').' horas a la semana )'; 
-		}	
-
-				
-		if(empty($input)){
-			//ACL::fristMonday() -> devuelve el timestamp del primer lunes disponible para reserva
-			
-			$datefirstmonday = getdate(ACL::fristMonday());
-			$numMonth = $datefirstmonday['mon'];//Representación númerica del mes del 1 al 12
-			$year = $datefirstmonday['year']; //Representación numérica del año cuatro dígitos
-			$nameMonth = Date::getNameMonth($numMonth,$year); //representación textual del mes (enero,febrero.... etc)
-			$day = $datefirstmonday['mday']; //Representación númerica del dia del mes: 1 - 31	
-		} 
-		//else -> los métodos getCaption, getHead y getBodytableMonth optiene los valores de fecha directamente desde el array de entrada post.
-		
-		$viewActive = 'month'; //vista por defecto
-		$tCaption = Calendar::getCaption($day,$numMonth,$year);
-		$tHead = Calendar::gettHead($viewActive,$day,$numMonth,$year);
-		$tBody = Calendar::getBodytableMonth($numMonth,$year);
-		
-		//Se obtinen todos los grupos de recursos
-		$grupos = DB::table('recursos')->select('id', 'acl', 'grupo','grupo_id')->groupby('grupo')->get();
-		//$grupos = Recurso::all()->unique('grupo_id');
-		//$grupos = $grupos->unique('grupo');//DB::table('recursos')->select('id', 'acl', 'grupo','grupo_id')->getunique('grupo'); 
-		
-		
-		//se filtran para obtener sólo aquellos con acceso para el usuario logeado
-		$groupWithAccess = array();
-		foreach ($grupos as $grupo) {
-			if (ACL::canReservation($grupo->id,$grupo->acl))
-				$groupWithAccess[] = $grupo;
-		}
-		
-		//Menú de opción 
-		$dropdown = Auth::user()->dropdownMenu();
-
-		//$tipos de actividad
-		$tipoActividades = ACL::getTipoActividadPorRol();
-		
-		//variables para formulario modal para filtar eventos.
-		$titulaciones = Titulacion::all();
-		$asignaturas = Asignatura::all();
-		$profesores = Profesor::all();
-
-		//se devuelve la vista calendario.
-
-		$aMediosDisponibles = Config::get('mediosdisponibles.medios');
-		
-		return View::make('informes.index')->with('tipoActividades',$tipoActividades)->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tCaption',$tCaption)->with('tHead',$tHead)->with('tBody',$tBody)->with('nh',$nh)->with('viewActive',$viewActive)->with('uvusUser',$uvus)->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg')->nest('modalFormFiltraCalendario','modalFormFiltraCalendario',compact('titulaciones','asignaturas','profesores'))->nest('sidebar','informes.sidebar',compact('aMediosDisponibles','titulaciones','asignaturas','profesores'));
 	
-		//Quitamos sidebar: ->nest('sidebar','sidebar',array('msg' => $msg,'grupos' => $groupWithAccess))
-	}
 
 	//Ajax functions
 	public function enableInputRepeticion(){

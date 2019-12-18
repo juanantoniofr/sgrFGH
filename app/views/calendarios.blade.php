@@ -53,11 +53,11 @@
         </div>
         
         <div class = "btn-group"  >
-          
-          <a type="button" data-view="{{$viewActive}}" data-day="{{$day}}" data-month="{{$numMonth}}" data-year="{{$year}}"  id="botonFiltrarEventos"  class="btn btn-info {{-- disabled --}}">
+          <!--
+          <a type="button" data-view="{{-- $viewActive --}}" data-day="{{-- $day --}}" data-month="{{-- $numMonth --}}" data-year="{{-- $year --}}"  id="botonFiltrarEventos"  class="btn btn-info {{-- disabled --}}">
             <i class="fa fa-print fa-fw" ></i> Filtar
           </a>
-          
+          -->
           <a type="button" data-view="{{$viewActive}}" data-day="{{$day}}" data-month="{{$numMonth}}" data-year="{{$year}}"  id="btnprint"  class="btn btn-primary disabled">
             <i class="fa fa-print fa-fw" ></i> Imprimir
           </a>

@@ -31,6 +31,7 @@ $(function(e){
 
         //Obtener asignaturas
         //showGifEspera();
+        $('#select-asignaturas').fadeOut(3000);
         console.log($data.getTitulaciones());   
         $.ajax({
             type: "GET",
@@ -40,6 +41,7 @@ $(function(e){
                 
                 console.log($respuesta);
                 $('div#opciones-filtrado select#asignatura ').empty();
+                $('div#opciones-filtrado select#asignatura ').append('<option value="all" selected>Todas</option>');
                 $respuesta.forEach(function(titulo,index){
                 
                     console.log(titulo);
@@ -48,6 +50,7 @@ $(function(e){
                         $('div#opciones-filtrado select#asignatura ').append('<option value = "'+ item.codigo+'"> ' + titulo.titulacion.codigo + '-' +item.asignatura + '</option>'); 
                     });
                 });
+                $('#select-asignaturas').fadeIn(3000);
             },
             error: function(xhr, ajaxOptions, thrownError){
                 //    hideGifEspera();
@@ -56,11 +59,26 @@ $(function(e){
         });// --end Ajax function
     }); // --end onclik function 
         
-    //1.7 click filtrar eventos
-    //$('#botonFiltrarEventos').on('click',function(e){
-    //    e.preventDefault();
-    //    $('#modalFormFiltarEventos').modal('show');
-    //}); 
+    // click filtrar eventos
+    $('#botonFiltrarEventos').on('click',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $.ajax({
+            type: "GET",
+            url: "getEventosByFiltros", /* terminar en controllador */
+            data: {id:4},
+            success: function($respuesta){
+                
+                console.log($respuesta);
+                $('#container-calendar').html($respuesta).toggle(4000);
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                //    hideGifEspera();
+                    alert(xhr.responseText + ' (codeError: ' + xhr.status) +')';
+            }
+        });
+
+    }); 
 
     function showGifEspera(){
         $('#espera').css('display','inline').css('z-index','100');
