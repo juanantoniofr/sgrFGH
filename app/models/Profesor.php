@@ -14,7 +14,15 @@ class Profesor extends Eloquent {
      */
     
     public function gruposAsignatura(){
+
         return $this->belongsToMany('GrupoAsignatura');
     }
 
+     /**
+        * Relación: 1 profesor tiene muchos eventos
+    */
+
+    public function eventos(){
+        return $this->hasMany('Evento');
+    }
 }

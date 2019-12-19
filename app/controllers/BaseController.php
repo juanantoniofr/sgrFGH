@@ -127,10 +127,16 @@ class BaseController extends Controller {
 				//$evento->user_id = Auth::user()->id;
 				$evento->user_id      = $userAdmin->id;
 				$evento->reservadoPor = $userAdmin->id;
+
+				$grupo = Asignatura::where('codigo','=',$aDataEvento['codigoAsignatura'])->gruposAsignatura()->where('grupo','=',$aDataEvento['grupo'])->first();
+				$evento->gruposAsignatura()->associate($grupo);
+				
+				$profesor = Profesor::where('dni','=',$aDataEvento['dni'])->where('profesor','=',$aDataEvento['profesor'])->first();
+				$evento->profesor()->associate($profesor);
+
 				if ( $evento->save() != true ) return false;
 				
-				$grupo = Asignatura::where('codigo','=',$aDataEvento['codigoAsignatura'])->first()->gruposAsignatura()->where('grupo','=',$aDataEvento['grupo'])->first();
-				$grupo->eventos()->attach($evento->id);
+				
 		}//fin foreach
 		
 		return true;

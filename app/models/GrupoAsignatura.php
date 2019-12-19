@@ -21,7 +21,7 @@ class GrupoAsignatura extends Eloquent {
     */
 
     public function eventos(){
-        return $this->belongsToMany('Evento');
+        return $this->hasMany('Evento');
     }
 
     public function asignatura()

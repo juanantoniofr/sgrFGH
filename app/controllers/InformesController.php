@@ -65,9 +65,21 @@ class InformesController extends BaseController {
 		
 		$aCodigosTitulaciones = Input::get('aCodigosTitulaciones','');
 		$aTitulaciones = array();
-		if ( !empty($aCodigosTitulaciones) )
-			$aTitulaciones = DB::table('titulaciones')->whereIN('codigo',$aCodigosTitulaciones)->get();
+		if ( !empty($aCodigosTitulaciones) ){
+			$aTitulaciones = Titulacion::whereIN('codigo',$aCodigosTitulaciones)->get();
+			//$aAsignaturas = Titulacion::whereIN('codigo',$aCodigosTitulaciones)->get()->asignaturas(); 
 		
+		/*$eventos = Recurso::findAll()->where('events', function($e) {
+    					$e->gruposAsignatura->asignatura()->titulacion()->where('codigo', 'in', '$aTitulaciones');
+					})->get();
+		
+		*/
+		}
+
+		foreach (Recurso::with('events')->get() as $recurso){
+    		 $recurso->events();//->gruposAsignatura;
+		}
+
 		$caption = View::make('informes.caption',compact('aTitulaciones'));
 		return $caption;
 	}

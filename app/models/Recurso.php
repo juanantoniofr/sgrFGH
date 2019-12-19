@@ -81,7 +81,6 @@ class Recurso extends Eloquent {
         }
         
         return $result;
-
     }
 
 }

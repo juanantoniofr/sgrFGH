@@ -28,7 +28,17 @@ class Evento extends Eloquent{
      */
     
     public function gruposAsignatura(){
-        return $this->belongsToMany('GrupoAsignatura');
+        return $this->belongsTo('GrupoAsignatura');
+    }
+
+    /**
+ 	 	*
+     	* Relación: Muchas eventos (identificados por evento_id) pertenece a un profesor
+     	* 
+     */
+    
+    public function profesor(){
+        return $this->belongsTo('Profesor');
     }
 
 
