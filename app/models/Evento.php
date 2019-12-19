@@ -41,6 +41,9 @@ class Evento extends Eloquent{
         return $this->belongsTo('Profesor');
     }
 
+    public function hola(){
+    	return "saludo";
+    }
 
  	public function total(){
  		$total = '';

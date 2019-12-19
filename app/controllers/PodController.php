@@ -222,6 +222,7 @@ class PodController extends BaseController {
 			$e['codigoAsignatura'] = $evento->codigo;
 			$e['grupo'] = $evento->grupo;
 			$e['profesor'] = $evento->profesor; 
+			$e['dni'] = $evento->dni;
 			$e['codigoTitulacion'] = $evento->codigoTitulacion;
 			
 			//método definido en BaseController.php

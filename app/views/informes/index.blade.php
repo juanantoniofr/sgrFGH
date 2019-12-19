@@ -1,7 +1,7 @@
 @extends('layout')
  
 @section('title')
-    SGR: Calendarios
+    SGR: Informes de ocupación
 @stop
 
 

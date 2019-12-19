@@ -1,4 +1,19 @@
 <div class = "col-lg-10 col-lg-offset-1 bg-info">
+
+	@if ( !empty($recursos) )
+
+		@foreach($recursos as $recurso)
+
+			<p> {{ $recurso->nombre }}</p>
+			<p> <?php
+			    $recurso->events->filter(function($e){
+				 
+				 	echo $e->where('fechaEvento','=','2020-02-10')->first()->titulo;
+				});
+				?>
+			</p>
+		@endforeach
+	@endif
 		@if ( !empty($aTitulaciones) )
 			<ul>
 			@foreach($aTitulaciones as $titulacion)

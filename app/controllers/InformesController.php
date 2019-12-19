@@ -76,11 +76,12 @@ class InformesController extends BaseController {
 		*/
 		}
 
-		foreach (Recurso::with('events')->get() as $recurso){
-    		 $recurso->events();//->gruposAsignatura;
-		}
+		$recursos = Recurso::whereHas('events', function($e) {
+    					$e->where('grupos_asignatura_id','=','817');
+    				})->get();
 
-		$caption = View::make('informes.caption',compact('aTitulaciones'));
+		
+		$caption = View::make('informes.caption',compact('recursos'));
 		return $caption;
 	}
 
