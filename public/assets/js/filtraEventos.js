@@ -50,7 +50,7 @@ $(function(e){
                         $('div#opciones-filtrado select#asignatura ').append('<option value = "'+ item.codigo+'"> ' + titulo.titulacion.codigo + '-' +item.asignatura + '</option>'); 
                     });
                 });
-                $('#select-asignaturas').fadeIn(3000);
+                $('#select-asignaturas').fadeIn(2000);
             },
             error: function(xhr, ajaxOptions, thrownError){
                 //    hideGifEspera();
@@ -70,7 +70,7 @@ $(function(e){
             success: function($respuesta){
                 
                 console.log($respuesta);
-                $('#container-calendar').html($respuesta).toggle(4000);
+                $('#tableCaption').html($respuesta).toggle(2000);
             },
             error: function(xhr, ajaxOptions, thrownError){
                 //    hideGifEspera();

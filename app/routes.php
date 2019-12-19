@@ -74,6 +74,8 @@ Route::get('getAsignaturas',array('uses' => 'TitulacionController@getAsignaturas
 //*********
 
 Route::get('informes-de-ocupacion.html',array('as' => 'informes-de-ocupacion.html','uses' => 'InformesController@showCalendarViewMonth','before' => array('auth','inicioCurso','capacidad:1-2-3-4-5-6,msg')));
+//ajax filtraEventos.js
+Route::get('getEventosByFiltros',array('uses' => 'InformesController@getEventosByFiltros', 'before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg' ) ));
 
 
 //*********

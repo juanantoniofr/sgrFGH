@@ -1,4 +1,4 @@
-<div class="col-lg-10 sidebar" id="opciones-filtrado">
+<div class="col-lg-12 sidebar" id="opciones-filtrado">
 {{Form::open(array('method' => 'POST',/*'route' => '',*/'role' => 'form','id'=>'fBuscaDisponible'))}}
     
     <h3>Opciones de Filtrado</h3>

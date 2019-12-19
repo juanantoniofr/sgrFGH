@@ -20,7 +20,7 @@ class InformesController extends BaseController {
 		} 
 		
 		$viewActive = 'month'; //vista por defecto
-		$tCaption = Calendar::getCaption($day,$numMonth,$year);
+		//$tCaption = Calendar::getCaption($day,$numMonth,$year);
 		$tHead = Calendar::gettHead($viewActive,$day,$numMonth,$year);
 		$tBody = Calendar::getBodytableMonth($numMonth,$year);
 		
@@ -47,7 +47,7 @@ class InformesController extends BaseController {
 		//se devuelve la vista calendario.
 		$aMediosDisponibles = Config::get('mediosdisponibles.medios');
 		
-		return View::make('informes.index')->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tCaption',$tCaption)->with('tHead',$tHead)->with('tBody',$tBody)->with('viewActive',$viewActive)->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg')->nest('sidebar','informes.sidebar',compact('aMediosDisponibles','titulaciones','asignaturas','profesores'));
+		return View::make('informes.index')->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tHead',$tHead)->with('tBody',$tBody)->with('viewActive',$viewActive)->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg')->nest('sidebar','informes.sidebar',compact('aMediosDisponibles','titulaciones','asignaturas','profesores'));
 	
 		//Quitamos sidebar: ->nest('sidebar','sidebar',array('msg' => $msg,'grupos' => $groupWithAccess))
 	}
@@ -61,7 +61,9 @@ class InformesController extends BaseController {
     */
 	public function getEventosByFiltros(){
 
-		return view::make('informes.caption');
+		$inputs = Input::all();
+		$caption = View::make('informes.caption',compact('inputs'));
+		return $caption;
 	}
 
 	public function imprime(){
