@@ -63,14 +63,15 @@ $(function(e){
     $('#botonFiltrarEventos').on('click',function(e){
         e.preventDefault();
         e.stopPropagation();
+        console.log($data.getTitulaciones());
         $.ajax({
             type: "GET",
             url: "getEventosByFiltros", /* terminar en controllador */
-            data: {id:4},
+            data: {aCodigosTitulaciones:$data.getTitulaciones()},
             success: function($respuesta){
                 
                 console.log($respuesta);
-                $('#tableCaption').html($respuesta).toggle(2000);
+                $('#tableCaption').html($respuesta).toggle(1000);
             },
             error: function(xhr, ajaxOptions, thrownError){
                 //    hideGifEspera();

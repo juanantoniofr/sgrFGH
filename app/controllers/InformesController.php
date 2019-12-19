@@ -62,7 +62,13 @@ class InformesController extends BaseController {
 	public function getEventosByFiltros(){
 
 		$inputs = Input::all();
-		$caption = View::make('informes.caption',compact('inputs'));
+		
+		$aCodigosTitulaciones = Input::get('aCodigosTitulaciones','');
+		$aTitulaciones = array();
+		if ( !empty($aCodigosTitulaciones) )
+			$aTitulaciones = DB::table('titulaciones')->whereIN('codigo',$aCodigosTitulaciones)->get();
+		
+		$caption = View::make('informes.caption',compact('aTitulaciones'));
 		return $caption;
 	}
 
