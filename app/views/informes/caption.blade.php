@@ -6,11 +6,17 @@
 
 			<p> {{ $recurso->nombre }}</p>
 			<p> <?php
-			    $recurso->events->filter(function($e){
+				$recurso_id = $recurso->id;
+			    $eventos = $recurso->events->filter(function($e){
 				 
-				 	echo $e->where('fechaEvento','=','2020-02-10')->first()->titulo;
+				 	return ( $e->fechaEvento == '2020-02-10' && $e->dia == 1 );
 				});
 				?>
+				@if (!empty($eventos))
+				@foreach ($eventos as $e)
+					{{ $e->titulo }} -- 
+				@endforeach
+				@endif
 			</p>
 		@endforeach
 	@endif
@@ -36,7 +42,7 @@
 			@endforeach
 			</ul>
 		@endif
-		<pre>
+		
 			{{-- var_dump($inputs) --}}
-		</pre>
+		
 </div>

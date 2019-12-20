@@ -19,9 +19,9 @@ $(function(e){
                 return  this.titulaciones;
             } 
 
-        };
+    };
 
-    //Muestra ventana modal nueva titulación
+    //Obtiene asignaturas de titulación seleccionada
     $("div#opciones-filtrado select#titulacion").on('click',function(e){
         
         e.preventDefault();
@@ -71,7 +71,8 @@ $(function(e){
             success: function($respuesta){
                 
                 console.log($respuesta);
-                $('#tableCaption').html($respuesta).toggle(1000);
+                $('#informacionSobreFiltros').html($respuesta).fadeToggle(1000,'linear');
+                
             },
             error: function(xhr, ajaxOptions, thrownError){
                 //    hideGifEspera();
