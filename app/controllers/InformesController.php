@@ -63,6 +63,10 @@ class InformesController extends BaseController {
 
 		$inputs = Input::all();
 		
+		$f_inicio_filtro = Input::get('f_inicio',Config::get('calendarioLectivo.f_inicio_curso'));
+		$f_fin_filtro = Input::get('f_fin',Config::get('calendarioLectivo.f_fin_curso'));
+
+
 		$aCodigosTitulaciones = Input::get('aCodigosTitulaciones','');
 		$aTitulaciones = array();
 		if ( !empty($aCodigosTitulaciones) ){
@@ -76,8 +80,8 @@ class InformesController extends BaseController {
 		*/
 		}
 
-		$recursos = Recurso::whereHas('events', function($e) {
-    					$e->where('grupos_asignatura_id','=','817');
+		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro) {
+    					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIN('grupos_asignatura_id',[ '817' ]);
     				})->get();
 
 		

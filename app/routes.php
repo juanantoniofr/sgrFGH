@@ -37,7 +37,16 @@ Route::get('newUser',array('as'=>'newUser',function(){
         //return Redirect::to($url);
 }));
 
-Route::get('hola',array('as'=>'hola','uses' => 'TitulacionController@getAsignaturas'));
+Route::get('hola',array('as'=>'hola',function(){
+
+	$f_inicio_filtro = Config::get('calendarioLectivo.f_inicio_curso');
+
+	echo $f_inicio_filtro;
+	echo " , ";
+	echo Date::toDB($f_inicio_filtro);
+
+
+}));
 
 //*********
 // Busquedas
