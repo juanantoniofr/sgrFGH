@@ -1,5 +1,7 @@
 <div class = "col-lg-10 col-lg-offset-1 bg-info">
 
+	{{ var_dump($id_grupos) }}
+	<hr />
 	@if ( !empty($recursos) )
 
 		@foreach($recursos as $recurso)

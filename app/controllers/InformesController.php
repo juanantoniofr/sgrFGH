@@ -78,14 +78,26 @@ class InformesController extends BaseController {
 					})->get();
 		
 		*/
+					//$roles = $user->roles->each(function($role)
+			$id_grupos = array();
+			Titulacion::whereIN('codigo',$aCodigosTitulaciones)->get()->each(function($titulacion) use (&$id_grupos) {
+
+										$titulacion->asignaturas->each(function($asignatura) use (&$id_grupos) {
+
+											$asignatura->gruposAsignatura->each(function($g) use (&$id_grupos){
+												$id_grupos[] = $g->id;	
+											});
+										
+										});
+			});
 		}
 
-		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro) {
-    					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIN('grupos_asignatura_id',[ '817' ]);
+		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro,$id_grupos) {
+    					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIN('grupos_asignatura_id',$id_grupos);
     				})->get();
 
 		
-		$caption = View::make('informes.caption',compact('recursos'));
+		$caption = View::make('informes.caption',compact('recursos','id_grupos'));
 		return $caption;
 	}
 
