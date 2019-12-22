@@ -79,7 +79,7 @@ class InformesController extends BaseController {
 		
 		*/
 					//$roles = $user->roles->each(function($role)
-			$id_grupos = array();
+			$id_grupos = array('0');
 			Titulacion::whereIN('codigo',$aCodigosTitulaciones)->get()->each(function($titulacion) use (&$id_grupos) {
 
 										$titulacion->asignaturas->each(function($asignatura) use (&$id_grupos) {
@@ -96,9 +96,13 @@ class InformesController extends BaseController {
     					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIN('grupos_asignatura_id',$id_grupos);
     				})->get();
 
-		
-		$caption = View::make('informes.caption',compact('recursos','id_grupos'));
-		return $caption;
+		foreach (Config::get('options.rangoHorarios') as $hora) {
+			
+			$filas[] = View::make('informes.tr',compact('hora'));
+		}
+
+		$resultado = View::make('informes.resultado',compact('recursos','id_grupos','filas'))->nest('thead','informes.thead');
+		return $resultado;
 	}
 
 	public function imprime(){

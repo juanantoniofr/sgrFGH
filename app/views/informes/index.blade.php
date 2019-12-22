@@ -86,15 +86,10 @@
             
             <div id="container-calendar" class="col-lg-12">  
                 
-                <div id="informacionSobreFiltros">
+                <div id="resultados-filtros">
                 </div>
                 
-                <table class="pull-left " style = "table-layout: fixed;width: 100%;" id="tableCalendar" >
-            
-                    <caption id="tableCaption" >{{$tCaption or ''}}</caption>
-                    <thead id="tableHead">{{$tHead}}</thead>
-                    <tbody id="tableBody">{{$tBody}}</tbody>
-                </table>
+                
             </div>
         </div><!-- /.row -->
     </div><!-- /#calendario -->   
@@ -170,10 +165,8 @@
 @stop
 
 @section('js')
-  {{ HTML::script('assets/js/calendar.js') }}
   {{ HTML::script('assets/js/filtraEventos.js') }}
   {{ HTML::script('assets/js/imprimir.js') }}
   {{ HTML::script('assets/js/disponibilidad.js')}}
-  {{HTML::script('assets/js/datepicker-es.js')}}
-  {{ HTML::script('assets/js/filtraEventos.js') }}
+  {{ HTML::script('assets/js/datepicker-es.js')}}
 @stop

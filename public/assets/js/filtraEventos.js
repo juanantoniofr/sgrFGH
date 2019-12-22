@@ -5,7 +5,8 @@ $(function(e){
             titulaciones: [],
 
             init: function(){
-                this.titulaciones = [];
+        
+                this.titulaciones = $('div#opciones-filtrado select#titulacion').val();
             },
 
             setTitulacion: function($aTitulaciones){
@@ -21,39 +22,48 @@ $(function(e){
 
     };
 
+    
+    $( document ).ready(function() {
+        //console.log( "ready!" );
+        //console.log($('div#opciones-filtrado select#titulacion').val());
+        $data.init();
+    });
+
     //Obtiene asignaturas de titulación seleccionada
     $("div#opciones-filtrado select#titulacion").on('click',function(e){
         
         e.preventDefault();
+        e.stopPropagation();
         
         //Set titulacion/es seleccionada/s
         $data.setTitulacion( $('div#opciones-filtrado select#titulacion').val() );
 
         //Obtener asignaturas
-        //showGifEspera();
-        $('#select-asignaturas').fadeOut(3000);
-        console.log($data.getTitulaciones());   
+        showGifEspera();
+        console.log('Código titulaciones ' + $data.getTitulaciones().toString());   
         $.ajax({
             type: "GET",
             url: "getAsignaturas", /* terminar en controllador */
             data: {aCodigos:$data.getTitulaciones()},
             success: function($respuesta){
                 
-                console.log($respuesta);
+                //console.log($respuesta);
+                //hideGifEspera();
                 $('div#opciones-filtrado select#asignatura ').empty();
                 $('div#opciones-filtrado select#asignatura ').append('<option value="all" selected>Todas</option>');
                 $respuesta.forEach(function(titulo,index){
                 
-                    console.log(titulo);
+                    //console.log(titulo);
                     titulo.asignatura.forEach(function(item,index){
                         console.log(item);
                         $('div#opciones-filtrado select#asignatura ').append('<option value = "'+ item.codigo+'"> ' + titulo.titulacion.codigo + '-' +item.asignatura + '</option>'); 
                     });
                 });
-                $('#select-asignaturas').fadeIn(2000);
+                $('#select-asignaturas').fadeOut(400,'linear').fadeIn(400,'linear',function(){hideGifEspera();});
+
             },
             error: function(xhr, ajaxOptions, thrownError){
-                //    hideGifEspera();
+                    hideGifEspera();
                     alert(xhr.responseText + ' (codeError: ' + xhr.status) +')';
             }
         });// --end Ajax function
@@ -63,7 +73,8 @@ $(function(e){
     $('#botonFiltrarEventos').on('click',function(e){
         e.preventDefault();
         e.stopPropagation();
-        console.log($data.getTitulaciones());
+        showGifEspera();
+        console.log('Código titulaciones ' + $data.getTitulaciones().toString());
         $.ajax({
             type: "GET",
             url: "getEventosByFiltros", /* terminar en controllador */
@@ -71,11 +82,10 @@ $(function(e){
             success: function($respuesta){
                 
                 console.log($respuesta);
-                $('#informacionSobreFiltros').html($respuesta).fadeToggle(1000,'linear');
-                
+                $('#resultados-filtros').fadeOut(400,'linear').html($respuesta).fadeIn(400,'linear',function(){hideGifEspera();});
             },
             error: function(xhr, ajaxOptions, thrownError){
-                //    hideGifEspera();
+                    hideGifEspera();
                     alert(xhr.responseText + ' (codeError: ' + xhr.status) +')';
             }
         });
