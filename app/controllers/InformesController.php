@@ -93,15 +93,13 @@ class InformesController extends BaseController {
 		}
 
 		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro,$id_grupos) {
+    					
     					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIN('grupos_asignatura_id',$id_grupos);
     				})->get();
 
-		foreach (Config::get('options.rangoHorarios') as $hora) {
-			
-			$filas[] = View::make('informes.tr',compact('hora'));
-		}
+		
 
-		$resultado = View::make('informes.resultado',compact('recursos','id_grupos','filas'))->nest('thead','informes.thead');
+		$resultado = View::make('informes.resultado',compact('recursos','id_grupos'))->nest('thead','informes.thead');
 		return $resultado;
 	}
 

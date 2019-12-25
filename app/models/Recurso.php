@@ -17,6 +17,28 @@ class Recurso extends Eloquent {
         return $this->hasMany('Evento','recurso_id','id');
     }
 
+    public function filtraEventos($dia,$hora){
+        
+        $eventos = $this->events->filter(function($e) use ($dia,$hora){
+                 
+                    return ( $e->dia == $dia && $e->horaInicio <= $hora && $hora <= $e->horaFin );
+                });
+
+        $aEventos_id = array();
+        
+        $eventos = $eventos->sortBy('evento_id')->filter(function($evento) use (&$aEventos_id){
+            
+            if (in_array($evento->evento_id, $aEventos_id) == false) {
+                $aEventos_id[] = $evento->evento_id;
+                return true;
+            }
+            return false;
+
+        });
+
+        return $eventos;
+
+    }
     
     public function scopetipoDesc($query)
     {
