@@ -27,12 +27,5 @@ class Asignatura extends Eloquent {
         return $this->hasMany('GrupoAsignatura','asignatura_id','id');
     }
 
-    /**
-    * Relación: 1 asignatura se imparte por profesores a través de los grupos que tiene la asignatura
-    */
 
-    public function profesores(){
-    	return $this->hasManyThrough('Profesor','GrupoAsignatura');
-    }
-    
 }

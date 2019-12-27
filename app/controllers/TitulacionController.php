@@ -348,5 +348,45 @@ class TitulacionController extends BaseController {
         return $respuesta;
     }
 
+    /**
+        * 
+        * Devuelve todos los profesores de cada una de las asignaturas con código en $aCodigos
+        * 
+        * @param Input::get('aCodigos') :array 
+        * 
+        * @return $respuesta :array    
+        *
+        *
+    */
+    //llamada ajax desde filtraEventos.js
+    public function getProfesores( Array $aCodigos = [] ){
+
+        //@return
+        $respuesta = array();
+        
+        //@param
+        $aCodigos = Input::get('aCodigos',array());
+        //return $aCodigos;
+
+        //Validación Input
+        if (empty($aCodigos)) return $respuesta;
+
+        
+        foreach($aCodigos as $codigo) {
+
+            $aProfesores = array();
+            Asignatura::where('codigo','=',$codigo)->first()->gruposAsignatura->each(function($grupoAsignatura) use (&$aProfesores){
+                                        $aProfesores[] = $grupoAsignatura->profesores->toArray();
+                                });
+        
+            $respuesta[] = [    'asignatura' => [ 'codigo' => $codigo ], 
+                                'profesores' => $aProfesores, ];
+
+        }
+        
+        //formato Key = codigo Asignautra, Value Asignatura
+        return $respuesta;
+    }    
+
 
 } //fin del controlador

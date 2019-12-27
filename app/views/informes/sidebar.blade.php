@@ -35,13 +35,11 @@
         </div>
 
         {{-- Select profesores --}}
-        <div class="form-group" id="select-profesores">
+        <div class="form-group" id="select-profesores" style="display: none">
         
-            <label class="control-label">Seleccione una o varias profesores:</label>
+            <label class="control-label">Seleccione uno o varios profesores/profesoras:</label>
             <select class="form-control"  name="profesor" id="profesor" multiple>
-                @foreach ($profesores as $profesor)
-                    <option value="{{ $profesor['dni'] }}">{{ $profesor['profesor'] }}</option>
-                @endforeach
+                {{-- Options desde ajax function en filtraEventos.js --}}
             </select>       
         </div>                       
     </div>

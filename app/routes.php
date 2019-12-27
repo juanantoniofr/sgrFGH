@@ -77,6 +77,8 @@ Route::get('admin/getTitulacion',array('as' => 'getTitulacion','uses' => 'Titula
 Route::get('admin/elimina-titulacion.html',array('uses'=>'TitulacionController@elimina','before' => array('auth','capacidad:2-3-4-5-6,msg')));
 //ajax filtraEventos.js
 Route::get('getAsignaturas',array('uses' => 'TitulacionController@getAsignaturas', 'before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg' ) ));
+Route::get('getProfesores',array('uses' => 'TitulacionController@getProfesores', 'before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg' ) ));
+
 
 //*********
 // Informes de  ocupación (filtros)

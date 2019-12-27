@@ -25,4 +25,13 @@ class Profesor extends Eloquent {
     public function eventos(){
         return $this->hasMany('Evento');
     }
+
+    /**
+    * Relación: 1 profesor imparte varias asignaturas atravé de grupoAsignaturas
+    */
+
+    public function asignatura(){
+        return $this->hasManyThrough('Asignatura','GrupoAsignatura');
+    }
+    
 }

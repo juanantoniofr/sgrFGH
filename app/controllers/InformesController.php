@@ -42,12 +42,12 @@ class InformesController extends BaseController {
 		
 		//variables para formulario modal para filtar eventos.
 		$titulaciones = Titulacion::all();
-		$profesores = Profesor::all();
+		//$profesores = Profesor::all();
 
 		//se devuelve la vista calendario.
 		$aMediosDisponibles = Config::get('mediosdisponibles.medios');
 		
-		return View::make('informes.index')->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tHead',$tHead)->with('tBody',$tBody)->with('viewActive',$viewActive)->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg')->nest('sidebar','informes.sidebar',compact('aMediosDisponibles','titulaciones','asignaturas','profesores'));
+		return View::make('informes.index')->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tHead',$tHead)->with('tBody',$tBody)->with('viewActive',$viewActive)->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg')->nest('sidebar','informes.sidebar',compact('aMediosDisponibles','titulaciones'));
 	
 		//Quitamos sidebar: ->nest('sidebar','sidebar',array('msg' => $msg,'grupos' => $groupWithAccess))
 	}
@@ -68,6 +68,8 @@ class InformesController extends BaseController {
 
 
 		$aCodigosTitulaciones = Input::get('aCodigosTitulaciones','');
+		$aCodigosAsignaturas = Input::get('aCodigosAsignaturas','');
+
 		$aTitulaciones = array();
 		if ( !empty($aCodigosTitulaciones) ){
 			$aTitulaciones = Titulacion::whereIN('codigo',$aCodigosTitulaciones)->get();
@@ -79,7 +81,7 @@ class InformesController extends BaseController {
 		
 		*/
 					//$roles = $user->roles->each(function($role)
-			$id_grupos = array('0');
+			$id_grupos = array('0'); //
 			Titulacion::whereIN('codigo',$aCodigosTitulaciones)->get()->each(function($titulacion) use (&$id_grupos) {
 
 										$titulacion->asignaturas->each(function($asignatura) use (&$id_grupos) {
@@ -87,7 +89,6 @@ class InformesController extends BaseController {
 											$asignatura->gruposAsignatura->each(function($g) use (&$id_grupos){
 												$id_grupos[] = $g->id;	
 											});
-										
 										});
 			});
 		}

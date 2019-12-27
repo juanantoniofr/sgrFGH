@@ -7,7 +7,7 @@
 
     	
 		<table style = "table-layout: fixed;width: 100%;" id="tableCalendar" class="informes" >
-    		<caption id="tableCaption" > {{ $recurso->nombre }} </caption>
+    		<caption id="tableCaption" class="text-align: center;padding: 40px;font-size: 36px;" > <span class="text-center">{{ $recurso->nombre }} </span> </caption>
     		<thead id="tableHead"> {{ $thead or ''}} </thead>
     		<tbody id="tableBody">
     			@foreach (Config::get('options.rangoHorarios') as $hora) 
@@ -18,6 +18,7 @@
 							@if (!empty($eventos))
 								@foreach ($eventos as $e)
 									{{ $e->asignatura }}
+									<small>({{ Date::datetoES($e->fechaInicio,'-') }} // {{ Date::datetoES($e->fechaFin,'-') }})</small>
 								@endforeach
 							@endif
 						</td>
@@ -26,6 +27,7 @@
 							@if (!empty($eventos))
 								@foreach ($eventos as $e)
 									{{ $e->asignatura }}
+									<small>({{ Date::datetoES($e->fechaInicio,'-') }} // {{ Date::datetoES($e->fechaFin,'-') }})</small>
 								@endforeach
 							@endif
 						</td>
@@ -34,6 +36,7 @@
 							@if (!empty($eventos))
 								@foreach ($eventos as $e)
 									{{ $e->asignatura }}
+									<small>({{ Date::datetoES($e->fechaInicio,'-') }} // {{ Date::datetoES($e->fechaFin,'-') }})</small>
 								@endforeach
 							@endif
 						</td>
@@ -42,6 +45,7 @@
 							@if (!empty($eventos))
 								@foreach ($eventos as $e)
 									{{ $e->asignatura }}
+									<small>({{ Date::datetoES($e->fechaInicio,'-') }} // {{ Date::datetoES($e->fechaFin,'-') }})</small>
 								@endforeach
 							@endif
 						</td>
@@ -50,6 +54,7 @@
 							@if (!empty($eventos))
 								@foreach ($eventos as $e)
 									{{ $e->asignatura }}
+									<small>({{ Date::datetoES($e->fechaInicio,'-') }} // {{ Date::datetoES($e->fechaFin,'-') }})</small>
 								@endforeach
 							@endif
 						</td>
