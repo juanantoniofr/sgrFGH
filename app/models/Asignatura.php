@@ -27,5 +27,6 @@ class Asignatura extends Eloquent {
         return $this->hasMany('GrupoAsignatura','asignatura_id','id');
     }
 
+    
 
 }

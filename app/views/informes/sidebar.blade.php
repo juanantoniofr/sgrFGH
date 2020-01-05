@@ -26,20 +26,22 @@
         </div>
                   
         {{-- Select asignaturas --}}
-        <div class="form-group" id="select-asignaturas" style="display: none">
+        <div class="form-group" id="select-asignaturas">
             
             <label class="control-label">Seleccione una o varias asignaturas:</label>
             <select class="form-control"  name="asignatura" id="asignatura" multiple>
                 {{-- Options desde ajax function en filtraEventos.js --}}
+                <option value="all" selected>Todas</option>
             </select>       
         </div>
 
         {{-- Select profesores --}}
-        <div class="form-group" id="select-profesores" style="display: none">
+        <div class="form-group" id="select-profesores" >
         
             <label class="control-label">Seleccione uno o varios profesores/profesoras:</label>
             <select class="form-control"  name="profesor" id="profesor" multiple>
                 {{-- Options desde ajax function en filtraEventos.js --}}
+                <option value="all" selected>Todos/as</option>
             </select>       
         </div>                       
     </div>

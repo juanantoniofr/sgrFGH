@@ -365,23 +365,42 @@ class TitulacionController extends BaseController {
         $respuesta = array();
         
         //@param
-        $aCodigos = Input::get('aCodigos',array());
+        $aCodigosTitulaciones = Input::get('aCodigosTitulaciones',array());
+        $aCodigosAsignaturas = input::get('aCodigosAsignaturas',array());
         //return $aCodigos;
 
         //Validación Input
-        if (empty($aCodigos)) return $respuesta;
+        if (empty($aCodigosAsignaturas) || empty($aCodigosTitulaciones)) return $respuesta;
 
-        
-        foreach($aCodigos as $codigo) {
+        if (in_array('all', $aCodigosAsignaturas) != false){
 
             $aProfesores = array();
-            Asignatura::where('codigo','=',$codigo)->first()->gruposAsignatura->each(function($grupoAsignatura) use (&$aProfesores){
-                                        $aProfesores[] = $grupoAsignatura->profesores->toArray();
-                                });
-        
-            $respuesta[] = [    'asignatura' => [ 'codigo' => $codigo ], 
-                                'profesores' => $aProfesores, ];
+            foreach ($aCodigosTitulaciones as $codigoTitulacion) {
+                # code...
+                Titulacion::where('codigo','=',$codigoTitulacion)->first()->asignaturas->each(function($asignatura) use (&$respuesta){
 
+                                $aProfesores = array();
+                                $asignatura->gruposAsignatura->each(function($g) use (&$aProfesores) {
+                                        $aProfesores[] = $g->profesores->toArray();
+                                });
+                                $respuesta[] = [    'asignatura' => [ 'codigo' => $asignatura->codigo ],
+                                                    'profesores' => $aProfesores ];
+                });
+            } 
+        }
+        else {
+        
+            foreach($aCodigosAsignaturas as $codigo) {
+
+                $aProfesores = array();
+                Asignatura::where('codigo','=',$codigo)->first()->gruposAsignatura->each(function($grupoAsignatura) use (&$aProfesores){
+                        $aProfesores[] = $grupoAsignatura->profesores->toArray();
+                });
+        
+                $respuesta[] = [    'asignatura' => [ 'codigo' => $codigo ], 
+                                    'profesores' => $aProfesores, ];
+
+            }
         }
         
         //formato Key = codigo Asignautra, Value Asignatura

@@ -64,3 +64,9 @@
 		</table>
 	@endforeach
 @endif
+
+<div class = "col-lg-10 col-lg-offset-1 bg-warning" style="margin-top: 40px">
+
+	<p>No se encontraron eventos</p>
+
+</div>

@@ -61,27 +61,29 @@ class InformesController extends BaseController {
     */
 	public function getEventosByFiltros(){
 
+		//Inputs
 		$inputs = Input::all();
 		
 		$f_inicio_filtro = Input::get('f_inicio',Config::get('calendarioLectivo.f_inicio_curso'));
 		$f_fin_filtro = Input::get('f_fin',Config::get('calendarioLectivo.f_fin_curso'));
 
 
-		$aCodigosTitulaciones = Input::get('aCodigosTitulaciones','');
-		$aCodigosAsignaturas = Input::get('aCodigosAsignaturas','');
+		$aCodigosTitulaciones = Input::get('aCodigosTitulaciones',array());
+		$aCodigosAsignaturas = Input::get('aCodigosAsignaturas',array());
+		$aIdProfesores = Input::get('aIdProfesores',array());
 
+		//Outputs
+		$id_grupos = array('0'); //identificadores de grupos de alumnos de cada asignatura
+		
+		//Code obtener identificadores de grupos de alumnos según criterios de filtrado
+
+
+		//Filtro por titulaciones
 		$aTitulaciones = array();
 		if ( !empty($aCodigosTitulaciones) ){
+			
 			$aTitulaciones = Titulacion::whereIN('codigo',$aCodigosTitulaciones)->get();
-			//$aAsignaturas = Titulacion::whereIN('codigo',$aCodigosTitulaciones)->get()->asignaturas(); 
-		
-		/*$eventos = Recurso::findAll()->where('events', function($e) {
-    					$e->gruposAsignatura->asignatura()->titulacion()->where('codigo', 'in', '$aTitulaciones');
-					})->get();
-		
-		*/
-					//$roles = $user->roles->each(function($role)
-			$id_grupos = array('0'); //
+
 			Titulacion::whereIN('codigo',$aCodigosTitulaciones)->get()->each(function($titulacion) use (&$id_grupos) {
 
 										$titulacion->asignaturas->each(function($asignatura) use (&$id_grupos) {
@@ -93,6 +95,36 @@ class InformesController extends BaseController {
 			});
 		}
 
+		//Filtro por asignaturas (value = all => todas las asignaturas)
+		if (!empty($aCodigosAsignaturas) && in_array('all', $aCodigosAsignaturas) == false){
+			//tenemos que eliminar del array $id_grupos, aquellos identificadores que no coinciden con los grupos de las asignaturas seleccionadas
+			$id_grupos = array('0');
+			Asignatura::whereIN('codigo',$aCodigosAsignaturas)->get()->each(function($asignatura) use (&$id_grupos) {
+
+						//$titulacion->asignaturas->whereIN('codigo',$aCodigosAsignaturas)->get()->each(function($asignatura) use (&$id_grupos) {
+
+											$asignatura->gruposAsignatura->each(function($g) use (&$id_grupos){
+												$id_grupos[] = $g->id;	
+											});
+										//});
+			});
+		}
+
+		//Filtro por profesores (value = all => todos/as los/as profesores/as)
+		if (!empty($aIdProfesores) && in_array('all', $aIdProfesores) == false){
+			//tenemos que eliminar del array $id_grupos, aquellos identificadores que no coinciden con los grupos de las asignaturas seleccionadas
+			$id_grupos = array('0');
+			Profesor::whereIN('id',$aIdProfesores)->get()->each(function($profesor) use (&$id_grupos) {
+
+						//$titulacion->asignaturas->whereIN('codigo',$aCodigosAsignaturas)->get()->each(function($asignatura) use (&$id_grupos) {
+
+											$profesor->gruposAsignatura->each(function($g) use (&$id_grupos){
+												$id_grupos[] = $g->id;	
+											});
+										//});
+			});
+		}
+
 		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro,$id_grupos) {
     					
     					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIN('grupos_asignatura_id',$id_grupos);
@@ -100,7 +132,7 @@ class InformesController extends BaseController {
 
 		
 
-		$resultado = View::make('informes.resultado',compact('recursos','id_grupos'))->nest('thead','informes.thead');
+		$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas'))->nest('thead','informes.thead');
 		return $resultado;
 	}
 
