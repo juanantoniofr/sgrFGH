@@ -66,6 +66,7 @@ class InformesController extends BaseController {
 		
 		$f_inicio_filtro = Input::get('f_inicio',Config::get('calendarioLectivo.f_inicio_curso'));
 		$f_fin_filtro = Input::get('f_fin',Config::get('calendarioLectivo.f_fin_curso'));
+		$aDias = Input::get('aDias',[1,2,3,4,5]); //filtra por fías de la semana // por defecto selecciona evento de todos los dias
 
 
 		$aCodigosTitulaciones = Input::get('aCodigosTitulaciones',array());
@@ -125,14 +126,14 @@ class InformesController extends BaseController {
 			});
 		}
 
-		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro,$id_grupos) {
+		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro,$aDias,$id_grupos) {
     					
-    					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIN('grupos_asignatura_id',$id_grupos);
+    					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIn('dia',$aDias)->whereIN('grupos_asignatura_id',$id_grupos);
     				})->get();
 
 		
 
-		$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas'))->nest('thead','informes.thead');
+		$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas','aDias'))->nest('thead','informes.thead');
 		return $resultado;
 	}
 

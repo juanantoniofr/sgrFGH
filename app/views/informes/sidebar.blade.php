@@ -1,19 +1,21 @@
 <div class="col-lg-12 sidebar" id="opciones-filtrado">
 {{Form::open(array('method' => 'POST',/*'route' => '',*/'role' => 'form','id'=>'fBuscaDisponible'))}}
     
-    <h3>Opciones de Filtrado</h3>
+    <h2>Opciones de Filtrado</h2>
     
+    <!--
     <div class = "align-right">
           <a type="button" data-view="$viewActive" data-day="{{-- $day --}}" data-month="{{-- $numMonth --}}" data-year="{{-- $year --}}"  id="botonFiltrarEventos"  class="btn btn-info {{-- disabled --}}">
             <i class="fa fa-print fa-fw" ></i> Filtar
           </a>
     </div>
-
+    -->
+    {{-- Filtrar por estudios//Asiganturas//Profesor --}}
     <div class="titulo-acordeon">
 
-        <h4><a href="">Plan docente <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h4>
+        <h3><a href="">Plan docente <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h3>
     </div> 
-    <div class="fila-acordeon">
+    <div class="fila-acordeon" style="display:none">
         {{-- Select titulaciones --}}  
         <div class="form-group ">
                         
@@ -49,14 +51,14 @@
     {{-- Filtrar por fechas/día y horario de los eventos--}}
     <div class="titulo-acordeon"  >
 
-        <h4><a href="">Evento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h4>
+        <h3><a href="">Evento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h3>
     </div>    
     
-    <div class="fila-acordeon" style="display:none" >
+    <div class="fila-acordeon" {{-- style="display:none" --}}>
         
         <div class="form-group col-lg-10">
-            <p>{{Form::label('fi', 'Fecha inicio')}}: <input class="form-control" type="text" id="datepickerIni"></p>
-            <p>{{Form::label('ff', 'Fecha fin')}}: <input class="form-control" type="text" id="datepickerFin"></p>
+            <p>{{Form::label('f_inicio', 'Fecha inicio')}}: <input name="f_inicio" class="form-control" type="text" id="datepickerIni" value="{{ Config::get('calendarioLectivo.f_inicio_curso') }}"></p>
+            <p>{{Form::label('f_fin', 'Fecha fin')}}: <input name="f_fin" class="form-control" type="text" id="datepickerFin" value="{{ Config::get('calendarioLectivo.f_fin_curso') }}"></p>
         </div>
      
         <div class="form-group col-lg-10" id="dias">
@@ -65,31 +67,31 @@
             <br />
         
             <div class="checkbox-inline" style="display:none">
-                <label><input type="checkbox" value = "0" name="dias[]"> D</label>
+                <label><input type="checkbox" value = "0" name="dias"> D</label>
             </div>
       
             <div class="checkbox-inline">
-                <label><input type="checkbox" value = "1" name="dias[]"> L</label>
+                <label><input type="checkbox" value = "1" name="dias" checked="checked"> L</label>
             </div>
       
             <div class="checkbox-inline">
-                <label><input type="checkbox" value = "2" name="dias[]"> M</label>
+                <label><input type="checkbox" value = "2" name="dias" checked="checked"> M</label>
             </div>  
       
             <div class="checkbox-inline">
-                <label><input type="checkbox" value = "3" name="dias[]"> X</label>  
+                <label><input type="checkbox" value = "3" name="dias" checked="checked"> X</label>  
             </div>
       
             <div class="checkbox-inline">
-                <label><input type="checkbox" value = "4" name="dias[]"> J</label>  
+                <label><input type="checkbox" value = "4" name="dias" checked="checked"> J</label>  
             </div>
       
             <div class="checkbox-inline">
-                <label><input type="checkbox" value = "5" name="dias[]"> V</label>  
+                <label><input type="checkbox" value = "5" name="dias" checked="checked"> V</label>  
             </div>
       
             <div class="checkbox-inline" style="display:none">
-                <label><input type="checkbox" value = "6" name="dias[]"> S</label>
+                <label><input type="checkbox" value = "6" name="dias"> S</label>
             </div>
         </div>    
       
@@ -139,7 +141,7 @@
     {{-- Filtrar por equipamiento --}}
     <div class="titulo-acordeon" >
         
-        <h4><a href="#" >Equipamiento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h4>
+        <h3><a href="#" >Equipamiento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h3>
     </div>
 
     <div class="fila-acordeon" style="display:none">

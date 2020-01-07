@@ -50,7 +50,7 @@
 
 @section('js')
 
-    {{HTML::script('assets/js/disponibilidad.js')}}
+    {{HTML::script('assets/js/sgr.js')}}
     {{HTML::script('assets/js/datepicker-es.js')}}
 
 @stop
