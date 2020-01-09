@@ -67,7 +67,8 @@ class InformesController extends BaseController {
 		$f_inicio_filtro = Input::get('f_inicio',Config::get('calendarioLectivo.f_inicio_curso'));
 		$f_fin_filtro = Input::get('f_fin',Config::get('calendarioLectivo.f_fin_curso'));
 		$aDias = Input::get('aDias',[1,2,3,4,5]); //filtra por fías de la semana // por defecto selecciona evento de todos los dias
-
+		$h_inicio = Input::get('h_inicio','8:30');
+		$h_fin = Input::get('h_fin','21:30');
 
 		$aCodigosTitulaciones = Input::get('aCodigosTitulaciones',array());
 		$aCodigosAsignaturas = Input::get('aCodigosAsignaturas',array());
@@ -77,7 +78,6 @@ class InformesController extends BaseController {
 		$id_grupos = array('0'); //identificadores de grupos de alumnos de cada asignatura
 		
 		//Code obtener identificadores de grupos de alumnos según criterios de filtrado
-
 
 		//Filtro por titulaciones
 		$aTitulaciones = array();
@@ -126,14 +126,14 @@ class InformesController extends BaseController {
 			});
 		}
 
-		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro,$aDias,$id_grupos) {
+		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro,$aDias,$h_inicio,$h_fin,$id_grupos) {
     					
-    					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIn('dia',$aDias)->whereIN('grupos_asignatura_id',$id_grupos);
+    					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIn('dia',$aDias)->whereIN('grupos_asignatura_id',$id_grupos)->whereBetween('horaInicio', [date('H:i:s',strtotime($h_inicio)), date('H:i:s',strtotime($h_fin))])->whereBetween('horaFin', [date('H:i:s',strtotime($h_inicio)), date('H:i:s',strtotime($h_fin))]);
     				})->get();
-
+		//where('horaInicio','>=',date('H:i:s',strtotime($h_inicio)))->where('horaFin','<=',date('H:i:s',strtotime($h_fin)))->
 		
 
-		$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas','aDias'))->nest('thead','informes.thead');
+		$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas','aDias','h_inicio','h_fin'))->nest('thead','informes.thead');
 		return $resultado;
 	}
 

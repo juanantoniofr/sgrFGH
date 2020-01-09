@@ -8,6 +8,8 @@ $(function(e){
             f_inicio: '',
             f_fin: '',
             dias: [],
+            h_inicio: '8:30',
+            h_fin: '9:30,',
 
             init: function(){
         
@@ -19,6 +21,9 @@ $(function(e){
                 $("div#opciones-filtrado input[name='dias']:checked").each(function() { 
                     $data.dias.push( parseInt ($(this).val()) ); 
                 }); 
+                if ( $("div#opciones-filtrado select[name='h_inicio']").val() != null) this.h_inicio = $("div#opciones-filtrado select[name='h_inicio']").val();
+                if ( $("div#opciones-filtrado select[name='h_fin']").val() != null) this.h_fin = $("div#opciones-filtrado select[name='h_fin']").val();
+
             },
 
             setTitulacion: function($aTitulaciones){
@@ -57,6 +62,18 @@ $(function(e){
                 return true;
             },
 
+            setH_inicio: function($h_inicio){
+
+                this.h_inicio = $h_inicio;
+                return true;
+            },
+
+            setH_fin: function($h_fin){
+
+                this.h_fin = $h_fin;
+                return true;
+            },
+
             getTitulaciones: function(){
                 
                 return  this.titulaciones;
@@ -85,6 +102,16 @@ $(function(e){
             getDias: function(){
 
                 return this.dias;
+            },
+
+            getH_inicio: function(){
+
+                return this.h_inicio;
+            },
+
+            getH_fin: function(){
+
+                return this.h_fin;
             },
     };
 
@@ -191,6 +218,30 @@ $(function(e){
     });
 
 
+    $("div#opciones-filtrado select[name='h_inicio']").on('change',function(e){
+        
+        e.preventDefault();
+        e.stopPropagation();
+
+        $data.setH_inicio($(this).val());
+        
+        //obtener eventos
+        showGifEspera();    
+        getEventos();
+    });
+
+    $("div#opciones-filtrado select[name='h_fin']").on('change',function(e){
+        
+        e.preventDefault();
+        e.stopPropagation();
+
+        $data.setH_fin($(this).val());
+        
+        //obtener eventos
+        showGifEspera();    
+        getEventos();
+    });
+
     function getAsignaturas(){
         $.ajax({
             type: "GET",
@@ -253,7 +304,7 @@ $(function(e){
         $.ajax({
             type: "GET",
             url: "getEventosByFiltros", /* terminar en controllador */
-            data: {aCodigosTitulaciones:$data.getTitulaciones(),aCodigosAsignaturas:$data.getAsignaturas(),aIdProfesores:$data.getProfesores(),f_inicio:$data.getF_inicio(),f_fin:$data.getF_fin(),aDias:$data.getDias()},
+            data: {aCodigosTitulaciones:$data.getTitulaciones(),aCodigosAsignaturas:$data.getAsignaturas(),aIdProfesores:$data.getProfesores(),f_inicio:$data.getF_inicio(),f_fin:$data.getF_fin(),aDias:$data.getDias(),h_inicio:$data.getH_inicio(),h_fin:$data.getH_fin()},
             success: function($respuesta){
                 
                 //console.log($respuesta);
