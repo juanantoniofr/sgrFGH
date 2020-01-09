@@ -11,9 +11,9 @@
     		<thead id="tableHead"> {{ $thead or ''}} </thead>
     		<tbody id="tableBody">
     			@foreach (Config::get('options.rangoHorarios') as $hora) 
-    				@if ( strtotime($h_inicio) <= strtotime($hora) && strtotime($hora) < strtotime($h_fin) )
+    				{{-- @if ( strtotime($h_inicio) <= strtotime($hora) && strtotime($hora) < strtotime($h_fin) ) --}}
 						<tr>
-							<td style = "width:6%">{{ $hora or '' }}</td>
+							<td style = "padding: 15px">{{ date('H:i',strtotime($hora)) }} <b>//</b> {{ date('H:i',strtotime($hora)+1800) }}</td>
 							<td>
 								@if(in_array(1,$aDias))
 									<?php $eventos = $recurso->filtraEventos(1,$hora); ?>
@@ -70,7 +70,7 @@
 								@endif
 							</td>
 						</tr>
-					@endif
+					{{-- @endif --}}
 				@endforeach
 		    </tbody>
 		</table>

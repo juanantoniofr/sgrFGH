@@ -21,7 +21,7 @@ class Recurso extends Eloquent {
         
         $eventos = $this->events->filter(function($e) use ($dia,$hora){
                  
-                    return ( $e->dia == $dia && strtotime($e->horaInicio) <= strtotime($hora) && strtotime($hora) <= strtotime($e->horaFin) );
+                    return ( $e->dia == $dia && strtotime($e->horaInicio) <= strtotime($hora) && strtotime($hora) < strtotime($e->horaFin) );
                 });
 
         $aEventos_id = array();

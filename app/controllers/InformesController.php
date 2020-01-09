@@ -128,10 +128,20 @@ class InformesController extends BaseController {
 
 		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro,$aDias,$h_inicio,$h_fin,$id_grupos) {
     					
-    					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIn('dia',$aDias)->whereIN('grupos_asignatura_id',$id_grupos)->whereBetween('horaInicio', [date('H:i:s',strtotime($h_inicio)), date('H:i:s',strtotime($h_fin))])->whereBetween('horaFin', [date('H:i:s',strtotime($h_inicio)), date('H:i:s',strtotime($h_fin))]);
+    					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIn('dia',$aDias)->whereIN('grupos_asignatura_id',$id_grupos);
     				})->get();
+		//->whereBetween('horaInicio', [date('H:i:s',strtotime($h_inicio)), date('H:i:s',strtotime($h_fin))])->whereBetween('horaFin', [date('H:i:s',strtotime($h_inicio)), date('H:i:s',strtotime($h_fin))])
 		//where('horaInicio','>=',date('H:i:s',strtotime($h_inicio)))->where('horaFin','<=',date('H:i:s',strtotime($h_fin)))->
 		
+		$recursos = $recursos->filter(function($r) use ($h_inicio,$h_fin){
+
+				$resultado = true;
+				$r->events->each(function($e) use ($h_inicio,$h_fin,&$resultado){
+					if ( strtotime($e->horaInicio) >= strtotime($h_fin) ) $resultado = false; 
+					if (  strtotime($e->horaFin) <= strtotime($h_inicio) ) $resultado = false;
+				});
+			    return $resultado;
+		});
 
 		$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas','aDias','h_inicio','h_fin'))->nest('thead','informes.thead');
 		return $resultado;
