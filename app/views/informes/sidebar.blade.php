@@ -54,7 +54,7 @@
         <h3><a href="">Evento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h3>
     </div>    
     
-    <div class="fila-acordeon" {{-- style="display:none" --}}>
+    <div class="fila-acordeon"style="display:none">
         
         <div class="form-group col-lg-10">
             <p>{{Form::label('f_inicio', 'Fecha inicio')}}: <input name="f_inicio" class="form-control" type="text" id="datepickerIni" value="{{ Config::get('calendarioLectivo.f_inicio_curso') }}"></p>
@@ -124,7 +124,7 @@
         <h3><a href="#" >Equipamiento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h3>
     </div>
 
-    <div class="fila-acordeon" style="display:none">
+    <div class="fila-acordeon" {{-- style="display:none" --}}>
         
         <div class="form-group col-lg-10 form-equipamiento" id="fgaforomax">
 
@@ -148,7 +148,7 @@
             @foreach($aMediosDisponibles as $medio) 
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name = "mediosdisponibles[]" value="{{$medio['codigo']}}" > {{$medio['nombre']}}
+                        <input type="checkbox" name = "mediosdisponibles" value="{{$medio['codigo']}}" checked="checked"> {{$medio['nombre']}}
                     </label>
                 </div>
             @endforeach

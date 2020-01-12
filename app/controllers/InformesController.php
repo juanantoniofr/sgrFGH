@@ -69,6 +69,9 @@ class InformesController extends BaseController {
 		$aDias = Input::get('aDias',[1,2,3,4,5]); //filtra por fías de la semana // por defecto selecciona evento de todos los dias
 		$h_inicio = Input::get('h_inicio','8:30');
 		$h_fin = Input::get('h_fin','21:30');
+		$aforomax = Input::get('aforomax','');
+		$aforoexam = Input::get('aforoexam','');
+		$medios = Input::get('medios',Config::get('mediosdisponibles.codigos'));
 
 		$aCodigosTitulaciones = Input::get('aCodigosTitulaciones',array());
 		$aCodigosAsignaturas = Input::get('aCodigosAsignaturas',array());
@@ -126,13 +129,14 @@ class InformesController extends BaseController {
 			});
 		}
 
-		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro,$aDias,$h_inicio,$h_fin,$id_grupos) {
+		$recursos = Recurso::whereHas('events', function($e) use ($f_inicio_filtro,$f_fin_filtro,$aDias,$id_grupos) {
     					
     					$e->where('fechaEvento','>=',Date::toDB($f_inicio_filtro))->where('fechaEvento','<=',Date::toDB($f_fin_filtro))->whereIn('dia',$aDias)->whereIN('grupos_asignatura_id',$id_grupos);
     				})->get();
 		//->whereBetween('horaInicio', [date('H:i:s',strtotime($h_inicio)), date('H:i:s',strtotime($h_fin))])->whereBetween('horaFin', [date('H:i:s',strtotime($h_inicio)), date('H:i:s',strtotime($h_fin))])
 		//where('horaInicio','>=',date('H:i:s',strtotime($h_inicio)))->where('horaFin','<=',date('H:i:s',strtotime($h_fin)))->
 		
+		//filtar por hora de inicio y hora fin de eventos
 		$recursos = $recursos->filter(function($r) use ($h_inicio,$h_fin){
 
 				$resultado = true;
@@ -143,7 +147,36 @@ class InformesController extends BaseController {
 			    return $resultado;
 		});
 
-		$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas','aDias','h_inicio','h_fin'))->nest('thead','informes.thead');
+		//filtar por aforo máximo
+		if (!empty($aforomax)){
+			
+			$recursos = $recursos->filter(function($r) use($aforomax){
+				
+				return ($r->aforomaximo >= $aforomax);
+			});
+		}
+
+		//filtar por aforo examen
+		if (!empty($aforoexam)){
+			
+			$recursos = $recursos->filter(function($r) use($aforoexam){
+				
+				return ($r->aforoexamen >= $aforoexam);
+			});
+		}
+
+
+		//filtar por medios
+		foreach ($medios as $medio) {
+			
+			$recursos = $recursos->filter(function($r) use($medio){
+				
+				$mediosdisponibles = explode(',',json_decode($r->mediosdisponibles,true)['medios']);
+				return ( in_array($medio, $mediosdisponibles) );
+			});
+		}
+
+		$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas','aDias'))->nest('thead','informes.thead');
 		return $resultado;
 	}
 

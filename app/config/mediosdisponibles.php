@@ -17,5 +17,7 @@ return array (
       'codigo'  => 'MIC',
       'nombre'   => 'Micrófono'),
   ),
+  
+  'codigos' => array('PRO','PC','VIP','VWEB','MIC'),
 );
 ?>

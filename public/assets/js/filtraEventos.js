@@ -10,6 +10,9 @@ $(function(e){
             dias: [],
             h_inicio: '8:30',
             h_fin: '9:30,',
+            aforomax: '',
+            aforoexam:'',
+            medios: [],
 
             init: function(){
         
@@ -23,7 +26,11 @@ $(function(e){
                 }); 
                 if ( $("div#opciones-filtrado select[name='h_inicio']").val() != null) this.h_inicio = $("div#opciones-filtrado select[name='h_inicio']").val();
                 if ( $("div#opciones-filtrado select[name='h_fin']").val() != null) this.h_fin = $("div#opciones-filtrado select[name='h_fin']").val();
-
+                if ( $("div#opciones-filtrado input[name='aforomax']").val() != null) this.aforomax = $("div#opciones-filtrado input[name='aforomax']").val();
+                if ( $("div#opciones-filtrado input[name='aforoexam']").val() != null) this.aforoexam = $("div#opciones-filtrado input[name='aforoexam']").val();
+                $("div#opciones-filtrado input[name='mediosdisponibles']:checked").each(function() { 
+                    $data.medios.push( $(this).val() ); 
+                });
             },
 
             setTitulacion: function($aTitulaciones){
@@ -74,6 +81,24 @@ $(function(e){
                 return true;
             },
 
+            setAforomax: function($aforomax){
+
+                this.aforomax = $aforomax;
+                return true;
+            },
+
+            setAforoexam: function($aforoexam){
+
+                this.aforoexam = $aforoexam;
+                return true;
+            },
+
+            setMedios: function($aMedios){
+
+                this.medios = $aMedios;
+                return true;
+            },
+
             getTitulaciones: function(){
                 
                 return  this.titulaciones;
@@ -112,6 +137,21 @@ $(function(e){
             getH_fin: function(){
 
                 return this.h_fin;
+            },
+
+            getAforomax: function(){
+
+                return this.aforomax;
+            },
+
+            getAforoexam: function(){
+
+                return this.aforoexam;
+            },
+
+            getMedios: function(){
+
+                return this.medios;
             },
     };
 
@@ -242,6 +282,48 @@ $(function(e){
         getEventos();
     });
 
+    $("div#opciones-filtrado input[name='aforomax']").on('change',function(e){
+        
+        e.preventDefault();
+        e.stopPropagation();
+
+        //alert($(this).val());
+        $data.setAforomax($(this).val());
+        
+        //obtener eventos
+        showGifEspera();    
+        getEventos();
+    });
+
+    $("div#opciones-filtrado input[name='aforoexam']").on('change',function(e){
+        
+        e.preventDefault();
+        e.stopPropagation();
+
+        //alert($(this).val());
+        $data.setAforoexam($(this).val());
+        
+        //obtener eventos
+        showGifEspera();    
+        getEventos();
+    });
+
+    $("div#opciones-filtrado input[name='mediosdisponibles']").on('change',function(e){
+        
+        //e.preventDefault();
+        e.stopPropagation();
+
+        var $aMedios = []; 
+        $("div#opciones-filtrado input[name='mediosdisponibles']:checked").each(function() { 
+                $aMedios.push( $(this).val() ); 
+            }); 
+        $data.setMedios($aMedios);
+        
+        //obtener eventos
+        showGifEspera();    
+        getEventos();
+    });
+
     function getAsignaturas(){
         $.ajax({
             type: "GET",
@@ -304,7 +386,7 @@ $(function(e){
         $.ajax({
             type: "GET",
             url: "getEventosByFiltros", /* terminar en controllador */
-            data: {aCodigosTitulaciones:$data.getTitulaciones(),aCodigosAsignaturas:$data.getAsignaturas(),aIdProfesores:$data.getProfesores(),f_inicio:$data.getF_inicio(),f_fin:$data.getF_fin(),aDias:$data.getDias(),h_inicio:$data.getH_inicio(),h_fin:$data.getH_fin()},
+            data: {aCodigosTitulaciones:$data.getTitulaciones(),aCodigosAsignaturas:$data.getAsignaturas(),aIdProfesores:$data.getProfesores(),f_inicio:$data.getF_inicio(),f_fin:$data.getF_fin(),aDias:$data.getDias(),h_inicio:$data.getH_inicio(),h_fin:$data.getH_fin(),aforomax:$data.getAforomax(),aforoexam:$data.getAforoexam(),medios:$data.getMedios()},
             success: function($respuesta){
                 
                 //console.log($respuesta);
