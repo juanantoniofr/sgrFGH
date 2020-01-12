@@ -1,7 +1,7 @@
 <div class="col-lg-12 sidebar" id="opciones-filtrado">
 {{Form::open(array('method' => 'POST',/*'route' => '',*/'role' => 'form','id'=>'fBuscaDisponible'))}}
     
-    <h2>Opciones de Filtrado</h2>
+    <h3>Opciones de Filtrado</h3>
     
     <!--
     <div class = "align-right">
@@ -13,7 +13,7 @@
     {{-- Filtrar por estudios//Asiganturas//Profesor --}}
     <div class="titulo-acordeon">
 
-        <h3><a href="">Plan docente <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h3>
+        <h3><a href="">Por Estudios//Asignaturas//Profesor <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h3>
     </div> 
     <div class="fila-acordeon" style="display:none">
         {{-- Select titulaciones --}}  
@@ -51,7 +51,7 @@
     {{-- Filtrar por fechas/día y horario de los eventos--}}
     <div class="titulo-acordeon"  >
 
-        <h3><a href="">Evento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h3>
+        <h3><a href="">Por fechas/día y horario de los eventos <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h3>
     </div>    
     
     <div class="fila-acordeon"style="display:none">
@@ -121,10 +121,10 @@
     {{-- Filtrar por equipamiento --}}
     <div class="titulo-acordeon" >
         
-        <h3><a href="#" >Equipamiento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h3>
+        <h3><a href="#" >Por aforos y equipamiento <i class="fa fa-angle-double-down" aria-hidden="true"></i></a></h3>
     </div>
 
-    <div class="fila-acordeon" {{-- style="display:none" --}}>
+    <div class="fila-acordeon" style="display:none" >
         
         <div class="form-group col-lg-10 form-equipamiento" id="fgaforomax">
 

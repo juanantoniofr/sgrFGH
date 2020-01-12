@@ -47,7 +47,7 @@ class InformesController extends BaseController {
 		//se devuelve la vista calendario.
 		$aMediosDisponibles = Config::get('mediosdisponibles.medios');
 		
-		return View::make('informes.index')->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tHead',$tHead)->with('tBody',$tBody)->with('viewActive',$viewActive)->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg')->nest('sidebar','informes.sidebar',compact('aMediosDisponibles','titulaciones'));
+		return View::make('informes.index')->with('day',$day)->with('numMonth',$numMonth)->with('year',$year)->with('tHead',$tHead)->with('tBody',$tBody)->with('viewActive',$viewActive)->nest('dropdown',$dropdown)->nest('modaldescripcion','modaldescripcion')->nest('modalMsg','modalMsg')->nest('sidebar','informes.sidebar',compact('aMediosDisponibles','titulaciones'))->nest('msgInicio','informes.msgInicio');
 	
 		//Quitamos sidebar: ->nest('sidebar','sidebar',array('msg' => $msg,'grupos' => $groupWithAccess))
 	}
