@@ -61,7 +61,7 @@
             <p>{{Form::label('f_fin', 'Fecha fin')}}: <input name="f_fin" class="form-control" type="text" id="datepickerFin" value="{{ Config::get('calendarioLectivo.f_fin_curso') }}"></p>
         </div>
      
-        <div class="form-group col-lg-10" id="dias">
+        <div class="form-group col-lg-12" id="dias">
       
             {{Form::label('d', 'Días')}}
             <br />
@@ -95,10 +95,10 @@
             </div>
         </div>    
       
-        <div class="form-group col-lg-10" id="hFin">
+        <div class="form-group" id="hFin">
         
             {{Form::label('h', 'Horario')}}
-        
+            <h4 class="">Desde:</h4>
             <div class="">
                 <select class="form-control"  name="h_inicio" id="newReservaHinicio">
                     @foreach (Config::get('options.rangoHorarios') as $hora)
@@ -148,7 +148,7 @@
             @foreach($aMediosDisponibles as $medio) 
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name = "mediosdisponibles" value="{{$medio['codigo']}}" checked="checked"> {{$medio['nombre']}}
+                        <input type="checkbox" name = "mediosdisponibles" value="{{$medio['codigo']}}" > {{$medio['nombre']}}
                     </label>
                 </div>
             @endforeach

@@ -15,6 +15,9 @@ $(function(e){
             medios: [],
 
             init: function(){
+
+                $("div#opciones-filtrado #newReservaHfin option:last").prop("selected", "selected");
+                $("div#opciones-filtrado select#newReservaHinicio option:first").prop("selected", "selected");
         
                 if ($('div#opciones-filtrado select#titulacion').val() != null) this.titulaciones = $('div#opciones-filtrado select#titulacion').val();
                 if ($('div#opciones-filtrado select#asignatura').val() != null) this.asignaturas = $('div#opciones-filtrado select#asignatura').val();
@@ -31,6 +34,8 @@ $(function(e){
                 $("div#opciones-filtrado input[name='mediosdisponibles']:checked").each(function() { 
                     $data.medios.push( $(this).val() ); 
                 });
+
+
             },
 
             setTitulacion: function($aTitulaciones){

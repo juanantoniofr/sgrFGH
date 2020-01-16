@@ -10,7 +10,7 @@
 <div id="page-wrapper" class="container-fluid"> 
 
 
-    <div id = "espera" style="display:none"></div>
+    <div id="espera" style="display:none"></div>
 
     <div id="calendario" class="col-lg-12">
         
@@ -24,7 +24,7 @@
                     
                     <div class = "btn-group"  >
 
-                        <a type="button" data-view="{{$viewActive}}" data-day="{{$day}}" data-month="{{$numMonth}}" data-year="{{$year}}"  id="btnprint"  class="btn btn-primary disabled">
+                        <a type="button" id="btnprint"  class="btn btn-primary">
                             <i class="fa fa-print fa-fw" ></i> Imprimir
                         </a>
                     </div>
@@ -89,17 +89,6 @@
                     <label><input type="checkbox"  id = "checknombre" value = "nombre" name="info[]" /> Nombre y apellidos</label>
                   </div>
               </div>      
-              <div class="col-md-6 col-md-offset-4"> 
-                  <div class="checkbox">
-                    <label><input type="checkbox" id = "checkcolectivo" value = "colectivo" name="info[]" /> Colectivo</label>
-                  </div>  
-              </div>     
-              
-              <div class="col-md-6 col-md-offset-4"> 
-                  <div class="checkbox">
-                    <label><input type="checkbox" id = "checktotal" value = "total" name="info[]" /> Total (puestos/equipos)</label>
-                  </div>  
-              </div>
               
               <div class="col-md-6 col-md-offset-4">
                 <label class="control-label">Tipo de Actividad:</label>
@@ -125,15 +114,13 @@
     </div><!-- ./modal-dialog -->
 </div>
 
-{{ $modaldescripcion or '' }}
-{{ $modalMsg         or '' }}
-{{ $modalFormFiltraCalendario or '' }}
+
 
 @stop
 
 @section('js')
   {{ HTML::script('assets/js/sgr.js')}}
   {{ HTML::script('assets/js/filtraEventos.js') }}
-  {{-- HTML::script('assets/js/imprimir.js') --}}
+  {{ HTML::script('assets/js/imprimirInformes.js') }}
   {{ HTML::script('assets/js/datepicker-es.js')}}
 @stop

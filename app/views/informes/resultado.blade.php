@@ -2,10 +2,12 @@
 
 	<h3>Resultados de busqueda</h3>
 </div>
+
 @if (!empty($recursos))
     
+    <span data-numerorecursos="{{ $recursos->count() }}" id="recursos-info"></span>
     @foreach($recursos as $recurso)
-    
+    	
 		<table style = "table-layout: fixed;width: 100%;" id="tableCalendar" class="informes" >
     		<caption id="tableCaption" class="text-align: center;padding: 40px;font-size: 36px;" > <span class="text-center">{{ $recurso->nombre }} </span> </caption>
     		<thead id="tableHead"> {{ $thead or ''}} </thead>
