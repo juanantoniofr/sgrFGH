@@ -98,7 +98,7 @@ class myPDF {
 		// This method has several options, check the source code documentation for more information.
 		$result = $pdf->Output($nombreFichero . '.pdf', 'I');
 		return $result;
-	}
+	}	
 
 	
 }

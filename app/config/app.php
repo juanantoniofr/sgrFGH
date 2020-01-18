@@ -107,6 +107,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Xavrsl\Cas\CasServiceProvider',
+		'Thujohn\Pdf\PdfServiceProvider',
 	),
 
 	/*
@@ -174,7 +175,7 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 		'Carbon'		  => 'Carbon/Carbon',
 		'PDF' 			  => 'Thujohn\Pdf\PdfFacade',
-		'Cas' 			  => 'Xavrsl\Cas\Facades\Cas',	
+		'Cas' 			  => 'Xavrsl\Cas\Facades\Cas',
 
 	),
 

@@ -156,12 +156,16 @@ class InformesController extends BaseController {
 	public function getPdfInforme(){
 
 
-		$html = View::make('informes.resultado',array($recursos = array(),$aDias = array()));
-		$nombreFichero = '_test';//.$recurso->nombre;
-		$result = myPDF::getPDF($html,$nombreFichero);
+		//$html = View::make('informes.resultado',array($recursos = array(),$aDias = array()));
+		//$nombreFichero = '_test';//.$recurso->nombre;
+		//$result = myPDF::getPDF($html,$nombreFichero);
 		//return $html;
-   		return Response::make($result)->header('Content-Type', 'application/pdf');
-
+   		//return Response::make($result)->header('Content-Type', 'application/pdf');
+		$html = '<html><body>'
+			. '<p>Put your html here, or generate it with your favourite '
+			. 'templating system.</p>'
+			. '</body></html>';
+		return PDF::load($html, 'A4', 'portrait')->show();
 
 	}
 
