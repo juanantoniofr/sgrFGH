@@ -30,8 +30,6 @@ class InformesController extends BaseController {
 	public function getEventosByFiltros(){
 
 		//Inputs
-		$inputs = Input::all();
-		
 		$f_inicio_filtro = Input::get('f_inicio',Config::get('calendarioLectivo.f_inicio_curso'));
 		$f_fin_filtro = Input::get('f_fin',Config::get('calendarioLectivo.f_fin_curso'));
 		$aDias = Input::get('aDias',[1,2,3,4,5]); //filtra por fías de la semana // por defecto selecciona evento de todos los dias
@@ -46,7 +44,7 @@ class InformesController extends BaseController {
 		$aIdProfesores = Input::get('aIdProfesores',array());
 
 		//Outputs
-		$id_grupos = array('0'); //identificadores de grupos de alumnos de cada asignatura
+		$id_grupos = array(''); //identificadores de grupos de alumnos de cada asignatura
 		
 		//Code obtener identificadores de grupos de alumnos según criterios de filtrado
 
@@ -70,7 +68,7 @@ class InformesController extends BaseController {
 		//Filtro por asignaturas (value = all => todas las asignaturas)
 		if (!empty($aCodigosAsignaturas) && in_array('all', $aCodigosAsignaturas) == false){
 			//tenemos que eliminar del array $id_grupos, aquellos identificadores que no coinciden con los grupos de las asignaturas seleccionadas
-			$id_grupos = array('0');
+			$id_grupos = array('');
 			Asignatura::whereIN('codigo',$aCodigosAsignaturas)->get()->each(function($asignatura) use (&$id_grupos) {
 
 						//$titulacion->asignaturas->whereIN('codigo',$aCodigosAsignaturas)->get()->each(function($asignatura) use (&$id_grupos) {
@@ -144,8 +142,27 @@ class InformesController extends BaseController {
 
 		$numeroRecursos = $recursos->count();
 
-		$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas','aDias','numeroRecursos'))->nest('thead','informes.thead');
+		//$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas','aDias','numeroRecursos'))->nest('thead','informes.thead');
+		$resultado = View::make('informes.resultado',compact('recursos','aDias'))->nest('thead','informes.thead');
 		return $resultado;
+	}
+
+
+	/**
+		* Genera informe de coupación // horario de clase
+		*
+		*
+	*/
+	public function getPdfInforme(){
+
+
+		$html = View::make('informes.resultado',array($recursos = array(),$aDias = array()));
+		$nombreFichero = '_test';//.$recurso->nombre;
+		$result = myPDF::getPDF($html,$nombreFichero);
+		//return $html;
+   		return Response::make($result)->header('Content-Type', 'application/pdf');
+
+
 	}
 
 	
