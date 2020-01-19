@@ -66,17 +66,16 @@ class InformesController extends BaseController {
 		}
 
 		//Filtro por asignaturas (value = all => todas las asignaturas)
+		$aAsignaturas = array();
 		if (!empty($aCodigosAsignaturas) && in_array('all', $aCodigosAsignaturas) == false){
 			//tenemos que eliminar del array $id_grupos, aquellos identificadores que no coinciden con los grupos de las asignaturas seleccionadas
 			$id_grupos = array('');
-			Asignatura::whereIN('codigo',$aCodigosAsignaturas)->get()->each(function($asignatura) use (&$id_grupos) {
+			$aAsignaturas = Asignatura::whereIN('codigo',$aCodigosAsignaturas)->get()->each(function($asignatura) use (&$id_grupos) {
 
-						//$titulacion->asignaturas->whereIN('codigo',$aCodigosAsignaturas)->get()->each(function($asignatura) use (&$id_grupos) {
-
-											$asignatura->gruposAsignatura->each(function($g) use (&$id_grupos){
-												$id_grupos[] = $g->id;	
-											});
-										//});
+					$asignatura->gruposAsignatura->each(function($g) use (&$id_grupos){
+					
+														$id_grupos[] = $g->id;	
+													});
 			});
 		}
 
@@ -145,8 +144,10 @@ class InformesController extends BaseController {
 		//$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas','aDias','numeroRecursos'))->nest('thead','informes.thead');
 		if (Input::get('generaPdf') == true){
 
-			$html = '<html><body>VARIABLE = TRUE ' . View::make('informes.resultado',compact('recursos','aDias')) . '</body></html>';
-			return PDF::load($html, 'A4', 'portrait')->show();
+			$horario = View::make('informes.resultado',compact('recursos','aDias'))->nest('thead','informes.thead');
+			$infoFiltros = View::make('informes.infoFiltros',compact('aTitulaciones','aAsignaturas'));
+			$html = View::make('pdf.informePdf',compact('horario','infoFiltros'));
+			return PDF::load($html, 'A4', 'landscape')->show();
 		}
 		else {
 

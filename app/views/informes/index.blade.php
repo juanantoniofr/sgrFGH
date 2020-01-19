@@ -36,9 +36,9 @@
         <div class= "row">
             @if(isset($msg) && !empty($msg))
             
-            <div class="alert alert-danger col-md-12 text-center" role="alert" id="alert_msg">
-              <strong>{{$msg}}</strong>
-            </div>  
+                <div class="alert alert-danger col-md-12 text-center" role="alert" id="alert_msg">
+                    <strong>{{$msg}}</strong>
+                </div>  
             @endif
           
             <div style = "display:none" class="alert alert-info col-md-12 text-center" role="alert" id="msg"></div> 

@@ -413,9 +413,9 @@ $(function(e){
             
             var url = $('#btnprint').attr('href'); 
             
-            alert($('#btnprint').attr('href'));
+            //alert($('#btnprint').attr('href'));
 
-            //window.open(url, '_blank');
+            window.open(url, '_blank');
             
             //$('#printModal').modal('show');
         }
@@ -430,20 +430,36 @@ $(function(e){
         $urlTitulaciones = '';
         $.each($data.getTitulaciones(),function($index, $codigotitulacion){
 
-            $urlTitulaciones += 'aCodigosTitulaciones[]='+$codigotitulacion+'&';
+            $urlTitulaciones += '&aCodigosTitulaciones[]='+$codigotitulacion;
+        });
+
+        $urlAsignaturas = '';
+        $.each($data.getAsignaturas(), function($index, $codigoasignatura){
+
+            $urlAsignaturas += '&aCodigosAsignaturas[]='+$codigoasignatura;
         });
 
         $urlProfesores = '';
         $.each($data.getProfesores(),function($index, $codigoprofesor){
 
-            $urlProfesores += 'aIdProfesores[]='+$codigoprofesor+'&';
+            $urlProfesores += '&aIdProfesores[]='+$codigoprofesor;
         });
         
+        $urlDias = '';
+        $.each($data.getDias(),function($index, $dia){
+
+            $urlDias += '&aDias[]='+$dia; 
+        });
+
+        $urlMedios = '';
+
+        $.each($data.getMedios(), function($index, $medio){
+
+            $urlMedios += '&medios[]='+$medio;
+        });
         
 
-        $url = 'getPdfInforme?generaPdf=1&'+$urlTitulaciones+$urlProfesores;
-        
-        //$url = 'getPdfInforme?generaPdf=1&aCodigosTitulaciones='+$data.getTitulaciones()+'&aIdProfesores='+$data.getProfesores()+'&f_inicio='+$data.getF_inicio()+'&f_fin='+$data.getF_fin()+'&aDias='+$data.getDias()+'&h_inicio='+$data.getH_inicio()+'&h_fin='+$data.getH_fin()+'&aforomax='+$data.getAforomax()+'&aforoexam='+$data.getAforoexam()+'&medios='+$data.getMedios();
+        $url = 'getPdfInforme?generaPdf=1'+$urlTitulaciones+$urlAsignaturas+$urlProfesores+'&f_inicio='+$data.getF_inicio()+'&f_fin='+$data.getF_fin()+$urlDias+'&h_inicio='+$data.getH_inicio()+'&h_fin='+$data.getH_fin()+'&aforomax='+$data.getAforomax()+'&aforoexam='+$data.getAforoexam()+$urlMedios;
         
         $('#btnprint').attr('href', $url);
     }
