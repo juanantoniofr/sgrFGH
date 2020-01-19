@@ -396,6 +396,7 @@ $(function(e){
                 
                 //console.log($respuesta);
                 $('#resultados-filtros').fadeOut(400,'linear').html($respuesta).fadeIn(400,'linear',function(){hideGifEspera();});
+                setPrintUrl();
             },
             error: function(xhr, ajaxOptions, thrownError){
                     hideGifEspera();
@@ -404,7 +405,50 @@ $(function(e){
         });
     }
 
-    // click filtrar eventos
+    $('#btnprint').on('click',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        if ($('#recursos-info') != null && $('#recursos-info').data('numerorecursos') > 0){
+            
+            var url = $('#btnprint').attr('href'); 
+            
+            alert($('#btnprint').attr('href'));
+
+            //window.open(url, '_blank');
+            
+            //$('#printModal').modal('show');
+        }
+        else {
+            alert('Seleccione filtros para generar informes y/o horarios de ocupación');
+        }
+        
+    });
+
+    function setPrintUrl(){
+
+        $urlTitulaciones = '';
+        $.each($data.getTitulaciones(),function($index, $codigotitulacion){
+
+            $urlTitulaciones += 'aCodigosTitulaciones[]='+$codigotitulacion+'&';
+        });
+
+        $urlProfesores = '';
+        $.each($data.getProfesores(),function($index, $codigoprofesor){
+
+            $urlProfesores += 'aIdProfesores[]='+$codigoprofesor+'&';
+        });
+        
+        
+
+        $url = 'getPdfInforme?generaPdf=1&'+$urlTitulaciones+$urlProfesores;
+        
+        //$url = 'getPdfInforme?generaPdf=1&aCodigosTitulaciones='+$data.getTitulaciones()+'&aIdProfesores='+$data.getProfesores()+'&f_inicio='+$data.getF_inicio()+'&f_fin='+$data.getF_fin()+'&aDias='+$data.getDias()+'&h_inicio='+$data.getH_inicio()+'&h_fin='+$data.getH_fin()+'&aforomax='+$data.getAforomax()+'&aforoexam='+$data.getAforoexam()+'&medios='+$data.getMedios();
+        
+        $('#btnprint').attr('href', $url);
+    }
+
+    // click filtrar eventos (borrar??, si se prefiere llama ajax cada vez que cambie un filtro)
     $('#botonFiltrarEventos').on('click',function(e){
         e.preventDefault();
         e.stopPropagation();

@@ -143,13 +143,22 @@ class InformesController extends BaseController {
 		$numeroRecursos = $recursos->count();
 
 		//$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas','aDias','numeroRecursos'))->nest('thead','informes.thead');
-		$resultado = View::make('informes.resultado',compact('recursos','aDias'))->nest('thead','informes.thead');
-		return $resultado;
+		if (Input::get('generaPdf') == true){
+
+			$html = '<html><body>VARIABLE = TRUE ' . View::make('informes.resultado',compact('recursos','aDias')) . '</body></html>';
+			return PDF::load($html, 'A4', 'portrait')->show();
+		}
+		else {
+
+			$resultado = View::make('informes.resultado',compact('recursos','aDias'))->nest('thead','informes.thead');
+			return $resultado;	
+		}
+		
 	}
 
 
 	/**
-		* Genera informe de coupación // horario de clase
+		* Genera informe de coupación // horario de clase (borrar solo para test- borrar)
 		*
 		*
 	*/

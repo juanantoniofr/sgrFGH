@@ -121,6 +121,5 @@
 @section('js')
   {{ HTML::script('assets/js/sgr.js')}}
   {{ HTML::script('assets/js/filtraEventos.js') }}
-  {{ HTML::script('assets/js/imprimirInformes.js') }}
   {{ HTML::script('assets/js/datepicker-es.js')}}
 @stop

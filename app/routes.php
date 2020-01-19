@@ -87,6 +87,8 @@ Route::get('getProfesores',array('uses' => 'TitulacionController@getProfesores',
 Route::get('informes-de-ocupacion.html',array('as' => 'informes-de-ocupacion.html','uses' => 'InformesController@index','before' => array('auth','inicioCurso','capacidad:1-2-3-4-5-6,msg')));
 //ajax filtraEventos.js
 Route::get('getEventosByFiltros',array('uses' => 'InformesController@getEventosByFiltros', 'before' => array('auth','ajax_check','capacidad:2-3-4-5-6,msg' ) ));
+//generar pdf
+Route::get('getPdfInforme',array('uses' => 'InformesController@getEventosByFiltros', 'before' => array('auth','capacidad:2-3-4-5-6,msg' ) ));
 
 
 //*********
@@ -282,7 +284,7 @@ Route::get('getDescripcion',array('as' => 'getDescripcion','uses' => 'CalendarCo
 
 
 Route::get('print',array('uses' => 'CalendarController@imprime'));
-Route::get('getPdfInforme',array('uses' => 'InformesController@getPdfInforme'));
+//Route::get('getPdfInforme',array('uses' => 'InformesController@getPdfInforme'));
 
 
 
