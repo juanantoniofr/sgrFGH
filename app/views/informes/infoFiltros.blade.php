@@ -1,7 +1,5 @@
 <div id="info-filtros">
-	<h1>
-		{{ Config::get('options.nombreSitio') }}
-	</h1>
+
 	{{-- //Titulaciones --}}
 	@if ( !empty($aTitulaciones) )
 		<h2>
@@ -12,12 +10,10 @@
 		</h2>
 	@endif
 
-	{{-- //Asignaturas --}}
-	@if( !empty($aAsignaturas) )
-		<h3>
-		@foreach ( $aAsignaturas as $asignatura )
-			<span>  {{ $asignatura->asignatura }} </span>
-		@endforeach
-		</h3>
+	{{-- //fechas --}}
+	@if( !empty($f_inicio_filtro) && !empty($f_fin_filtro))
+		<p>
+			( {{ $f_inicio_filtro }} // {{ $f_fin_filtro }} )
+		</p>
 	@endif
 </div>

@@ -2,7 +2,7 @@
     
     <span data-numerorecursos="{{ $recursos->count() }}" id="recursos-info"></span>
     @foreach($recursos as $recurso)
-    	
+    	{{ $infoFiltros or '' }}
 		<table style = "table-layout: fixed;width: 100%;" id="tableCalendar" class="informes" >
     		<caption id="tableCaption" class="text-align: center;padding: 40px;font-size: 36px;height:70px" > <h2 class="text-center">{{ $recurso->nombre }} </h2> </caption>
     		<thead id="tableHead"> {{ $thead or ''}} </thead>

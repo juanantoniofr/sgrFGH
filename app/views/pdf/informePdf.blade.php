@@ -24,17 +24,18 @@
 				font-size:0.9em;
 			}
 
-			div#info-filtros {
+			div#info-filtros, h1, p {
 				text-align: center;
 			}
-			div#info-filtros h1, div#info-filtros h2{
+			h1, div#info-filtros h2{
 				display: block;
 			}
 
 		</style>
 	</head>
 	<body>
-		{{ $infoFiltros or '' }}
+		
+		<h1> {{ Config::get('options.nombreSitio') }} </h1>
 		{{ $horario or '' }}
 	</body>
 </html>';

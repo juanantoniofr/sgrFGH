@@ -27,6 +27,7 @@ return array(
 	*/
 
 	'url' => 'http://juanantonio.us.es',
+	//'url' => 'http://alojawebapps.us.es/reservasfgh'
 
 	/*
 	|--------------------------------------------------------------------------

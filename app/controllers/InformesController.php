@@ -144,13 +144,14 @@ class InformesController extends BaseController {
 		//$resultado = View::make('informes.resultado',compact('recursos','id_grupos','aCodigosAsignaturas','aDias','numeroRecursos'))->nest('thead','informes.thead');
 		if (Input::get('generaPdf') == true){
 
-			$horario = View::make('informes.resultado',compact('recursos','aDias'))->nest('thead','informes.thead');
-			$infoFiltros = View::make('informes.infoFiltros',compact('aTitulaciones','aAsignaturas'));
-			$html = View::make('pdf.informePdf',compact('horario','infoFiltros'));
+			$infoFiltros = View::make('informes.infoFiltros',compact('aTitulaciones','f_inicio_filtro','f_fin_filtro'));
+			$horario = View::make('informes.resultado',compact('recursos','aDias','infoFiltros'))->nest('thead','informes.thead');
+			
+			$html = View::make('pdf.informePdf',compact('horario'));
 			return PDF::load($html, 'A4', 'landscape')->show();
 		}
 		else {
-
+			//$infoFiltros = View::make('informes.infoFiltros',compact('aTitulaciones','f_inicio_filtro','f_fin_filtro'));
 			$resultado = View::make('informes.resultado',compact('recursos','aDias'))->nest('thead','informes.thead');
 			return $resultado;	
 		}
